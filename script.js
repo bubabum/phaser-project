@@ -39,6 +39,8 @@ let camera;
 
 let bombs;
 let bombVelocity = 0;
+let bombMaxVelocity = 300;
+let bombBar;
 
 let lastFired = 0;
 
@@ -51,9 +53,12 @@ function preload() {
 	this.load.spritesheet('player', './assets/player.png', { frameWidth: 58, frameHeight: 58 });
 	this.load.spritesheet('player_hit', './assets/player_hit.png', { frameWidth: 58, frameHeight: 58 });
 	this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
+	this.load.spritesheet('bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
+	this.load.spritesheet('capitan', 'assets/enemy_capitan.png', { frameWidth: 80, frameHeight: 72 });
 }
 
 function create() {
+	let game = this;
 	this.anims.create({
 		key: 'idle',
 		frames: this.anims.generateFrameNumbers('player', {
@@ -127,6 +132,27 @@ function create() {
 		frameRate: 20,
 		repeat: 0,
 	});
+
+	this.anims.create({
+		key: 'charging',
+		frames: this.anims.generateFrameNumbers('bar', {
+			start: 0,
+			end: 10,
+		}),
+		frameRate: 15,
+		repeat: 0,
+	});
+
+	this.anims.create({
+		key: 'idle_capitan',
+		frames: this.anims.generateFrameNumbers('capitan', {
+			start: 0,
+			end: 31,
+		}),
+		frameRate: 20,
+		repeat: -1,
+	});
+
 	map = this.make.tilemap({ key: 'map', tileWidth: 64, tileHeight: 64 });
 	tileset = map.addTilesetImage('tile_map', 'tiles');
 	layer = map.createLayer('ground', tileset);
@@ -139,26 +165,15 @@ function create() {
 		}
 	});
 
-
-	// let mov = map.createFromObjects('platforms1', { gid: 30, key: 'platform' });
-	// const plats = this.physics.add.group(mov);
-	// plats.getChildren().forEach(plat => {
-	// 	plat.body.setImmovable(true);
-	// 	plat.body.allowGravity = false;
-	// 	plat.body.checkCollision.left = false;
-	// 	plat.body.checkCollision.right = false;
-	// 	plat.body.checkCollision.down = false;
-	// })
-
 	//this.physics.world.setBounds(0, 0, 35 * TILE, 25 * TILE);
 
 	player = this.physics.add.sprite(1600, 300, 'player');
-	player.setSize(25, 50, false);
-	player.body.offset.x = 20;
-	player.body.offset.y = 8;
+	player.setSize(25, 50, false).setOffset(20, 8);
 	//player.setCollideWorldBounds(true);
 	player.anims.play('idle');
 
+	bombBar = this.add.sprite(player.body.x, player.body.y, 'bar');
+	bombBar.setVisible(false);
 
 	bombs = this.physics.add.group({
 		angularVelocity: 0,
@@ -168,32 +183,56 @@ function create() {
 		defaultKey: 'bomb',
 	});
 
-	this.physics.add.collider(player, layer);
-	this.physics.add.collider(player, platforms);
-	this.physics.add.collider(bombs, layer);
-	this.physics.add.collider(bombs, platforms);
+	let capitansGroup = this.physics.add.group();
+	let capitansArray = map.createFromObjects('enemies', [{ gid: 31, key: 'capitan', frame: 0 }]);
+
+	for (var i = 0; i < capitansArray.length; i++) {
+		capitansGroup.add(capitansArray[i]);
+		capitansArray[i].body.setSize(30, 67, false).setOffset(20, 5);;
+		capitansArray[i].anims.play('idle_capitan');
+	}
+
 
 	player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'land', function (anims) {
 		player.chain(['land', 'idle']);
 	}, this);
 
+	this.physics.add.collider(player, layer);
+	this.physics.add.collider(player, platforms);
+	this.physics.add.collider(capitansGroup, layer);
+	this.physics.add.collider(capitansGroup, platforms);
+	this.physics.add.collider(bombs, layer);
+	this.physics.add.collider(bombs, platforms);
+
 	cursors = this.input.keyboard.createCursorKeys();
-	console.log(game)
-	let a = this.physics;
+
+	this.input.keyboard.on('keydown-SPACE', function (event) {
+		bombBar.setVisible(true);
+		bombBar.anims.play('charging');
+	});
+
 	this.input.keyboard.on('keyup-SPACE', function (event) {
 		event.stopPropagation();
-		let bomb = bombs.get(player.x + 15, player.y);
+		bombBar.setVisible(false);
+		let bomb = bombs.get(player.x + (player.flipX ? -15 : 15), player.y);
 		if (bomb) {
 			bomb.anims.play('on');
-			bomb.setCircle(15).setOffset(34, 58).setOrigin(0.51, 0.67).setBounce(0.5).setVelocity(bombVelocity, -bombVelocity).setAcceleration(-20, -20);
+			bomb.setCircle(15).setOffset(34, 58).setOrigin(0.51, 0.67).setBounce(0.5).setVelocity((player.flipX ? -1 : 1) * bombVelocity, -bombVelocity).setDrag(20, 20);
 			setTimeout(() => {
 				bomb.anims.play('explosion');
 				bomb.body.moves = false;
 				bomb.setCircle(48).setOrigin(0.5, 0.5).setOffset(0, 12);
-				a.add.collider(player, bomb, () => {
+				let bombColider = game.physics.add.collider(player, bomb, () => {
+					game.physics.world.removeCollider(bombColider);
 					player.anims.play('hit');
 					let angle = Phaser.Math.Angle.BetweenPoints(bomb.getCenter(), player.getCenter());
-					a.velocityFromRotation(angle, 200, player.body.velocity);
+					game.physics.velocityFromRotation(angle, 200, player.body.velocity);
+				});
+				let bombEnemyColider = game.physics.add.collider(bomb, capitansGroup, (bomb, capitan) => {
+					game.physics.world.removeCollider(bombEnemyColider);
+					let angle = Phaser.Math.Angle.BetweenPoints(bomb.getCenter(), capitan.getCenter());
+					game.physics.velocityFromRotation(angle, 200, capitan.body.velocity);
+					capitan.body.setDrag(100, 20);
 				});
 			}, 2000)
 			bomb.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'explosion', function (anims) {
@@ -202,13 +241,6 @@ function create() {
 			bombVelocity = 0;
 		}
 
-		// bomb.anims.play('on');
-		// bomb.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'on', function (anims) {
-		// 	bomb.anims.play('explosion');
-		// }, this);
-		// bomb.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'explosion', function (anims) {
-		// 	bomb.destroy();
-		// }, this);
 	});
 
 	camera = this.cameras.main;
@@ -251,10 +283,13 @@ function update() {
 	if (player.body.velocity.x > 0) player.setFlipX(false);
 	if (player.anims.currentAnim.key === 'hit' && player.body.velocity.x > 0) player.setFlipX(true)
 	if (player.anims.currentAnim.key === 'hit' && player.body.velocity.x < 0) player.setFlipX(false)
-	if (cursors.space.isDown) {
+
+	if (cursors.space.isDown && bombVelocity < bombMaxVelocity) {
 		bombVelocity += 5;
 	}
+
 	bombs.getChildren().forEach(bomb => {
 		if (bomb.body.velocity.x === 0) bomb.setAcceleration(0);
 	})
+	bombBar.setPosition(player.getCenter().x + 3, player.getCenter().y - 30)
 }

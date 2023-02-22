@@ -77,19 +77,31 @@
         {
          "draworder":"topdown",
          "id":4,
-         "name":"platforms1",
+         "name":"enemies",
          "objects":[
                 {
                  "class":"",
-                 "gid":30,
-                 "height":64,
-                 "id":1,
-                 "name":"platform",
+                 "gid":31,
+                 "height":72,
+                 "id":3,
+                 "name":"captina1",
                  "rotation":0,
                  "visible":true,
-                 "width":64,
-                 "x":2048.5,
-                 "y":448.5
+                 "width":80,
+                 "x":455,
+                 "y":448
+                }, 
+                {
+                 "class":"",
+                 "gid":31,
+                 "height":72,
+                 "id":4,
+                 "name":"capitan2",
+                 "rotation":0,
+                 "visible":true,
+                 "width":80,
+                 "x":1070,
+                 "y":448
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -98,7 +110,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":2,
+ "nextobjectid":5,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
@@ -116,6 +128,19 @@
          "tilecount":30,
          "tileheight":64,
          "tilewidth":64
+        }, 
+        {
+         "columns":1,
+         "firstgid":31,
+         "image":"..\/src\/Pirates\/Sprites\/5-Enemy-Captain\/1-Idle\/1.png",
+         "imageheight":72,
+         "imagewidth":80,
+         "margin":0,
+         "name":"capitan",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":72,
+         "tilewidth":80
         }],
  "tilewidth":64,
  "type":"map",
