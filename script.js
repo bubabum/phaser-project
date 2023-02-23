@@ -48,10 +48,8 @@ let game = new Phaser.Game(config);
 
 function preload() {
 	this.load.image('tiles', './assets/tile_map.png');
-	this.load.image('platform', './assets/platform.png');
 	this.load.tilemapTiledJSON('map', './assets/lv.json');
 	this.load.spritesheet('player', './assets/player.png', { frameWidth: 58, frameHeight: 58 });
-	this.load.spritesheet('player_hit', './assets/player_hit.png', { frameWidth: 58, frameHeight: 58 });
 	this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
 	this.load.spritesheet('bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 	this.load.spritesheet('capitan', 'assets/enemy_capitan.png', { frameWidth: 80, frameHeight: 72 });
@@ -61,56 +59,68 @@ function create() {
 	let game = this;
 	this.anims.create({
 		key: 'idle',
-		frames: this.anims.generateFrameNumbers('player', {
-			start: 0,
-			end: 25,
-		}),
+		frames: this.anims.generateFrameNumbers('player', { start: 0, end: 25 }),
 		frameRate: 20,
 		repeat: -1,
 	});
 	this.anims.create({
 		key: 'run',
-		frames: this.anims.generateFrameNumbers('player', {
-			start: 26,
-			end: 39,
-		}),
+		frames: this.anims.generateFrameNumbers('player', { start: 26, end: 39 }),
 		frameRate: 20,
 		repeat: -1,
 	});
 	this.anims.create({
+		key: 'jump_anticipation',
+		frames: this.anims.generateFrameNumbers('player', { start: 40, end: 40 }),
+		frameRate: 20,
+		repeat: 0,
+	});
+	this.anims.create({
 		key: 'jump',
-		frames: this.anims.generateFrameNumbers('player', {
-			start: 40,
-			end: 43,
-		}),
+		frames: this.anims.generateFrameNumbers('player', { start: 41, end: 44 }),
 		frameRate: 20,
 		repeat: 0,
 	});
 	this.anims.create({
 		key: 'fall',
-		frames: this.anims.generateFrameNumbers('player', {
-			start: 47,
-			end: 48,
-		}),
+		frames: this.anims.generateFrameNumbers('player', { start: 45, end: 46 }),
 		frameRate: 20,
 		repeat: 0,
 	});
 	this.anims.create({
-		key: 'land',
-		frames: this.anims.generateFrameNumbers('player', {
-			start: 44,
-			end: 46,
-		}),
+		key: 'ground',
+		frames: this.anims.generateFrameNumbers('player', { start: 47, end: 49 }),
 		frameRate: 20,
 		repeat: 0,
 	});
 	this.anims.create({
 		key: 'hit',
-		frames: this.anims.generateFrameNumbers('player_hit', {
-			start: 0,
-			end: 7,
-		}),
-		frameRate: 10,
+		frames: this.anims.generateFrameNumbers('player', { start: 50, end: 57 }),
+		frameRate: 20,
+		repeat: 0,
+	});
+	this.anims.create({
+		key: 'dead_hit',
+		frames: this.anims.generateFrameNumbers('player', { start: 58, end: 63 }),
+		frameRate: 20,
+		repeat: 0,
+	});
+	this.anims.create({
+		key: 'dead_ground',
+		frames: this.anims.generateFrameNumbers('player', { start: 64, end: 67 }),
+		frameRate: 20,
+		repeat: 0,
+	});
+	this.anims.create({
+		key: 'door_in',
+		frames: this.anims.generateFrameNumbers('player', { start: 68, end: 83 }),
+		frameRate: 20,
+		repeat: 0,
+	});
+	this.anims.create({
+		key: 'door_out',
+		frames: this.anims.generateFrameNumbers('player', { start: 84, end: 99 }),
+		frameRate: 20,
 		repeat: 0,
 	});
 
@@ -143,15 +153,15 @@ function create() {
 		repeat: 0,
 	});
 
-	this.anims.create({
-		key: 'idle_capitan',
-		frames: this.anims.generateFrameNumbers('capitan', {
-			start: 0,
-			end: 31,
-		}),
-		frameRate: 20,
-		repeat: -1,
-	});
+	// this.anims.create({
+	// 	key: 'idle_capitan',
+	// 	frames: this.anims.generateFrameNumbers('capitan', {
+	// 		start: 0,
+	// 		end: 31,
+	// 	}),
+	// 	frameRate: 20,
+	// 	repeat: -1,
+	// });
 
 	map = this.make.tilemap({ key: 'map', tileWidth: 64, tileHeight: 64 });
 	tileset = map.addTilesetImage('tile_map', 'tiles');
@@ -188,8 +198,17 @@ function create() {
 
 	for (var i = 0; i < capitansArray.length; i++) {
 		capitansGroup.add(capitansArray[i]);
-		capitansArray[i].body.setSize(30, 67, false).setOffset(20, 5);;
-		capitansArray[i].anims.play('idle_capitan');
+		capitansArray[i].body.setSize(30, 67, false).setOffset(20, 5);
+		capitansArray[i].anims.create({
+			key: 'idle',
+			frames: this.anims.generateFrameNumbers('capitan', {
+				start: 0,
+				end: 31,
+			}),
+			frameRate: 20,
+			repeat: -1,
+		});
+		capitansArray[i].anims.play('idle');
 	}
 
 
@@ -246,6 +265,7 @@ function create() {
 	camera = this.cameras.main;
 	camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 	camera.startFollow(player, true, 1, 1, 0, 0);
+
 }
 
 function update() {
@@ -267,7 +287,7 @@ function update() {
 		player.allowedToJump = true;
 	}
 	if (cursors.up.isDown && player.body.blocked.down && player.allowedToJump) {
-		player.setVelocityY(-320);
+		player.setVelocityY(-250);
 		player.anims.play('jump', true);
 		player.allowedToJump = false;
 		player.hitGround = false;
@@ -277,7 +297,7 @@ function update() {
 	}
 	if (player.body.velocity.y === 0 && player.body.onFloor() && !player.hitGround) {
 		player.hitGround = true;
-		player.anims.play('land', true);
+		player.anims.play('ground', true);
 	}
 	if (player.body.velocity.x < 0) player.setFlipX(true);
 	if (player.body.velocity.x > 0) player.setFlipX(false);
@@ -292,4 +312,5 @@ function update() {
 		if (bomb.body.velocity.x === 0) bomb.setAcceleration(0);
 	})
 	bombBar.setPosition(player.getCenter().x + 3, player.getCenter().y - 30)
+
 }
