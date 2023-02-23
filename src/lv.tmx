@@ -7,7 +7,7 @@
   <image source="Tile-Sets (64-64).png" width="384" height="320"/>
  </tileset>
  <tileset firstgid="31" name="capitan" tilewidth="80" tileheight="72" tilecount="1" columns="1">
-  <image source="Pirates/Sprites/5-Enemy-Captain/1-Idle/1.png" width="80" height="72"/>
+  <image source="1.png" width="80" height="72"/>
  </tileset>
  <layer id="1" name="ground" width="35" height="25">
   <data encoding="csv">
