@@ -129,15 +129,12 @@ function create() {
 
 	//this.physics.world.setBounds(0, 0, 35 * TILE, 25 * TILE);
 
-	//player = this.physics.add.sprite(1600, 300, 'player');
-	player = this.physics.add.existing(new Player(this, 1600, 300, 'player'));
-
+	player = new Player({ scene: this, x: 1600, y: 300, textureKey: 'player' });
 
 	//player.setTexture('player');
 	//player.body.setSize(25, 50, false).setOffset(20, 8);
 	//player.setCollideWorldBounds(true);
-	player.anims.play('idle');
-	console.log(player)
+	//player.anims.play('idle');
 
 	//bombBar = this.add.sprite(player.body.x, player.body.y, 'bar');
 	//bombBar.setVisible(false);
@@ -227,12 +224,11 @@ function create() {
 	camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 	camera.startFollow(player, true, 1, 1, 0, 0);
 
-	console.log(player)
-
 }
 
 function update() {
 	let game = this;
+	player.currentState.handleInput(cursors);
 	// if (cursors.left.isDown && player.anims.currentAnim.key !== 'hit') {
 	// 	player.body.setVelocityX(-160);
 	// 	//player.flipX = true;
