@@ -1,53 +1,3 @@
-const TILE = 64;
-let config = {
-	type: Phaser.AUTO,
-	// width: 16 * TILE,
-	// height: 9 * TILE,
-	scale: {
-		mode: Phaser.Scale.FIT,
-		//mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
-		//parent: 'phaser-example',
-		//autoCenter: Phaser.Scale.CENTER_BOTH,
-		width: 16 * TILE,
-		height: 9 * TILE,
-	},
-	physics: {
-		default: 'arcade',
-		arcade: {
-			gravity: { y: 400 },
-			debug: true,
-		},
-	},
-	scene: {
-		preload: preload,
-		create: create,
-		update: update,
-	}
-};
-
-let player;
-let cursors;
-let map;
-let tileset;
-let layer;
-let platforms;
-
-let follower;
-let path;
-
-let camera;
-
-let bombs;
-let bombVelocity = 0;
-let bombMaxVelocity = 300;
-let bombBar;
-
-let capitansGroup;
-
-let lastFired = 0;
-
-let game = new Phaser.Game(config);
-
 function preload() {
 	this.load.image('tiles', './assets/tile_map.png');
 	this.load.tilemapTiledJSON('map', './assets/lv.json');
@@ -179,13 +129,18 @@ function create() {
 
 	//this.physics.world.setBounds(0, 0, 35 * TILE, 25 * TILE);
 
-	player = this.physics.add.sprite(1600, 300, 'player');
-	player.setSize(25, 50, false).setOffset(20, 8);
+	//player = this.physics.add.sprite(1600, 300, 'player');
+	player = this.physics.add.existing(new Player(this, 1600, 300, 'player'));
+
+
+	//player.setTexture('player');
+	//player.body.setSize(25, 50, false).setOffset(20, 8);
 	//player.setCollideWorldBounds(true);
 	player.anims.play('idle');
+	console.log(player)
 
-	bombBar = this.add.sprite(player.body.x, player.body.y, 'bar');
-	bombBar.setVisible(false);
+	//bombBar = this.add.sprite(player.body.x, player.body.y, 'bar');
+	//bombBar.setVisible(false);
 
 	bombs = this.physics.add.group({
 		angularVelocity: 0,
@@ -272,44 +227,53 @@ function create() {
 	camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 	camera.startFollow(player, true, 1, 1, 0, 0);
 
+	console.log(player)
+
 }
 
 function update() {
 	let game = this;
-	if (cursors.left.isDown && player.anims.currentAnim.key !== 'hit') {
-		player.setVelocityX(-160);
-		//player.flipX = true;
-		if (player.body.blocked.down) player.anims.play('run', true);
-	} else if (cursors.right.isDown && player.anims.currentAnim.key !== 'hit') {
-		player.setVelocityX(160);
-		//player.flipX = false;
-		if (player.body.blocked.down) player.anims.play('run', true);
-	} else {
-		if (player.anims.currentAnim.key !== 'hit') {
-			player.setVelocityX(0);
-			if (player.body.blocked.down) player.anims.play('idle', true);
-		}
-	}
-	if (!cursors.up.isDown && player.body.blocked.down) {
-		player.allowedToJump = true;
-	}
-	if (cursors.up.isDown && player.body.blocked.down && player.allowedToJump) {
-		player.setVelocityY(-250);
-		player.anims.play('jump', true);
-		player.allowedToJump = false;
-		player.hitGround = false;
-	}
-	if (!player.body.blocked.down && player.body.velocity.y > 0 && player.anims.currentAnim.key !== 'fall') {
-		player.anims.play('fall', true);
-	}
-	if (player.body.velocity.y === 0 && player.body.onFloor() && !player.hitGround) {
-		player.hitGround = true;
-		player.anims.play('ground', true);
-	}
-	if (player.body.velocity.x < 0) player.setFlipX(true);
-	if (player.body.velocity.x > 0) player.setFlipX(false);
-	if (player.anims.currentAnim.key === 'hit' && player.body.velocity.x > 0) player.setFlipX(true)
-	if (player.anims.currentAnim.key === 'hit' && player.body.velocity.x < 0) player.setFlipX(false)
+	// if (cursors.left.isDown && player.anims.currentAnim.key !== 'hit') {
+	// 	player.body.setVelocityX(-160);
+	// 	//player.flipX = true;
+	// 	if (player.body.blocked.down) player.anims.play('run', true);
+	// } else if (cursors.right.isDown && player.anims.currentAnim.key !== 'hit') {
+	// 	player.setVelocityX(160);
+	// 	//player.flipX = false;
+	// 	if (player.body.blocked.down) player.anims.play('run', true);
+	// } else {
+	// 	if (player.anims.currentAnim.key !== 'hit') {
+	// 		player.body.setVelocityX(0);
+	// 		if (player.body.blocked.down) player.anims.play('idle', true);
+	// 	}
+	// }
+	// if (!cursors.up.isDown && player.body.blocked.down) {
+	// 	player.allowedToJump = true;
+	// }
+	// if (cursors.up.isDown && player.body.blocked.down && player.allowedToJump) {
+	// 	player.setVelocityY(-250);
+	// 	player.anims.play('jump', true);
+	// 	player.allowedToJump = false;
+	// 	player.hitGround = false;
+	// }
+	// if (!player.body.blocked.down && player.body.velocity.y > 0 && player.anims.currentAnim.key !== 'fall') {
+	// 	player.anims.play('fall', true);
+	// }
+	// if (player.body.velocity.y === 0 && player.body.onFloor() && !player.hitGround) {
+	// 	player.hitGround = true;
+	// 	player.anims.play('ground', true);
+	// }
+	// if (player.body.velocity.x < 0) {
+	// 	player.setFlipX(true);
+	// 	//player.body.offset.x = 13;
+	// }
+	// if (player.body.velocity.x > 0) {
+	// 	player.setFlipX(false);
+	// 	//player.body.offset.x = 20;
+	// 	//player.setOffset(player.width - player.body.width - player.body.offset.x);
+	// }
+	// if (player.anims.currentAnim.key === 'hit' && player.body.velocity.x > 0) player.setFlipX(true)
+	// if (player.anims.currentAnim.key === 'hit' && player.body.velocity.x < 0) player.setFlipX(false)
 
 	if (cursors.space.isDown && bombVelocity < bombMaxVelocity) {
 		bombVelocity += 5;
@@ -318,7 +282,7 @@ function update() {
 	bombs.getChildren().forEach(bomb => {
 		if (bomb.body.velocity.x === 0) bomb.setAcceleration(0);
 	})
-	bombBar.setPosition(player.getCenter().x + 3, player.getCenter().y - 30)
+	//bombBar.setPosition(player.getCenter().x + 3, player.getCenter().y - 30)
 
 	capitansGroup.getChildren().forEach(capitan => {
 		walkingBehavior(groundLayer, capitan);
