@@ -14,12 +14,20 @@ class Idle extends State {
 		super('IDLE', player);
 	}
 	enter() {
-		this.player.anims.play('idle');
+		//this.player.anims.play('idle');
 		// this.player.switchAnimation('idle');
-		// this.player.velocity.x = 0;
+		this.player.body.velocity.x = 0;
 	}
 	handleInput(input) {
-		if (input.right.isDown || input.left.isDown) this.player.setState('RUNNING');
+		if (input.right.isDown) {
+			this.player.setVelocityX(160);
+			this.player.setState('RUNNING');
+		} else if (input.left.isDown) {
+			this.player.setVelocityX(-160);
+			this.player.setState('RUNNING');
+		} else {
+			this.player.setVelocityX(0);
+		}
 		// if (input.ArrowRight || input.ArrowLeft) this.player.setState(states.RUNNING);
 		// if (input.ArrowUp) {
 		// 	this.player.velocity.y = JUMPING_VELOCITY;
@@ -34,7 +42,7 @@ class Running extends State {
 		super('RUNNING', player);
 	}
 	enter() {
-		this.player.anims.play('run');
+		//this.player.anims.play('run');
 		// this.player.switchAnimation('run');
 	}
 	handleInput(input) {

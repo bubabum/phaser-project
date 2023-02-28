@@ -1,7 +1,7 @@
 function preload() {
 	this.load.image('tiles', './assets/tile_map.png');
 	this.load.tilemapTiledJSON('map', './assets/lv.json');
-	this.load.spritesheet('player', './assets/player.png', { frameWidth: 58, frameHeight: 58 });
+	this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
 	this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
 	this.load.spritesheet('bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 	this.load.spritesheet('capitan', 'assets/capitan.png', { frameWidth: 80, frameHeight: 72 });
@@ -9,72 +9,7 @@ function preload() {
 
 function create() {
 	let game = this;
-	this.anims.create({
-		key: 'idle',
-		frames: this.anims.generateFrameNumbers('player', { start: 0, end: 25 }),
-		frameRate: 20,
-		repeat: -1,
-	});
-	this.anims.create({
-		key: 'run',
-		frames: this.anims.generateFrameNumbers('player', { start: 26, end: 39 }),
-		frameRate: 20,
-		repeat: -1,
-	});
-	this.anims.create({
-		key: 'jump_anticipation',
-		frames: this.anims.generateFrameNumbers('player', { start: 40, end: 40 }),
-		frameRate: 20,
-		repeat: 0,
-	});
-	this.anims.create({
-		key: 'jump',
-		frames: this.anims.generateFrameNumbers('player', { start: 41, end: 44 }),
-		frameRate: 20,
-		repeat: 0,
-	});
-	this.anims.create({
-		key: 'fall',
-		frames: this.anims.generateFrameNumbers('player', { start: 45, end: 46 }),
-		frameRate: 20,
-		repeat: 0,
-	});
-	this.anims.create({
-		key: 'ground',
-		frames: this.anims.generateFrameNumbers('player', { start: 47, end: 49 }),
-		frameRate: 20,
-		repeat: 0,
-	});
-	this.anims.create({
-		key: 'hit',
-		frames: this.anims.generateFrameNumbers('player', { start: 50, end: 57 }),
-		frameRate: 20,
-		repeat: 0,
-	});
-	this.anims.create({
-		key: 'dead_hit',
-		frames: this.anims.generateFrameNumbers('player', { start: 58, end: 63 }),
-		frameRate: 20,
-		repeat: 0,
-	});
-	this.anims.create({
-		key: 'dead_ground',
-		frames: this.anims.generateFrameNumbers('player', { start: 64, end: 67 }),
-		frameRate: 20,
-		repeat: 0,
-	});
-	this.anims.create({
-		key: 'door_in',
-		frames: this.anims.generateFrameNumbers('player', { start: 68, end: 83 }),
-		frameRate: 20,
-		repeat: 0,
-	});
-	this.anims.create({
-		key: 'door_out',
-		frames: this.anims.generateFrameNumbers('player', { start: 84, end: 99 }),
-		frameRate: 20,
-		repeat: 0,
-	});
+
 
 	this.anims.create({
 		key: 'on',
@@ -129,7 +64,7 @@ function create() {
 
 	//this.physics.world.setBounds(0, 0, 35 * TILE, 25 * TILE);
 
-	player = new Player({ scene: this, x: 1600, y: 300, textureKey: 'player' });
+	player = new Player({ scene: this, x: 1600, y: 300, textureKey: 'bomb_guy' });
 
 	//player.setTexture('player');
 	//player.body.setSize(25, 50, false).setOffset(20, 8);

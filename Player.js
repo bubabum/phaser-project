@@ -11,18 +11,91 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			new Falling(this),
 			new Landing(this),
 		];
-		this.currentState = this.states[0];
-		this.currentState.enter();
+		this.createAnimations(textureKey);
+		this.setState('IDLE');
+		this.setSize(25, 50, false).setOffset(20, 8);
 	}
 
 	setState(name) {
 		this.currentState = this.states.find(state => state.name === name);
+		this.anims.play(name);
 		this.currentState.enter();
 	}
 
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
-		//this.rotation += 0.01;
+		console.log(this.body.deltaX())
+		if (this?.body?.velocity?.x < 0) this.flipX = true;
+		if (this?.body?.velocity?.x > 0) this.flipX = false;
+	}
+
+	createAnimations(textureKey) {
+		this.anims.create({
+			key: 'IDLE',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 0, end: 25 }),
+			frameRate: 20,
+			repeat: -1,
+		});
+		this.anims.create({
+			key: 'RUNNING',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 26, end: 39 }),
+			frameRate: 20,
+			repeat: -1,
+		});
+		this.anims.create({
+			key: 'jump_anticipation',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 40, end: 40 }),
+			frameRate: 20,
+			repeat: 0,
+		});
+		this.anims.create({
+			key: 'jump',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 41, end: 44 }),
+			frameRate: 20,
+			repeat: 0,
+		});
+		this.anims.create({
+			key: 'fall',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 45, end: 46 }),
+			frameRate: 20,
+			repeat: 0,
+		});
+		this.anims.create({
+			key: 'ground',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 47, end: 49 }),
+			frameRate: 20,
+			repeat: 0,
+		});
+		this.anims.create({
+			key: 'hit',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 50, end: 57 }),
+			frameRate: 20,
+			repeat: 0,
+		});
+		this.anims.create({
+			key: 'dead_hit',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 58, end: 63 }),
+			frameRate: 20,
+			repeat: 0,
+		});
+		this.anims.create({
+			key: 'dead_ground',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 64, end: 67 }),
+			frameRate: 20,
+			repeat: 0,
+		});
+		this.anims.create({
+			key: 'door_in',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 68, end: 83 }),
+			frameRate: 20,
+			repeat: 0,
+		});
+		this.anims.create({
+			key: 'door_out',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 84, end: 99 }),
+			frameRate: 20,
+			repeat: 0,
+		});
 	}
 
 }
