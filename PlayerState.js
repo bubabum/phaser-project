@@ -3,10 +3,6 @@ class State {
 		this.name = name;
 		this.player = player;
 	}
-	setOrientation(input) {
-		// if (input.ArrowRight && !input.ArrowLeft) this.player.isLeftOriented = false;
-		// if (!input.ArrowRight && input.ArrowLeft) this.player.isLeftOriented = true;
-	}
 }
 
 class Idle extends State {
@@ -14,26 +10,11 @@ class Idle extends State {
 		super('IDLE', player);
 	}
 	enter() {
-		//this.player.anims.play('idle');
-		// this.player.switchAnimation('idle');
-		this.player.body.velocity.x = 0;
 	}
-	handleInput(input) {
-		if (input.right.isDown) {
-			this.player.setVelocityX(160);
-			this.player.setState('RUNNING');
-		} else if (input.left.isDown) {
-			this.player.setVelocityX(-160);
-			this.player.setState('RUNNING');
-		} else {
-			this.player.setVelocityX(0);
-		}
-		// if (input.ArrowRight || input.ArrowLeft) this.player.setState(states.RUNNING);
-		// if (input.ArrowUp) {
-		// 	this.player.velocity.y = JUMPING_VELOCITY;
-		// 	this.player.setState(states.JUMPING)
-		// };
-		// if (this.player.velocity.y > 0) this.player.setState(states.FALLING);
+	handleInput(input, up) {
+		if (input.right.isDown || input.left.isDown) this.player.setState('RUNNING');
+		if (Phaser.Input.Keyboard.JustDown(up)) this.player.setState('JUMPING');
+		if (this.player.body.velocity.y > 0) this.player.setState('FALLING');
 	}
 }
 
@@ -42,18 +23,18 @@ class Running extends State {
 		super('RUNNING', player);
 	}
 	enter() {
-		//this.player.anims.play('run');
-		// this.player.switchAnimation('run');
 	}
 	handleInput(input) {
-		if (!input.right.isDown && !input.left.isDown) this.player.setState('IDLE');
-		// if (!input.ArrowRight && !input.ArrowLeft) this.player.setState(states.IDLE);
-		// if (input.ArrowRight || input.ArrowLeft) this.player.velocity.x = (this.player.isLeftOriented ? -1 : 1) * X_VELOCITY;
-		// if (input.ArrowUp) {
-		// 	this.player.velocity.y = JUMPING_VELOCITY;
-		// 	this.player.setState(states.JUMPING)
-		// };
-		// if (this.player.velocity.y > 0) this.player.setState(states.FALLING);
+		if (input.right.isDown) {
+			this.player.setVelocityX(160);
+		} else if (input.left.isDown) {
+			this.player.setVelocityX(-160);
+		} else {
+			this.player.setVelocityX(0);
+			this.player.setState('IDLE');
+		}
+		if (Phaser.Input.Keyboard.JustDown(up)) this.player.setState('JUMPING');
+		if (this.player.body.velocity.y > 0) this.player.setState('FALLING');
 	}
 }
 
@@ -62,12 +43,17 @@ class Jumping extends State {
 		super('JUMPING', player);
 	}
 	enter() {
-		// this.player.switchAnimation('jump');
+		this.player.setVelocityY(-250);
 	}
 	handleInput(input) {
-		// this.player.velocity.x = 0;
-		// if (input.ArrowRight || input.ArrowLeft) this.player.velocity.x = (this.player.isLeftOriented ? -1 : 1) * X_VELOCITY;
-		// if (this.player.velocity.y >= 0) this.player.setState(states.FALLING);
+		if (input.right.isDown) {
+			this.player.setVelocityX(160);
+		} else if (input.left.isDown) {
+			this.player.setVelocityX(-160);
+		} else {
+			this.player.setVelocityX(0);
+		}
+		if (this.player.body.velocity.y > 0) this.player.setState('FALLING');
 	}
 }
 
@@ -76,12 +62,16 @@ class Falling extends State {
 		super('FALLING', player);
 	}
 	enter() {
-		// this.player.switchAnimation('falling');
 	}
 	handleInput(input) {
-		// if (this.player.velocity.y === 0) this.player.setState(states.LANDING);
-		// this.player.velocity.x = 0;
-		// if (input.ArrowRight || input.ArrowLeft) this.player.velocity.x = (this.player.isLeftOriented ? -1 : 1) * X_VELOCITY;
+		if (input.right.isDown) {
+			this.player.setVelocityX(160);
+		} else if (input.left.isDown) {
+			this.player.setVelocityX(-160);
+		} else {
+			this.player.setVelocityX(0);
+		}
+		if (this.player.body.blocked.down) this.player.setState('LANDING');
 	}
 }
 
@@ -90,9 +80,18 @@ class Landing extends State {
 		super('LANDING', player);
 	}
 	enter() {
-		// this.player.switchAnimation('landing');
-		// setTimeout(() => this.player.setState(states.IDLE), 50);
+		this.player.setVelocityX(0);
+		this.player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'LANDING', function (anims) {
+			this.player.setState('IDLE');
+		}, this);
 	}
 	handleInput(input) {
+		if (input.right.isDown) {
+			this.player.setVelocityX(160);
+		} else if (input.left.isDown) {
+			this.player.setVelocityX(-160);
+		} else {
+			this.player.setVelocityX(0);
+		}
 	}
 }

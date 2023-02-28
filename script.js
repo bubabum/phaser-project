@@ -62,17 +62,12 @@ function create() {
 		}
 	});
 
-	//this.physics.world.setBounds(0, 0, 35 * TILE, 25 * TILE);
+	this.physics.world.setBounds(0, 0, 35 * TILE, 25 * TILE);
 
 	player = new Player({ scene: this, x: 1600, y: 300, textureKey: 'bomb_guy' });
 
-	//player.setTexture('player');
-	//player.body.setSize(25, 50, false).setOffset(20, 8);
-	//player.setCollideWorldBounds(true);
-	//player.anims.play('idle');
-
-	//bombBar = this.add.sprite(player.body.x, player.body.y, 'bar');
-	//bombBar.setVisible(false);
+	bombBar = this.add.sprite(player.body.x, player.body.y, 'bar');
+	bombBar.setVisible(false);
 
 	bombs = this.physics.add.group({
 		angularVelocity: 0,
@@ -104,11 +99,6 @@ function create() {
 		capitansArray[i].body.setVelocityX(120);
 	}
 
-
-	player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'land', function (anims) {
-		player.chain(['land', 'idle']);
-	}, this);
-
 	this.physics.add.collider(player, groundLayer);
 	this.physics.add.collider(player, platforms);
 	this.physics.add.collider(capitansGroup, groundLayer);
@@ -117,6 +107,7 @@ function create() {
 	this.physics.add.collider(bombs, platforms);
 
 	cursors = this.input.keyboard.createCursorKeys();
+	up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 
 	this.input.keyboard.on('keydown-SPACE', function (event) {
 		bombBar.setVisible(true);
@@ -126,7 +117,8 @@ function create() {
 	this.input.keyboard.on('keyup-SPACE', function (event) {
 		event.stopPropagation();
 		bombBar.setVisible(false);
-		let bomb = bombs.get(player.x + (player.flipX ? -15 : 15), player.y);
+		let bomb = bombs.get(player.x + (player.flipX ? -10 : 10), player.y);
+		//bomb.setCollideWorldBounds(true);
 		if (bomb) {
 			bomb.anims.play('on');
 			bomb.setCircle(15).setOffset(34, 58).setOrigin(0.51, 0.67).setBounce(0.5).setVelocity((player.flipX ? -1 : 1) * bombVelocity, -bombVelocity).setDrag(20, 20);
@@ -163,48 +155,7 @@ function create() {
 
 function update() {
 	let game = this;
-	player.currentState.handleInput(cursors);
-	// if (cursors.left.isDown && player.anims.currentAnim.key !== 'hit') {
-	// 	player.body.setVelocityX(-160);
-	// 	//player.flipX = true;
-	// 	if (player.body.blocked.down) player.anims.play('run', true);
-	// } else if (cursors.right.isDown && player.anims.currentAnim.key !== 'hit') {
-	// 	player.setVelocityX(160);
-	// 	//player.flipX = false;
-	// 	if (player.body.blocked.down) player.anims.play('run', true);
-	// } else {
-	// 	if (player.anims.currentAnim.key !== 'hit') {
-	// 		player.body.setVelocityX(0);
-	// 		if (player.body.blocked.down) player.anims.play('idle', true);
-	// 	}
-	// }
-	// if (!cursors.up.isDown && player.body.blocked.down) {
-	// 	player.allowedToJump = true;
-	// }
-	// if (cursors.up.isDown && player.body.blocked.down && player.allowedToJump) {
-	// 	player.setVelocityY(-250);
-	// 	player.anims.play('jump', true);
-	// 	player.allowedToJump = false;
-	// 	player.hitGround = false;
-	// }
-	// if (!player.body.blocked.down && player.body.velocity.y > 0 && player.anims.currentAnim.key !== 'fall') {
-	// 	player.anims.play('fall', true);
-	// }
-	// if (player.body.velocity.y === 0 && player.body.onFloor() && !player.hitGround) {
-	// 	player.hitGround = true;
-	// 	player.anims.play('ground', true);
-	// }
-	// if (player.body.velocity.x < 0) {
-	// 	player.setFlipX(true);
-	// 	//player.body.offset.x = 13;
-	// }
-	// if (player.body.velocity.x > 0) {
-	// 	player.setFlipX(false);
-	// 	//player.body.offset.x = 20;
-	// 	//player.setOffset(player.width - player.body.width - player.body.offset.x);
-	// }
-	// if (player.anims.currentAnim.key === 'hit' && player.body.velocity.x > 0) player.setFlipX(true)
-	// if (player.anims.currentAnim.key === 'hit' && player.body.velocity.x < 0) player.setFlipX(false)
+	player.currentState.handleInput(cursors, up);
 
 	if (cursors.space.isDown && bombVelocity < bombMaxVelocity) {
 		bombVelocity += 5;
@@ -213,7 +164,7 @@ function update() {
 	bombs.getChildren().forEach(bomb => {
 		if (bomb.body.velocity.x === 0) bomb.setAcceleration(0);
 	})
-	//bombBar.setPosition(player.getCenter().x + 3, player.getCenter().y - 30)
+	bombBar.setPosition(player.getCenter().x + 3, player.getCenter().y - 30)
 
 	capitansGroup.getChildren().forEach(capitan => {
 		walkingBehavior(groundLayer, capitan);

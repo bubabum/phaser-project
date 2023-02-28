@@ -14,9 +14,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.createAnimations(textureKey);
 		this.setState('IDLE');
 		this.setSize(25, 50, false).setOffset(20, 8);
+		//this.offsetX = 20;
+		//this.offsetFlipX = 13;
 	}
 
 	setState(name) {
+		if (this?.currentState?.name === name) return
 		this.currentState = this.states.find(state => state.name === name);
 		this.anims.play(name);
 		this.currentState.enter();
@@ -24,9 +27,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
-		console.log(this.body.deltaX())
-		if (this?.body?.velocity?.x < 0) this.flipX = true;
-		if (this?.body?.velocity?.x > 0) this.flipX = false;
+		if (this?.body?.velocity?.x < 0) {
+			this.flipX = true;
+			this.setOffset(13, 8);
+		}
+		if (this?.body?.velocity?.x > 0) {
+			this.flipX = false;
+			this.setOffset(20, 8);
+		}
 	}
 
 	createAnimations(textureKey) {
@@ -49,19 +57,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			repeat: 0,
 		});
 		this.anims.create({
-			key: 'jump',
+			key: 'JUMPING',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 41, end: 44 }),
 			frameRate: 20,
 			repeat: 0,
 		});
 		this.anims.create({
-			key: 'fall',
+			key: 'FALLING',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 45, end: 46 }),
 			frameRate: 20,
 			repeat: 0,
 		});
 		this.anims.create({
-			key: 'ground',
+			key: 'LANDING',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 47, end: 49 }),
 			frameRate: 20,
 			repeat: 0,
