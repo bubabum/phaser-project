@@ -13,9 +13,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		];
 		this.createAnimations(textureKey);
 		this.setState('IDLE');
-		this.setSize(25, 50, false).setOffset(20, 8);
-		//this.offsetX = 20;
-		//this.offsetFlipX = 13;
+		this.setSize(25, 50);
+		this.setOffset(20, 8);
 	}
 
 	setState(name) {
@@ -50,12 +49,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			frameRate: 20,
 			repeat: -1,
 		});
-		this.anims.create({
-			key: 'jump_anticipation',
-			frames: this.anims.generateFrameNumbers(textureKey, { start: 40, end: 40 }),
-			frameRate: 20,
-			repeat: 0,
-		});
+		// this.anims.create({
+		// 	key: 'jump_anticipation',
+		// 	frames: this.anims.generateFrameNumbers(textureKey, { start: 40, end: 40 }),
+		// 	frameRate: 20,
+		// 	repeat: 0,
+		// });
 		this.anims.create({
 			key: 'JUMPING',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 41, end: 44 }),

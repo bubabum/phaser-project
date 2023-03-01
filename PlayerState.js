@@ -11,9 +11,9 @@ class Idle extends State {
 	}
 	enter() {
 	}
-	handleInput(input, up) {
-		if (input.right.isDown || input.left.isDown) this.player.setState('RUNNING');
-		if (Phaser.Input.Keyboard.JustDown(up)) this.player.setState('JUMPING');
+	handleInput({ cursors, keyUp }) {
+		if (cursors.right.isDown || cursors.left.isDown) this.player.setState('RUNNING');
+		if (Phaser.Input.Keyboard.JustDown(keyUp)) this.player.setState('JUMPING');
 		if (this.player.body.velocity.y > 0) this.player.setState('FALLING');
 	}
 }
@@ -24,16 +24,16 @@ class Running extends State {
 	}
 	enter() {
 	}
-	handleInput(input) {
-		if (input.right.isDown) {
+	handleInput({ cursors }) {
+		if (cursors.right.isDown) {
 			this.player.setVelocityX(160);
-		} else if (input.left.isDown) {
+		} else if (cursors.left.isDown) {
 			this.player.setVelocityX(-160);
 		} else {
 			this.player.setVelocityX(0);
 			this.player.setState('IDLE');
 		}
-		if (Phaser.Input.Keyboard.JustDown(up)) this.player.setState('JUMPING');
+		if (Phaser.Input.Keyboard.JustDown(keyUp)) this.player.setState('JUMPING');
 		if (this.player.body.velocity.y > 0) this.player.setState('FALLING');
 	}
 }
@@ -45,10 +45,10 @@ class Jumping extends State {
 	enter() {
 		this.player.setVelocityY(-250);
 	}
-	handleInput(input) {
-		if (input.right.isDown) {
+	handleInput({ cursors }) {
+		if (cursors.right.isDown) {
 			this.player.setVelocityX(160);
-		} else if (input.left.isDown) {
+		} else if (cursors.left.isDown) {
 			this.player.setVelocityX(-160);
 		} else {
 			this.player.setVelocityX(0);
@@ -63,10 +63,10 @@ class Falling extends State {
 	}
 	enter() {
 	}
-	handleInput(input) {
-		if (input.right.isDown) {
+	handleInput({ cursors }) {
+		if (cursors.right.isDown) {
 			this.player.setVelocityX(160);
-		} else if (input.left.isDown) {
+		} else if (cursors.left.isDown) {
 			this.player.setVelocityX(-160);
 		} else {
 			this.player.setVelocityX(0);
@@ -85,10 +85,10 @@ class Landing extends State {
 			this.player.setState('IDLE');
 		}, this);
 	}
-	handleInput(input) {
-		if (input.right.isDown) {
+	handleInput({ cursors }) {
+		if (cursors.right.isDown) {
 			this.player.setVelocityX(160);
-		} else if (input.left.isDown) {
+		} else if (cursors.left.isDown) {
 			this.player.setVelocityX(-160);
 		} else {
 			this.player.setVelocityX(0);

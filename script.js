@@ -3,13 +3,16 @@ function preload() {
 	this.load.tilemapTiledJSON('map', './assets/lv.json');
 	this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
 	this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
-	this.load.spritesheet('bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
+	this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 	this.load.spritesheet('capitan', 'assets/capitan.png', { frameWidth: 80, frameHeight: 72 });
 }
 
 function create() {
 	let game = this;
 
+	cursors = this.input.keyboard.createCursorKeys();
+	keyUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+	keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
 	this.anims.create({
 		key: 'on',
@@ -27,16 +30,6 @@ function create() {
 			end: 19,
 		}),
 		frameRate: 20,
-		repeat: 0,
-	});
-
-	this.anims.create({
-		key: 'charging',
-		frames: this.anims.generateFrameNumbers('bar', {
-			start: 0,
-			end: 10,
-		}),
-		frameRate: 15,
 		repeat: 0,
 	});
 
@@ -65,9 +58,7 @@ function create() {
 	this.physics.world.setBounds(0, 0, 35 * TILE, 25 * TILE);
 
 	player = new Player({ scene: this, x: 1600, y: 300, textureKey: 'bomb_guy' });
-
-	bombBar = this.add.sprite(player.body.x, player.body.y, 'bar');
-	bombBar.setVisible(false);
+	bombBar = new BombBar({ scene: this, player, textureKey: 'bomb_bar' });
 
 	bombs = this.physics.add.group({
 		angularVelocity: 0,
@@ -106,17 +97,15 @@ function create() {
 	this.physics.add.collider(bombs, groundLayer);
 	this.physics.add.collider(bombs, platforms);
 
-	cursors = this.input.keyboard.createCursorKeys();
-	up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+	// cursors = this.input.keyboard.createCursorKeys();
+	// up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 
-	this.input.keyboard.on('keydown-SPACE', function (event) {
-		bombBar.setVisible(true);
-		bombBar.anims.play('charging');
-	});
+	// this.input.keyboard.on('keydown-SPACE', function (event) {
+	// 	bombBar.setVisible(true);
+	// 	bombBar.anims.play('CHARGING');
+	// });
 
 	this.input.keyboard.on('keyup-SPACE', function (event) {
-		event.stopPropagation();
-		bombBar.setVisible(false);
 		let bomb = bombs.get(player.x + (player.flipX ? -10 : 10), player.y);
 		//bomb.setCollideWorldBounds(true);
 		if (bomb) {
@@ -155,7 +144,10 @@ function create() {
 
 function update() {
 	let game = this;
-	player.currentState.handleInput(cursors, up);
+	player.currentState.handleInput({ cursors, keyUp });
+	bombBar.update();
+	//Phaser.Display.Align.In.Center(bombBar, player, 0, -30);
+	//bombBar.setPosition(player.getCenter().x + 3, player.getCenter().y - 30)
 
 	if (cursors.space.isDown && bombVelocity < bombMaxVelocity) {
 		bombVelocity += 5;
@@ -164,7 +156,6 @@ function update() {
 	bombs.getChildren().forEach(bomb => {
 		if (bomb.body.velocity.x === 0) bomb.setAcceleration(0);
 	})
-	bombBar.setPosition(player.getCenter().x + 3, player.getCenter().y - 30)
 
 	capitansGroup.getChildren().forEach(capitan => {
 		walkingBehavior(groundLayer, capitan);
