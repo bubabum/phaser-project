@@ -95,3 +95,15 @@ class Landing extends State {
 		}
 	}
 }
+
+class Hit extends State {
+	constructor(player) {
+		super('HIT', player);
+	}
+	enter() {
+		this.player.flipX = !this.player.flipX;
+		setTimeout(() => this.player.setState('FALLING'), 300);
+	}
+	handleInput({ cursors }) {
+	}
+}

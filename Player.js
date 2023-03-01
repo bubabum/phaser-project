@@ -10,6 +10,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			new Jumping(this),
 			new Falling(this),
 			new Landing(this),
+			new Hit(this),
 		];
 		this.createAnimations(textureKey);
 		this.setState('IDLE');
@@ -74,7 +75,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			repeat: 0,
 		});
 		this.anims.create({
-			key: 'hit',
+			key: 'HIT',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 50, end: 57 }),
 			frameRate: 20,
 			repeat: 0,

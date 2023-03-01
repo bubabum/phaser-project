@@ -14,25 +14,6 @@ function create() {
 	keyUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 	keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-	this.anims.create({
-		key: 'on',
-		frames: this.anims.generateFrameNumbers('bomb', {
-			start: 0,
-			end: 9,
-		}),
-		frameRate: 20,
-		repeat: -1,
-	});
-	this.anims.create({
-		key: 'explosion',
-		frames: this.anims.generateFrameNumbers('bomb', {
-			start: 10,
-			end: 19,
-		}),
-		frameRate: 20,
-		repeat: 0,
-	});
-
 	// this.anims.create({
 	// 	key: 'idle_capitan',
 	// 	frames: this.anims.generateFrameNumbers('capitan', {
@@ -59,14 +40,7 @@ function create() {
 
 	player = new Player({ scene: this, x: 1600, y: 300, textureKey: 'bomb_guy' });
 	bombBar = new BombBar({ scene: this, player, textureKey: 'bomb_bar' });
-
-	bombs = this.physics.add.group({
-		angularVelocity: 0,
-		angularAcceleration: 0,
-		velocityX: 0,
-		maxSize: 3,
-		defaultKey: 'bomb',
-	});
+	bombs = new Bombs({ scene: this, textureKey: 'bomb' });
 
 	capitansGroup = this.physics.add.group();
 	let capitansArray = map.createFromObjects('enemies', [{ gid: 31, key: 'capitan', frame: 0 }]);
@@ -90,49 +64,38 @@ function create() {
 		capitansArray[i].body.setVelocityX(120);
 	}
 
-	this.physics.add.collider(player, groundLayer);
-	this.physics.add.collider(player, platforms);
-	this.physics.add.collider(capitansGroup, groundLayer);
-	this.physics.add.collider(capitansGroup, platforms);
-	this.physics.add.collider(bombs, groundLayer);
-	this.physics.add.collider(bombs, platforms);
-
-	// cursors = this.input.keyboard.createCursorKeys();
-	// up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-
-	// this.input.keyboard.on('keydown-SPACE', function (event) {
-	// 	bombBar.setVisible(true);
-	// 	bombBar.anims.play('CHARGING');
-	// });
+	this.physics.add.collider(player, [groundLayer, platforms]);
+	this.physics.add.collider(capitansGroup, [groundLayer, platforms]);
+	this.physics.add.collider(bombs, [groundLayer, platforms]);
 
 	this.input.keyboard.on('keyup-SPACE', function (event) {
-		let bomb = bombs.get(player.x + (player.flipX ? -10 : 10), player.y);
+		// let bomb = bombs.get(player.x + (player.flipX ? -10 : 10), player.y);
 		//bomb.setCollideWorldBounds(true);
-		if (bomb) {
-			bomb.anims.play('on');
-			bomb.setCircle(15).setOffset(34, 58).setOrigin(0.51, 0.67).setBounce(0.5).setVelocity((player.flipX ? -1 : 1) * bombVelocity, -bombVelocity).setDrag(20, 20);
-			setTimeout(() => {
-				bomb.anims.play('explosion');
-				bomb.body.moves = false;
-				bomb.setCircle(48).setOrigin(0.5, 0.5).setOffset(0, 12);
-				let bombColider = game.physics.add.collider(player, bomb, () => {
-					game.physics.world.removeCollider(bombColider);
-					player.anims.play('hit');
-					let angle = Phaser.Math.Angle.BetweenPoints(bomb.getCenter(), player.getCenter());
-					game.physics.velocityFromRotation(angle, 200, player.body.velocity);
-				});
-				let bombEnemyColider = game.physics.add.collider(bomb, capitansGroup, (bomb, capitan) => {
-					game.physics.world.removeCollider(bombEnemyColider);
-					let angle = Phaser.Math.Angle.BetweenPoints(bomb.getCenter(), capitan.getCenter());
-					game.physics.velocityFromRotation(angle, 200, capitan.body.velocity);
-					capitan.body.setDrag(100, 20);
-				});
-			}, 2000)
-			bomb.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'explosion', function (anims) {
-				bomb.destroy();
-			}, this);
-			bombVelocity = 0;
-		}
+		// if (bomb) {
+		// 	bomb.anims.play('on');
+		// 	bomb.setCircle(15).setOffset(34, 58).setOrigin(0.51, 0.67).setBounce(0.5).setVelocity((player.flipX ? -1 : 1) * bombVelocity, -bombVelocity).setDrag(20, 20);
+		// 	setTimeout(() => {
+		// 		bomb.anims.play('explosion');
+		// 		bomb.body.moves = false;
+		// 		bomb.setCircle(48).setOrigin(0.5, 0.5).setOffset(0, 12);
+		// 		let bombColider = game.physics.add.collider(player, bomb, () => {
+		// 			game.physics.world.removeCollider(bombColider);
+		// 			player.anims.play('hit');
+		// 			let angle = Phaser.Math.Angle.BetweenPoints(bomb.getCenter(), player.getCenter());
+		// 			game.physics.velocityFromRotation(angle, 200, player.body.velocity);
+		// 		});
+		// 		let bombEnemyColider = game.physics.add.collider(bomb, capitansGroup, (bomb, capitan) => {
+		// 			game.physics.world.removeCollider(bombEnemyColider);
+		// 			let angle = Phaser.Math.Angle.BetweenPoints(bomb.getCenter(), capitan.getCenter());
+		// 			game.physics.velocityFromRotation(angle, 200, capitan.body.velocity);
+		// 			capitan.body.setDrag(100, 20);
+		// 		});
+		// 	}, 2000)
+		// 	bomb.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'explosion', function (anims) {
+		// 		bomb.destroy();
+		// 	}, this);
+		// 	bombVelocity = 0;
+		// }
 
 	});
 
@@ -143,19 +106,12 @@ function create() {
 }
 
 function update() {
-	let game = this;
 	player.currentState.handleInput({ cursors, keyUp });
 	bombBar.update();
-	//Phaser.Display.Align.In.Center(bombBar, player, 0, -30);
-	//bombBar.setPosition(player.getCenter().x + 3, player.getCenter().y - 30)
 
-	if (cursors.space.isDown && bombVelocity < bombMaxVelocity) {
-		bombVelocity += 5;
-	}
-
-	bombs.getChildren().forEach(bomb => {
-		if (bomb.body.velocity.x === 0) bomb.setAcceleration(0);
-	})
+	// bombs.getChildren().forEach(bomb => {
+	// 	if (bomb.body.velocity.x === 0) bomb.setAcceleration(0);
+	// })
 
 	capitansGroup.getChildren().forEach(capitan => {
 		walkingBehavior(groundLayer, capitan);
