@@ -1,6 +1,6 @@
 function preload() {
-	this.load.image('tiles', './assets/tile_map.png');
-	this.load.tilemapTiledJSON('map', './assets/lv.json');
+	this.load.image('tiles', './assets/tileset.png');
+	this.load.tilemapTiledJSON('map', './assets/demo_level.json');
 	this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
 	this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
 	this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
@@ -8,7 +8,6 @@ function preload() {
 }
 
 function create() {
-	let game = this;
 
 	cursors = this.input.keyboard.createCursorKeys();
 	keyUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
@@ -25,7 +24,7 @@ function create() {
 	// });
 
 	map = this.make.tilemap({ key: 'map', tileWidth: 64, tileHeight: 64 });
-	tileset = map.addTilesetImage('tile_map', 'tiles');
+	tileset = map.addTilesetImage('tileset', 'tiles');
 	groundLayer = map.createLayer('ground', tileset);
 	map.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26]);
 	platforms = map.createLayer('platforms', tileset);
@@ -38,66 +37,41 @@ function create() {
 
 	this.physics.world.setBounds(0, 0, 35 * TILE, 25 * TILE);
 
-	player = new Player({ scene: this, x: 1600, y: 300, textureKey: 'bomb_guy' });
+	player = new Player({ scene: this, x: 250, y: 300, textureKey: 'bomb_guy' });
 	bombBar = new BombBar({ scene: this, player, textureKey: 'bomb_bar' });
 	bombs = new Bombs({ scene: this, textureKey: 'bomb' });
 
 	capitansGroup = this.physics.add.group();
-	let capitansArray = map.createFromObjects('enemies', [{ gid: 31, key: 'capitan', frame: 0 }]);
 
-	for (var i = 0; i < capitansArray.length; i++) {
-		capitansGroup.add(capitansArray[i]);
-		capitansArray[i].body.setSize(30, 67, false).setOffset(20, 5);
-		capitansArray[i].anims.create({
-			key: 'run',
-			frames: this.anims.generateFrameNumbers('capitan', { start: 32, end: 45 }),
-			frameRate: 20,
-			repeat: -1,
-		});
-		capitansArray[i].anims.create({
-			key: 'atack',
-			frames: this.anims.generateFrameNumbers('capitan', { start: 56, end: 62 }),
-			frameRate: 20,
-			repeat: -1,
-		});
-		capitansArray[i].anims.play('run');
-		capitansArray[i].body.setVelocityX(120);
-	}
+	let capitansLayer = map.getObjectLayer('capitans');
+	capitansLayer.objects.forEach(capitan => {
+		let newCapitan = new Capitan(this, capitan.x - capitan.width * 0.5, capitan.y - capitan.height * 0.5, 'capitan');
+		capitansGroup.add(newCapitan);
+	})
+	//let capitansArray = map.createFromObjects('capitans', [{ gid: 39, key: 'capitan', frame: 0 }]);
+
+	// for (let i = 0; i < capitansArray.length; i++) {
+	// 	capitansGroup.add(capitansArray[i]);
+	// 	capitansArray[i].body.setSize(30, 67, false).setOffset(20, 5);
+	// 	capitansArray[i].anims.create({
+	// 		key: 'run',
+	// 		frames: this.anims.generateFrameNumbers('capitan', { start: 32, end: 45 }),
+	// 		frameRate: 20,
+	// 		repeat: -1,
+	// 	});
+	// 	capitansArray[i].anims.create({
+	// 		key: 'atack',
+	// 		frames: this.anims.generateFrameNumbers('capitan', { start: 56, end: 62 }),
+	// 		frameRate: 20,
+	// 		repeat: -1,
+	// 	});
+	// 	capitansArray[i].anims.play('run');
+	// 	capitansArray[i].body.setVelocityX(120);
+	// }
 
 	this.physics.add.collider(player, [groundLayer, platforms]);
 	this.physics.add.collider(capitansGroup, [groundLayer, platforms]);
 	this.physics.add.collider(bombs, [groundLayer, platforms]);
-
-	this.input.keyboard.on('keyup-SPACE', function (event) {
-		// let bomb = bombs.get(player.x + (player.flipX ? -10 : 10), player.y);
-		//bomb.setCollideWorldBounds(true);
-		// if (bomb) {
-		// 	bomb.anims.play('on');
-		// 	bomb.setCircle(15).setOffset(34, 58).setOrigin(0.51, 0.67).setBounce(0.5).setVelocity((player.flipX ? -1 : 1) * bombVelocity, -bombVelocity).setDrag(20, 20);
-		// 	setTimeout(() => {
-		// 		bomb.anims.play('explosion');
-		// 		bomb.body.moves = false;
-		// 		bomb.setCircle(48).setOrigin(0.5, 0.5).setOffset(0, 12);
-		// 		let bombColider = game.physics.add.collider(player, bomb, () => {
-		// 			game.physics.world.removeCollider(bombColider);
-		// 			player.anims.play('hit');
-		// 			let angle = Phaser.Math.Angle.BetweenPoints(bomb.getCenter(), player.getCenter());
-		// 			game.physics.velocityFromRotation(angle, 200, player.body.velocity);
-		// 		});
-		// 		let bombEnemyColider = game.physics.add.collider(bomb, capitansGroup, (bomb, capitan) => {
-		// 			game.physics.world.removeCollider(bombEnemyColider);
-		// 			let angle = Phaser.Math.Angle.BetweenPoints(bomb.getCenter(), capitan.getCenter());
-		// 			game.physics.velocityFromRotation(angle, 200, capitan.body.velocity);
-		// 			capitan.body.setDrag(100, 20);
-		// 		});
-		// 	}, 2000)
-		// 	bomb.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'explosion', function (anims) {
-		// 		bomb.destroy();
-		// 	}, this);
-		// 	bombVelocity = 0;
-		// }
-
-	});
 
 	camera = this.cameras.main;
 	camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -109,21 +83,17 @@ function update() {
 	player.currentState.handleInput({ cursors, keyUp });
 	bombBar.update();
 
-	// bombs.getChildren().forEach(bomb => {
-	// 	if (bomb.body.velocity.x === 0) bomb.setAcceleration(0);
+	// capitansGroup.getChildren().forEach(capitan => {
+	// 	walkingBehavior(groundLayer, capitan);
+	// 	if (Phaser.Math.Distance.BetweenPoints(player, capitan) < 40 && capitan.anims.currentAnim.key !== 'atack') {
+	// 		capitan.body.stop();
+	// 		capitan.anims.play('atack');
+	// 	}
+	// 	if (Phaser.Math.Distance.BetweenPoints(player, capitan) > 40 && capitan.anims.currentAnim.key !== 'run') {
+	// 		capitan.body.setVelocityX(120);
+	// 		capitan.anims.play('run');
+	// 	}
 	// })
-
-	capitansGroup.getChildren().forEach(capitan => {
-		walkingBehavior(groundLayer, capitan);
-		if (Phaser.Math.Distance.BetweenPoints(player, capitan) < 40 && capitan.anims.currentAnim.key !== 'atack') {
-			capitan.body.stop();
-			capitan.anims.play('atack');
-		}
-		if (Phaser.Math.Distance.BetweenPoints(player, capitan) > 40 && capitan.anims.currentAnim.key !== 'run') {
-			capitan.body.setVelocityX(120);
-			capitan.anims.play('run');
-		}
-	})
 }
 
 function walkingBehavior(layer, npc) {

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="3" nextobjectid="1">
+ <tileset firstgid="1" name="tileset" tilewidth="64" tileheight="64" tilecount="30" columns="6">
+  <image source="tileset.png" width="384" height="320"/>
+ </tileset>
+ <tileset firstgid="31" name="bald_pirate" tilewidth="63" tileheight="67" tilecount="1" columns="1">
+  <image source="Objects/bald_pirate.png" width="63" height="67"/>
+ </tileset>
+ <tileset firstgid="32" name="barrel" tilewidth="42" tileheight="44" tilecount="1" columns="1">
+  <image source="Objects/barrel.png" width="42" height="44"/>
+ </tileset>
+ <tileset firstgid="33" name="big_chain" tilewidth="9" tileheight="100" tilecount="1" columns="1">
+  <image source="Objects/big_chain.png" width="9" height="100"/>
+ </tileset>
+ <tileset firstgid="34" name="big_guy" tilewidth="77" tileheight="74" tilecount="1" columns="1">
+  <image source="Objects/big_guy.png" width="77" height="74"/>
+ </tileset>
+ <tileset firstgid="35" name="blue_bottle" tilewidth="16" tileheight="21" tilecount="1" columns="1">
+  <image source="Objects/blue_bottle.png" width="16" height="21"/>
+ </tileset>
+ <tileset firstgid="36" name="bomb_guy" tilewidth="58" tileheight="58" tilecount="1" columns="1">
+  <image source="Objects/bomb_guy.png" width="58" height="58"/>
+ </tileset>
+ <tileset firstgid="37" name="candle" tilewidth="14" tileheight="32" tilecount="1" columns="1">
+  <image source="Objects/candle.png" width="14" height="32"/>
+ </tileset>
+ <tileset firstgid="38" name="canon" tilewidth="62" tileheight="46" tilecount="1" columns="1">
+  <image source="Objects/canon.png" width="62" height="46"/>
+ </tileset>
+ <tileset firstgid="39" name="capitan" tilewidth="80" tileheight="72" tilecount="1" columns="1">
+  <image source="Objects/capitan.png" width="80" height="72"/>
+ </tileset>
+ <tileset firstgid="40" name="chair" tilewidth="32" tileheight="56" tilecount="1" columns="1">
+  <image source="Objects/chair.png" width="32" height="56"/>
+ </tileset>
+ <tileset firstgid="41" name="cucumber" tilewidth="64" tileheight="68" tilecount="1" columns="1">
+  <image source="Objects/cucumber.png" width="64" height="68"/>
+ </tileset>
+ <tileset firstgid="42" name="green_bottle" tilewidth="14" tileheight="24" tilecount="1" columns="1">
+  <image source="Objects/green_bottle.png" width="14" height="24"/>
+ </tileset>
+ <tileset firstgid="43" name="red_bottle" tilewidth="16" tileheight="31" tilecount="1" columns="1">
+  <image source="Objects/red_bottle.png" width="16" height="31"/>
+ </tileset>
+ <tileset firstgid="44" name="skull" tilewidth="19" tileheight="14" tilecount="1" columns="1">
+  <image source="Objects/skull.png" width="19" height="14"/>
+ </tileset>
+ <tileset firstgid="45" name="small_chain" tilewidth="9" tileheight="52" tilecount="1" columns="1">
+  <image source="Objects/small_chain.png" width="9" height="52"/>
+ </tileset>
+ <tileset firstgid="46" name="table" tilewidth="80" tileheight="32" tilecount="1" columns="1">
+  <image source="Objects/table.png" width="80" height="32"/>
+ </tileset>
+ <tileset firstgid="47" name="window" tilewidth="56" tileheight="61" tilecount="1" columns="1">
+  <image source="Objects/window.png" width="58" height="61"/>
+ </tileset>
+ <layer id="1" name="ground" width="20" height="20">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

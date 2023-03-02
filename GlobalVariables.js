@@ -16,9 +16,6 @@ let tileset;
 let layer;
 let platforms;
 
-let follower;
-let path;
-
 let camera;
 
 let capitansGroup;

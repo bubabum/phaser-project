@@ -4,7 +4,9 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y, textureKey);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
-		//this.scene = scene;
+		this.setCircle(15);
+		this.setOffset(34, 58);
+		this.setOrigin(0.51, 0.67);
 		this.createAnimations(textureKey);
 	}
 
@@ -13,24 +15,20 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		let velocity = BOMB_MAX_VELOCITY * velocityRatio;
 		this.setPosition(player.x + (player.flipX ? -10 : 10), player.y);
 		this.setVelocity((player.flipX ? -1 : 1) * velocity, -velocity);
-		this.setCircle(15);
-		this.setOffset(34, 58);
-		this.setOrigin(0.51, 0.67);
-		this.setBounce(0.7);
+		this.setBounce(0.5);
 		this.setDrag(20, 20);
 		setTimeout(() => this.explode(), 2000)
 	}
 
 	explode() {
 		this.anims.play('EXPLOSION');
-		this.setVelocity(0);
 		this.body.moves = false;
 		this.setCircle(48);
 		this.setOffset(0, 12);
 		this.setOrigin(0.5, 0.5);
-		let playerCollider = this.scene.physics.add.collider(bombs, player, (player, bomb) => {
+		let playerCollider = this.scene.physics.add.collider(this, player, () => {
 			player.setState('HIT');
-			const angle = Phaser.Math.Angle.BetweenPoints(bomb.getCenter(), player.getCenter());
+			const angle = Phaser.Math.Angle.BetweenPoints(this.getCenter(), player.getCenter());
 			this.scene.physics.velocityFromRotation(angle, 200, player.body.velocity);
 			this.scene.physics.world.removeCollider(playerCollider);
 		});
@@ -62,19 +60,10 @@ class Bombs extends Phaser.Physics.Arcade.Group {
 		this.defaultKey = textureKey;
 		this.classType = Bomb;
 		this.maxSize = 3;
-		// this.createMultiple({
-		// 	quantity: 3,
-		// 	max: 3,
-		// 	key: textureKey,
-		// 	active: false,
-		// 	// visible: false,
-		// 	classType: Bomb,
-		// });
 	}
 
 	throwBomb(velocityRatio) {
-		let bomb = this.create();
-		//let bomb = this.get();
+		let bomb = this.get();
 		if (bomb) bomb.throw(velocityRatio);
 	}
 
