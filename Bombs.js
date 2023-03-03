@@ -32,6 +32,12 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 			this.scene.physics.velocityFromRotation(angle, 200, player.body.velocity);
 			this.scene.physics.world.removeCollider(playerCollider);
 		});
+		let enemyCollider = this.scene.physics.add.collider(this, enemies, (bomb, enemy) => {
+			enemy.setState('HIT');
+			const angle = Phaser.Math.Angle.BetweenPoints(this.getCenter(), enemy.getCenter());
+			this.scene.physics.velocityFromRotation(angle, 200, enemy.body.velocity);
+			this.scene.physics.world.removeCollider(enemyCollider);
+		});
 		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'EXPLOSION', function (anims) {
 			this.destroy();
 		}, this);

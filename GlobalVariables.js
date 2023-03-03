@@ -13,9 +13,10 @@ let keySpace;
 
 let map;
 let tileset;
-let layer;
-let platforms;
+let groundLayer;
+let platformsLayer;
 
 let camera;
 
+let enemies;
 let capitansGroup;

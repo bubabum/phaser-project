@@ -1,108 +1,101 @@
-class State {
-	constructor(name, player) {
-		this.name = name;
-		this.player = player;
-	}
-}
-
 class Idle extends State {
-	constructor(player) {
-		super('IDLE', player);
+	constructor(carrier) {
+		super('IDLE', carrier);
 	}
 	enter() {
 	}
 	handleInput({ cursors, keyUp }) {
-		if (cursors.right.isDown || cursors.left.isDown) this.player.setState('RUNNING');
-		if (Phaser.Input.Keyboard.JustDown(keyUp)) this.player.setState('JUMPING');
-		if (this.player.body.velocity.y > 0) this.player.setState('FALLING');
+		if (cursors.right.isDown || cursors.left.isDown) this.carrier.setState('RUNNING');
+		if (Phaser.Input.Keyboard.JustDown(keyUp)) this.carrier.setState('JUMPING');
+		if (this.carrier.body.velocity.y > 0) this.carrier.setState('FALLING');
 	}
 }
 
 class Running extends State {
-	constructor(player) {
-		super('RUNNING', player);
+	constructor(carrier) {
+		super('RUNNING', carrier);
 	}
 	enter() {
 	}
 	handleInput({ cursors }) {
 		if (cursors.right.isDown) {
-			this.player.setVelocityX(160);
+			this.carrier.setVelocityX(160);
 		} else if (cursors.left.isDown) {
-			this.player.setVelocityX(-160);
+			this.carrier.setVelocityX(-160);
 		} else {
-			this.player.setVelocityX(0);
-			this.player.setState('IDLE');
+			this.carrier.setVelocityX(0);
+			this.carrier.setState('IDLE');
 		}
-		if (Phaser.Input.Keyboard.JustDown(keyUp)) this.player.setState('JUMPING');
-		if (this.player.body.velocity.y > 0) this.player.setState('FALLING');
+		if (Phaser.Input.Keyboard.JustDown(keyUp)) this.carrier.setState('JUMPING');
+		if (this.carrier.body.velocity.y > 0) this.carrier.setState('FALLING');
 	}
 }
 
 class Jumping extends State {
-	constructor(player) {
-		super('JUMPING', player);
+	constructor(carrier) {
+		super('JUMPING', carrier);
 	}
 	enter() {
-		this.player.setVelocityY(-250);
+		this.carrier.setVelocityY(-250);
 	}
 	handleInput({ cursors }) {
 		if (cursors.right.isDown) {
-			this.player.setVelocityX(160);
+			this.carrier.setVelocityX(160);
 		} else if (cursors.left.isDown) {
-			this.player.setVelocityX(-160);
+			this.carrier.setVelocityX(-160);
 		} else {
-			this.player.setVelocityX(0);
+			this.carrier.setVelocityX(0);
 		}
-		if (this.player.body.velocity.y > 0) this.player.setState('FALLING');
+		if (this.carrier.body.velocity.y > 0) this.carrier.setState('FALLING');
 	}
 }
 
 class Falling extends State {
-	constructor(player) {
-		super('FALLING', player);
+	constructor(carrier) {
+		super('FALLING', carrier);
 	}
 	enter() {
 	}
 	handleInput({ cursors }) {
 		if (cursors.right.isDown) {
-			this.player.setVelocityX(160);
+			this.carrier.setVelocityX(160);
 		} else if (cursors.left.isDown) {
-			this.player.setVelocityX(-160);
+			this.carrier.setVelocityX(-160);
 		} else {
-			this.player.setVelocityX(0);
+			this.carrier.setVelocityX(0);
 		}
-		if (this.player.body.blocked.down) this.player.setState('LANDING');
+		if (this.carrier.body.blocked.down) this.carrier.setState('LANDING');
 	}
 }
 
 class Landing extends State {
-	constructor(player) {
-		super('LANDING', player);
+	constructor(carrier) {
+		super('LANDING', carrier);
 	}
 	enter() {
-		this.player.setVelocityX(0);
-		this.player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'LANDING', function (anims) {
-			this.player.setState('IDLE');
+		this.carrier.setVelocityX(0);
+		this.carrier.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'LANDING', function (anims) {
+			this.carrier.setState('IDLE');
 		}, this);
 	}
 	handleInput({ cursors }) {
 		if (cursors.right.isDown) {
-			this.player.setVelocityX(160);
+			this.carrier.setVelocityX(160);
 		} else if (cursors.left.isDown) {
-			this.player.setVelocityX(-160);
+			this.carrier.setVelocityX(-160);
 		} else {
-			this.player.setVelocityX(0);
+			this.carrier.setVelocityX(0);
 		}
 	}
 }
 
 class Hit extends State {
-	constructor(player) {
-		super('HIT', player);
+	constructor(carrier) {
+		super('HIT', carrier);
 	}
 	enter() {
-		this.player.flipX = !this.player.flipX;
-		setTimeout(() => this.player.setState('FALLING'), 300);
+		this.carrier.flipX = !this.carrier.flipX;
+		setTimeout(() => this.carrier.setState('FALLING'), 300);
 	}
 	handleInput({ cursors }) {
 	}

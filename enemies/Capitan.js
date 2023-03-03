@@ -1,30 +1,29 @@
-class Capitan extends Phaser.Physics.Arcade.Sprite {
+class Capitan extends Enemy {
 
    constructor(scene, x, y, textureKey) {
       super(scene, x, y, textureKey);
-      scene.add.existing(this);
-      scene.physics.add.existing(this);
       this.setSize(30, 67);
       this.setOffset(20, 5);
       this.createAnimations(textureKey);
-      this.anims.play('RUN')
-   }
-
-   preUpdate(time, delta) {
-      super.preUpdate(time, delta);
-      if (this?.body?.velocity?.x < 0) {
-         this.flipX = true;
-         this.setOffset(30, 5);
-      }
-      if (this?.body?.velocity?.x > 0) {
-         this.flipX = false;
-         this.setOffset(20, 5);
-      }
+      this.states = [
+         new EnemyIdle(this),
+         new EnemyRunning(this),
+         new EnemyAtack(this),
+         new EnemyHit(this),
+      ];
+      this.setState('IDLE');
+      this.velocityX = 120;
    }
 
    createAnimations(textureKey) {
       this.anims.create({
-         key: 'RUN',
+         key: 'IDLE',
+         frames: this.anims.generateFrameNumbers(textureKey, { start: 0, end: 31 }),
+         frameRate: 20,
+         repeat: -1,
+      });
+      this.anims.create({
+         key: 'RUNNING',
          frames: this.anims.generateFrameNumbers(textureKey, { start: 32, end: 45 }),
          frameRate: 20,
          repeat: -1,
@@ -32,6 +31,12 @@ class Capitan extends Phaser.Physics.Arcade.Sprite {
       this.anims.create({
          key: 'ATACK',
          frames: this.anims.generateFrameNumbers(textureKey, { start: 56, end: 62 }),
+         frameRate: 20,
+         repeat: -1,
+      });
+      this.anims.create({
+         key: 'HIT',
+         frames: this.anims.generateFrameNumbers(textureKey, { start: 75, end: 82 }),
          frameRate: 20,
          repeat: -1,
       });
