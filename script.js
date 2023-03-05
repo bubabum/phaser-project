@@ -19,11 +19,11 @@ function create() {
 	groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26]);
 	platformsLayer = map.createLayer('platforms', tileset);
 	platformsLayer.filterTiles(tile => tile.index > 0).forEach(tile => tile.setCollision(false, false, true, false, false))
-	console.log(map)
 
-	this.physics.world.setBounds(0, 0, 35 * TILE, 25 * TILE);
+	this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
-	player = new Player({ scene: this, x: 250, y: 300, textureKey: 'bomb_guy' });
+	playerObject = map.getObjectLayer('player').objects[0];
+	player = new Player({ scene: this, x: playerObject.x - playerObject.width * 0.5, y: playerObject.y - playerObject.height * 0.5, textureKey: 'bomb_guy' });
 	bombBar = new BombBar({ scene: this, player, textureKey: 'bomb_bar' });
 	bombs = new Bombs({ scene: this, textureKey: 'bomb' });
 
@@ -49,28 +49,5 @@ function update() {
 	player.currentState.handleInput({ cursors, keyUp });
 	bombBar.update();
 	enemies.getChildren().forEach(enemy => enemy.currentState.handleState())
+	//console.log(enemies.getChildren()[0].currentState.name)
 }
-
-// function walkingBehavior(layer, npc) {
-// 	const isLeftOrientated = (npc) => {
-// 		return npc.body.velocity.x < 0
-// 	}
-// 	const isNextGroundTileCollidable = (layer, npc, isLeftOrientated) => {
-// 		const { x, y, width, height } = npc.body;
-// 		const posX = x + (isLeftOrientated ? -0.5 : width + 0.5);
-// 		const tile = layer.getTileAtWorldXY(posX, y + height + 0.5);
-// 		return tile?.collideUp
-// 	}
-// 	const isNextTileCollidable = (layer, npc, isLeftOrientated) => {
-// 		const { x, y, width, height } = npc.body;
-// 		const posX = x + (isLeftOrientated ? -0.5 : width + 0.5);
-// 		const tile = layer.getTileAtWorldXY(posX, y + height - 0.5);
-// 		if (isLeftOrientated) return tile?.collideRight;
-// 		return tile?.collideLeft;
-// 	}
-// 	const nextGroundTile = isNextGroundTileCollidable(layer, npc, isLeftOrientated(npc))
-// 	const nextTile = isNextTileCollidable(layer, npc, isLeftOrientated(npc))
-// 	if (!nextGroundTile || nextTile) {
-// 		npc.body.setVelocityX(-npc.body.velocity.x);
-// 	}
-// }

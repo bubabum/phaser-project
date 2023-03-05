@@ -15,8 +15,8 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		let velocity = BOMB_MAX_VELOCITY * velocityRatio;
 		this.setPosition(player.x + (player.flipX ? -10 : 10), player.y);
 		this.setVelocity((player.flipX ? -1 : 1) * velocity, -velocity);
-		this.setBounce(0.5);
-		this.setDrag(20, 20);
+		this.setBounce(0.25, 0.5);
+		this.setDrag(80, 20);
 		setTimeout(() => this.explode(), 2000)
 	}
 
@@ -26,18 +26,14 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.setCircle(48);
 		this.setOffset(0, 12);
 		this.setOrigin(0.5, 0.5);
-		let playerCollider = this.scene.physics.add.collider(this, player, () => {
+		let playerCollider = this.scene.physics.add.overlap(this, player, () => {
 			player.setState('HIT');
 			const angle = Phaser.Math.Angle.BetweenPoints(this.getCenter(), player.getCenter());
 			this.scene.physics.velocityFromRotation(angle, 200, player.body.velocity);
 			this.scene.physics.world.removeCollider(playerCollider);
 		});
-		let enemyCollider = this.scene.physics.add.collider(this, enemies, (bomb, enemy) => {
-			enemy.setState('HIT');
-			const angle = Phaser.Math.Angle.BetweenPoints(this.getCenter(), enemy.getCenter());
-			this.scene.physics.velocityFromRotation(angle, 200, enemy.body.velocity);
-			this.scene.physics.world.removeCollider(enemyCollider);
-		});
+		let enemyCollider = this.scene.physics.add.overlap(this, enemies, (bomb, enemy) => enemy.takeDamage(bomb, enemyCollider));
+		setTimeout(() => this.body.destroy(), 20)
 		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'EXPLOSION', function (anims) {
 			this.destroy();
 		}, this);
