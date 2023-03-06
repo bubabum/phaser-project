@@ -22,6 +22,10 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		}
 	}
 
+	canScaryRun() {
+		return this.properties.canScaryRun
+	}
+
 	getHealth() {
 		return this.properties.health
 	}

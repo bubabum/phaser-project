@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="8" nextobjectid="8">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="9" nextobjectid="9">
  <editorsettings>
   <export target="demo_level.json" format="json"/>
  </editorsettings>
@@ -113,9 +113,11 @@
  </objectgroup>
  <objectgroup id="4" name="capitans">
   <object id="1" name="capitan1" gid="39" x="955" y="256" width="80" height="72"/>
-  <object id="2" name="capitan2" gid="39" x="895" y="1217" width="80" height="72"/>
   <object id="5" name="capitan3" gid="39" x="282.667" y="320" width="80" height="72"/>
   <object id="6" name="capitan4" gid="39" x="823.98" y="256" width="80" height="72"/>
+ </objectgroup>
+ <objectgroup id="8" name="bald_pirates">
+  <object id="8" name="bald_pirate1" gid="31" x="786" y="1216" width="63" height="67"/>
  </objectgroup>
  <objectgroup id="5" name="player">
   <object id="3" name="player" gid="36" x="195" y="1024" width="58" height="58"/>

@@ -21,6 +21,7 @@ class BombBar extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	throwBomb() {
+		if (this.visible === false) return
 		this.setVisible(false);
 		bombs.throwBomb(this.anims.getProgress());
 	}

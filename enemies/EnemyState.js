@@ -74,7 +74,7 @@ class EnemyDeadHit extends State {
 		super('DEAD_HIT', carrier);
 	}
 	enter() {
-		this.carrier.setSize(30, 50);
+		this.carrier.setSize(30, 45);
 		this.carrier.setDrag(100, 0);
 		this.carrier.atackHitbox.destroy();
 		setTimeout(() => this.carrier.destroy(), 2000);

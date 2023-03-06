@@ -5,6 +5,7 @@ function preload() {
 	this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
 	this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 	this.load.spritesheet('capitan', 'assets/capitan.png', { frameWidth: 80, frameHeight: 72 });
+	this.load.spritesheet('bald_pirate', 'assets/bald_pirate.png', { frameWidth: 63, frameHeight: 67 });
 	this.load.spritesheet('door', 'assets/door.png', { frameWidth: 78, frameHeight: 96 });
 }
 
@@ -41,6 +42,12 @@ function create() {
 		enemies.add(newCapitan);
 	})
 
+	let baldPiratesLayer = map.getObjectLayer('bald_pirates');
+	baldPiratesLayer.objects.forEach(pirate => {
+		let newCapitan = new BaldPirate(this, pirate.x - pirate.width * 0.5, pirate.y - pirate.height * 0.5, 'bald_pirate');
+		enemies.add(newCapitan);
+	})
+
 	this.physics.add.collider(player, [groundLayer, platformsLayer]);
 	this.physics.add.collider(enemies, [groundLayer, platformsLayer]);
 	this.physics.add.collider(bombs, [groundLayer, platformsLayer]);
@@ -65,3 +72,17 @@ function getObjectCoordinateX(gameObject) {
 function getObjectCoordinateY(gameObject) {
 	return gameObject.y - gameObject.height * 0.5
 }
+
+function getKeyFrames(array) {
+	let start = 0;
+	let end = -1;
+	let result = [];
+	array.forEach(item => {
+		end += item;
+		result.push([start, end])
+		start = end + 1;
+	})
+	return result
+}
+
+console.log(getKeyFrames([34, 14, 1, 4, 2, 3, 12, 8, 6, 4]))

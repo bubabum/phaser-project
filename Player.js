@@ -16,7 +16,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setState('IDLE');
 		this.setSize(25, 50);
 		this.setOffset(20, 8);
-		this.health = 1;
+		this.health = 5;
 		this.start();
 	}
 
