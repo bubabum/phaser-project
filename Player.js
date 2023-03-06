@@ -17,6 +17,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setSize(25, 50);
 		this.setOffset(20, 8);
 		this.health = 1;
+		this.start();
+	}
+
+	start() {
+		this.anims.play('DOOR_OUT');
+		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'DOOR_OUT', function (anims) {
+			this.setState('RUNNING');
+			this.setState('IDLE');
+		}, this);
 	}
 
 	setState(name) {
@@ -82,25 +91,25 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			repeat: 0,
 		});
 		this.anims.create({
-			key: 'dead_hit',
+			key: 'DEAD_HIT',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 58, end: 63 }),
 			frameRate: 20,
 			repeat: 0,
 		});
 		this.anims.create({
-			key: 'dead_ground',
+			key: 'DEAD_GROUND',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 64, end: 67 }),
 			frameRate: 20,
 			repeat: 0,
 		});
 		this.anims.create({
-			key: 'door_in',
+			key: 'DOOR_IN',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 68, end: 83 }),
 			frameRate: 20,
 			repeat: 0,
 		});
 		this.anims.create({
-			key: 'door_out',
+			key: 'DOOR_OUT',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 84, end: 99 }),
 			frameRate: 20,
 			repeat: 0,

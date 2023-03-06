@@ -8,6 +8,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
 	setState(name) {
 		if (this?.currentState?.name === name) return
+		if (this?.currentState?.name === 'DEAD_HIT') return
 		this.currentState = this.states.find(state => state.name === name);
 		this.anims.play(name);
 		this.currentState.enter();
@@ -38,16 +39,16 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	canDash() {
-		return this.properties.direction
+		return this.properties.canDash
 	}
 	toogleDirection() {
 		if (this.getDirection() === 'right') return this.setDirection('left');
 		this.setDirection('right');
 	}
 
-	setDirection(direction) {
+	setDirection(direction, speed = this.getSpeedX()) {
 		this.properties.direction = direction;
-		this.setVelocityXByDirection(direction);
+		this.setVelocityXByDirection(direction, speed);
 	}
 
 	setVelocityXByDirection(direction = this.properties.direction, speed = this.getSpeedX()) {

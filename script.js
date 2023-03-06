@@ -5,6 +5,7 @@ function preload() {
 	this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
 	this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 	this.load.spritesheet('capitan', 'assets/capitan.png', { frameWidth: 80, frameHeight: 72 });
+	this.load.spritesheet('door', 'assets/door.png', { frameWidth: 78, frameHeight: 96 });
 }
 
 function create() {
@@ -22,8 +23,13 @@ function create() {
 
 	this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
-	playerObject = map.getObjectLayer('player').objects[0];
-	player = new Player({ scene: this, x: playerObject.x - playerObject.width * 0.5, y: playerObject.y - playerObject.height * 0.5, textureKey: 'bomb_guy' });
+	let doorInObject = map.getObjectLayer('door_in').objects[0];
+	let doorIn = new Door({ scene: this, x: getObjectCoordinateX(doorInObject), y: getObjectCoordinateY(doorInObject), textureKey: 'door' });
+
+	let playerObject = map.getObjectLayer('player').objects[0];
+	player = new Player({ scene: this, x: getObjectCoordinateX(playerObject), y: getObjectCoordinateY(playerObject), textureKey: 'bomb_guy' });
+	doorIn.openAndClose();
+
 	bombBar = new BombBar({ scene: this, player, textureKey: 'bomb_bar' });
 	bombs = new Bombs({ scene: this, textureKey: 'bomb' });
 
@@ -50,4 +56,12 @@ function update() {
 	bombBar.update();
 	enemies.getChildren().forEach(enemy => enemy.currentState.handleState())
 	//console.log(enemies.getChildren()[0].currentState.name)
+}
+
+function getObjectCoordinateX(gameObject) {
+	return gameObject.x + gameObject.width * 0.5
+}
+
+function getObjectCoordinateY(gameObject) {
+	return gameObject.y - gameObject.height * 0.5
 }

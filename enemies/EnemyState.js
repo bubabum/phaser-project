@@ -18,10 +18,11 @@ class EnemyRunning extends State {
 		this.carrier.setVelocityX(this.carrier.getSpeedX());
 	}
 	handleState() {
+		if (this.carrier.canScaryRun() && this.carrier.checkScaryRun()) return this.carrier.setState('SCARY_RUN');
 		if (this.carrier.checkAtackRange()) return this.carrier.setState('ATACK');
 		if (this.carrier.canDash() && this.carrier.checkDashRange() && !this.carrier.canMoveForward()) return this.carrier.setState('ATACK');
-		if (this.carrier.checkDashRange()) {
-			this.carrier.makeDash();
+		if (this.carrier.canDash() && this.carrier.checkDashRange()) {
+			return this.carrier.makeDash();
 		} else {
 			this.carrier.setVelocityXByDirection();
 		}
@@ -79,5 +80,20 @@ class EnemyDeadHit extends State {
 		setTimeout(() => this.carrier.destroy(), 2000);
 	}
 	handleState() {
+	}
+}
+
+class EnemyScaryRun extends State {
+	constructor(carrier) {
+		super('SCARY_RUN', carrier);
+	}
+	enter() {
+		this.carrier.makeScaryRun();
+	}
+	handleState() {
+		if (!this.carrier.canMoveForward()) this.carrier.toogleDirection();
+		this.carrier.setVelocityXByDirection(this.carrier.getDirection(), this.carrier.properties.scaryRunSpeed);
+		if (this.carrier.body.velocity.y > 0) this.carrier.setState('FALLING');
+		setTimeout(() => this.carrier.setState('RUNNING'), 500);
 	}
 }

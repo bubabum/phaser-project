@@ -33,7 +33,7 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 			this.scene.physics.world.removeCollider(playerCollider);
 		});
 		let enemyCollider = this.scene.physics.add.overlap(this, enemies, (bomb, enemy) => enemy.takeDamage(bomb, enemyCollider));
-		setTimeout(() => this.body.destroy(), 20)
+		setTimeout(() => this.body.destroy(), 100)
 		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'EXPLOSION', function (anims) {
 			this.destroy();
 		}, this);
