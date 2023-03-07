@@ -7,8 +7,8 @@ class Capitan extends Enemy {
 		this.createAnimations(textureKey);
 		this.states = [
 			new EnemyIdle(this),
-			new EnemyRunning(this),
-			new EnemyFalling(this),
+			new EnemyRun(this),
+			new EnemyFall(this),
 			new EnemyAtack(this),
 			new EnemyHit(this),
 			new EnemyDeadHit(this),
@@ -71,43 +71,43 @@ class Capitan extends Enemy {
 
 	createAnimations(textureKey) {
 		this.anims.create({
-			key: 'IDLE',
+			key: 'idle',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 0, end: 31 }),
 			frameRate: 20,
 			repeat: -1,
 		});
 		this.anims.create({
-			key: 'RUNNING',
+			key: 'run',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 32, end: 45 }),
 			frameRate: 20,
 			repeat: -1,
 		});
 		this.anims.create({
-			key: 'FALLING',
+			key: 'fall',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 51, end: 52 }),
 			frameRate: 20,
 			repeat: 0,
 		});
 		this.anims.create({
-			key: 'ATACK',
+			key: 'atack',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 56, end: 62 }),
 			frameRate: 20,
 			repeat: -1,
 		});
 		this.anims.create({
-			key: 'SCARY_RUN',
+			key: 'scary_run',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 63, end: 74 }),
 			frameRate: 20,
 			repeat: -1,
 		});
 		this.anims.create({
-			key: 'HIT',
+			key: 'hit',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 75, end: 82 }),
 			frameRate: 20,
 			repeat: 0,
 		});
 		this.anims.create({
-			key: 'DEAD_HIT',
+			key: 'dead_hit',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 83, end: 88 }),
 			frameRate: 20,
 			repeat: 0,

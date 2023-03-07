@@ -22,6 +22,7 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 
 	explode() {
 		this.anims.play('EXPLOSION');
+		//this.scene.cameras.main.shake(200, 0.01);
 		this.body.moves = false;
 		this.setCircle(48);
 		this.setOffset(0, 12);

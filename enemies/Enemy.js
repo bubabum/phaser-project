@@ -10,8 +10,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		if (this?.currentState?.name === name) return
 		if (this?.currentState?.name === 'DEAD_HIT') return
 		this.currentState = this.states.find(state => state.name === name);
-		this.anims.play(name);
 		this.currentState.enter();
+		this.anims.play(this.currentState.animation);
 	}
 
 	preUpdate(time, delta) {
@@ -22,6 +22,12 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		}
 	}
 
+	canRun() {
+		return this.properties.canRun
+	}
+	canDash() {
+		return this.properties.canDash
+	}
 	canScaryRun() {
 		return this.properties.canScaryRun
 	}
@@ -42,17 +48,16 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		return this.properties.direction
 	}
 
-	canDash() {
-		return this.properties.canDash
-	}
 	toogleDirection() {
+		this.setVelocityX(-this.body.velocity.x)
 		if (this.getDirection() === 'right') return this.setDirection('left');
 		this.setDirection('right');
 	}
 
-	setDirection(direction, speed = this.getSpeedX()) {
+	setDirection(direction) {
 		this.properties.direction = direction;
-		this.setVelocityXByDirection(direction, speed);
+		if (direction === 'right') return this.setFlipX(false);
+		this.setFlipX(true);
 	}
 
 	setVelocityXByDirection(direction = this.properties.direction, speed = this.getSpeedX()) {
@@ -103,17 +108,18 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	canMoveForward() {
+		let marginX = 5;
 		let isLeftOrientated = false;
 		if (this.getDirection() === 'left') isLeftOrientated = true;
 		const isNextGroundTileCollidable = (layer, npc) => {
 			const { x, y, width, height } = npc.body;
-			const posX = x + (isLeftOrientated ? -0.5 : width + 0.5);
+			const posX = x + (isLeftOrientated ? -marginX : width + marginX);
 			const tile = layer.getTileAtWorldXY(posX, y + height + 0.5);
 			return tile?.collideUp
 		}
 		const isNextTileCollidable = (layer, npc) => {
 			const { x, y, width, height } = npc.body;
-			const posX = x + (isLeftOrientated ? -0.5 : width + 0.5);
+			const posX = x + (isLeftOrientated ? -marginX : width + marginX);
 			const tile = layer.getTileAtWorldXY(posX, y + height - 0.5);
 			if (isLeftOrientated) return tile?.collideRight;
 			return tile?.collideLeft;

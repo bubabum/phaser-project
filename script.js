@@ -37,10 +37,10 @@ function create() {
 	enemies = this.physics.add.group();
 
 	let capitansLayer = map.getObjectLayer('capitans');
-	capitansLayer.objects.forEach(capitan => {
-		let newCapitan = new Capitan(this, capitan.x - capitan.width * 0.5, capitan.y - capitan.height * 0.5, 'capitan');
-		enemies.add(newCapitan);
-	})
+	// capitansLayer.objects.forEach(capitan => {
+	// 	let newCapitan = new Capitan(this, capitan.x - capitan.width * 0.5, capitan.y - capitan.height * 0.5, 'capitan');
+	// 	enemies.add(newCapitan);
+	// })
 
 	let baldPiratesLayer = map.getObjectLayer('bald_pirates');
 	baldPiratesLayer.objects.forEach(pirate => {
@@ -62,7 +62,8 @@ function update() {
 	player.currentState.handleInput({ cursors, keyUp });
 	bombBar.update();
 	enemies.getChildren().forEach(enemy => enemy.currentState.handleState())
-	//console.log(enemies.getChildren()[0].currentState.name)
+	//enemies.getChildren().forEach(enemy => console.log(enemy.properties.direction))
+	console.log(enemies.getChildren()[0].currentState.name)
 }
 
 function getObjectCoordinateX(gameObject) {
