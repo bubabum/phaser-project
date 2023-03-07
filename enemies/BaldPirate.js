@@ -21,13 +21,14 @@ class BaldPirate extends Enemy {
 		this.properties = {
 			canRun: true,
 			canDash: true,
+			canJump: true,
 			canScaryRun: false,
 			health: 2,
 			speedX: 120,
 			dashSpeedX: 250,
 			scaryRunSpeed: 200,
 			visionRange: 200,
-			atackRange: 30,
+			atackRange: 40,
 			scaryRunRange: 60,
 			direction: 'right',
 			isInvulnerable: false,
@@ -38,12 +39,15 @@ class BaldPirate extends Enemy {
 		this.atackHitbox = this.scene.add.circle(this.x, this.y, 30, 0x918f8d);
 		this.atackHitbox = this.scene.physics.add.existing(this.atackHitbox);
 		this.atackHitbox.body.setCircle(25);
-		this.atackHitbox.body.setOffset(0, 20);
+		this.atackHitbox.body.setOffset(0, 15);
 		this.atackHitbox.body.setAllowGravity(false);
 		this.atackHitbox.setVisible(false);
 		let playerCollider = this.scene.physics.add.overlap(this.atackHitbox, player, () => {
-			if (this.anims.currentFrame.index === 5 && !this.isAtacking && this.currentState.name === 'ATACK') {
+			if (this.anims.currentFrame.index === 5 && !this.isAtacking && ['ATACK', 'AIR_ATACK'].includes(this.currentState.name)) {
 				player.health--;
+				// const angle = Phaser.Math.Angle.BetweenPoints(this.getCenter(), player.getCenter());
+				// this.scene.physics.velocityFromRotation(angle, 200, player.body.velocity);
+				player.setState('HIT')
 				if (player.health === 0) player.scene.scene.restart();
 				console.log('hit')
 				this.isAtacking = true;

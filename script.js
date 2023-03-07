@@ -37,10 +37,10 @@ function create() {
 	enemies = this.physics.add.group();
 
 	let capitansLayer = map.getObjectLayer('capitans');
-	// capitansLayer.objects.forEach(capitan => {
-	// 	let newCapitan = new Capitan(this, capitan.x - capitan.width * 0.5, capitan.y - capitan.height * 0.5, 'capitan');
-	// 	enemies.add(newCapitan);
-	// })
+	capitansLayer.objects.forEach(capitan => {
+		let newCapitan = new BaldPirate(this, capitan.x - capitan.width * 0.5, capitan.y - capitan.height * 0.5, 'bald_pirate');
+		enemies.add(newCapitan);
+	})
 
 	let baldPiratesLayer = map.getObjectLayer('bald_pirates');
 	baldPiratesLayer.objects.forEach(pirate => {
