@@ -17,7 +17,7 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.setVelocity((player.flipX ? -1 : 1) * velocity, -velocity);
 		this.setBounce(0.25, 0.5);
 		this.setDrag(80, 20);
-		setTimeout(() => this.explode(), 2000)
+		setTimeout(() => this.explode(), 10000)
 	}
 
 	explode() {

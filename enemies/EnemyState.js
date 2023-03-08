@@ -30,6 +30,7 @@ class EnemyRun extends EnemyState {
 		//if (this.enemy.canScaryRun() && this.enemy.checkScaryRun()) return this.enemy.setState('SCARY_RUN');
 		if (this.enemy.checkAtackRange()) return this.enemy.setState('ATACK');
 		if (this.enemy.canDash() && this.enemy.checkDashRange()) return this.enemy.setState('DASH');
+		if (this.enemy.canHitBomb() && this.enemy.checkBombRange()) return this.enemy.setState('MOVE_TO_BOMB');
 		if (this.enemy.canDash() && this.enemy.checkDashRange() && !this.enemy.canMoveForward()) return this.enemy.setState('ATACK');
 		if (!this.enemy.canMoveForward()) this.enemy.toogleDirection();
 		if (this.enemy.body.velocity.x === 0) this.enemy.setVelocityXByDirection();
@@ -144,5 +145,32 @@ class EnemyScaryRun extends EnemyState {
 		this.enemy.setVelocityXByDirection(this.enemy.getDirection(), this.enemy.properties.scaryRunSpeed);
 		if (this.enemy.body.velocity.y > 0) this.enemy.setState('FALL');
 		setTimeout(() => this.enemy.setState('RUN'), 500);
+	}
+}
+
+class EnemyMoveToBomb extends EnemyState {
+	constructor(enemy) {
+		super('MOVE_TO_BOMB', enemy, 'run');
+	}
+	enter() {
+		this.enemy.moveToBomb();
+	}
+	handleState() {
+		// if no bomb setState 'RUN'
+	}
+}
+
+class EnemyHitBomb extends EnemyState {
+	constructor(enemy) {
+		super('HIT_BOMB', enemy, 'hit_bomb');
+	}
+	enter() {
+		this.enemy.setVelocity(0);
+		this.enemy.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hit_bomb', function (anims) {
+			this.setState('RUN')
+		}, this.enemy);
+	}
+	handleState() {
+
 	}
 }

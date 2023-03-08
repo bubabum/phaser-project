@@ -97,6 +97,6 @@ class Hit extends State {
 		setTimeout(() => this.carrier.setState('FALLING'), 300);
 	}
 	handleInput({ cursors }) {
-		this.carrier.flipX = !this.carrier.flipX;
+		// this.carrier.flipX = !this.carrier.flipX;
 	}
 }

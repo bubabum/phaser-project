@@ -13,6 +13,8 @@ class BaldPirate extends Enemy {
 			new EnemyFall(this),
 			new EnemyAtack(this),
 			new EnemyAirAtack(this),
+			new EnemyMoveToBomb(this),
+			new EnemyHitBomb(this),
 			new EnemyHit(this),
 			new EnemyDeadHit(this),
 		];
@@ -23,6 +25,7 @@ class BaldPirate extends Enemy {
 			canDash: true,
 			canJump: true,
 			canScaryRun: false,
+			canHitBomb: true,
 			health: 2,
 			speedX: 120,
 			dashSpeedX: 250,
@@ -34,6 +37,13 @@ class BaldPirate extends Enemy {
 			isInvulnerable: false,
 		}
 	}
+
+	hitBomb(colider) {
+		this.setState('HIT_BOMB');
+		if (this.anims.currentFrame.index === 5);
+		bomb.setVelocity(200, -200);
+	}
+
 
 	createAtackHitbox() {
 		this.atackHitbox = this.scene.add.circle(this.x, this.y, 30, 0x918f8d);
@@ -106,6 +116,12 @@ class BaldPirate extends Enemy {
 		});
 		this.anims.create({
 			key: 'air_atack',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 58, end: 69 }),
+			frameRate: 20,
+			repeat: 0,
+		});
+		this.anims.create({
+			key: 'hit_bomb',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 58, end: 69 }),
 			frameRate: 20,
 			repeat: 0,

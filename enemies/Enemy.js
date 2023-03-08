@@ -34,6 +34,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	canScaryRun() {
 		return this.properties.canScaryRun
 	}
+	canHitBomb() {
+		return this.properties.canHitBomb
+	}
 
 	getHealth() {
 		return this.properties.health
@@ -76,6 +79,24 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		return Phaser.Math.Distance.BetweenPoints(player, this) < this.properties.visionRange &&
 			player.y > this.y - this.height * 0.5 &&
 			player.y < this.y + this.height * 0.5
+	}
+
+	checkBombRange() {
+		if (bombs.getChildren().length === 0) return
+		for (let i = 0; i < bombs.getChildren().length; i++) {
+			if (Phaser.Math.Distance.BetweenPoints(bombs.getChildren()[i], this) < 50 && bombs.getChildren()[i].x < this.x && this.getDirection() === 'left' ||
+				Phaser.Math.Distance.BetweenPoints(bombs.getChildren()[i], this) < 50 && bombs.getChildren()[i].x > this.x && this.getDirection() === 'right') return true
+		}
+		return false
+	}
+
+	moveToBomb() {
+		if (bombs.getChildren().length === 0) return
+		let bomb = bombs.getChildren().sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
+		this.scene.physics.moveTo(this, bomb.x, this.y, this.properties.speedX);
+		let bombCollider = this.scene.physics.add.overlap(this, bomb, () => {
+			console.log('bam')
+		});
 	}
 
 	makeDash() {
