@@ -63,7 +63,7 @@ function update() {
 	bombBar.update();
 	enemies.getChildren().forEach(enemy => enemy.currentState.handleState())
 	//enemies.getChildren().forEach(enemy => console.log(enemy.properties.direction))
-	console.log(enemies.getChildren()[0].currentState.name)
+	//console.log(enemies.getChildren()[0].currentState.name)
 }
 
 function getObjectCoordinateX(gameObject) {

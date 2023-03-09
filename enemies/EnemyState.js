@@ -46,7 +46,7 @@ class EnemyDash extends EnemyState {
 	}
 	handleState() {
 		if (Phaser.Math.Distance.BetweenPoints(player, this.enemy) < 10) return this.enemy.setState('ATACK');
-		if (player.y < this.enemy.y && Phaser.Math.Distance.BetweenPoints(player, this.enemy) < 100) return this.enemy.setState('JUMP');
+		if (this.enemy.canJump() && player.y < this.enemy.y && Phaser.Math.Distance.BetweenPoints(player, this.enemy) < 100) return this.enemy.setState('JUMP');
 		if (!this.enemy.checkDashRange()) return this.enemy.setState('RUN');
 		if (!this.enemy.canMoveForward()) this.enemy.toogleDirection();
 	}
@@ -133,21 +133,6 @@ class EnemyDeadHit extends EnemyState {
 	}
 }
 
-class EnemyScaryRun extends EnemyState {
-	constructor(enemy) {
-		super('SCARY_RUN', enemy, 'scary_run');
-	}
-	enter() {
-		this.enemy.makeScaryRun();
-	}
-	handleState() {
-		if (!this.enemy.canMoveForward()) this.enemy.toogleDirection();
-		this.enemy.setVelocityXByDirection(this.enemy.getDirection(), this.enemy.properties.scaryRunSpeed);
-		if (this.enemy.body.velocity.y > 0) this.enemy.setState('FALL');
-		setTimeout(() => this.enemy.setState('RUN'), 500);
-	}
-}
-
 class EnemyMoveToBomb extends EnemyState {
 	constructor(enemy) {
 		super('MOVE_TO_BOMB', enemy, 'run');
@@ -156,7 +141,7 @@ class EnemyMoveToBomb extends EnemyState {
 		this.enemy.moveToBomb();
 	}
 	handleState() {
-		// if no bomb setState 'RUN'
+		if (!this.enemy.checkBombRange()) this.enemy.setState('RUN')
 	}
 }
 
@@ -172,5 +157,20 @@ class EnemyHitBomb extends EnemyState {
 	}
 	handleState() {
 
+	}
+}
+
+class EnemyScaryRun extends EnemyState {
+	constructor(enemy) {
+		super('SCARY_RUN', enemy, 'scary_run');
+	}
+	enter() {
+		this.enemy.makeScaryRun();
+	}
+	handleState() {
+		if (!this.enemy.canMoveForward()) this.enemy.toogleDirection();
+		this.enemy.setVelocityXByDirection(this.enemy.getDirection(), this.enemy.properties.scaryRunSpeed);
+		if (this.enemy.body.velocity.y > 0) this.enemy.setState('FALL');
+		setTimeout(() => this.enemy.setState('RUN'), 500);
 	}
 }

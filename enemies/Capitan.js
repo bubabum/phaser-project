@@ -19,8 +19,11 @@ class Capitan extends Enemy {
 		this.health = 2;
 		this.createAtackHitbox();
 		this.properties = {
-			canDash: true,
+			canRun: false,
+			canDash: false,
+			canJump: false,
 			canScaryRun: true,
+			canHitBomb: false,
 			health: 2,
 			speedX: 120,
 			dashSpeedX: 180,

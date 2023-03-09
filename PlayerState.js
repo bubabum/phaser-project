@@ -94,9 +94,12 @@ class Hit extends State {
 		super('HIT', carrier);
 	}
 	enter() {
+		this.carrier.setVelocityY(-250);
+		console.log(this.carrier.body.velocity.y)
 		setTimeout(() => this.carrier.setState('FALLING'), 300);
 	}
 	handleInput({ cursors }) {
+		//console.log(this.carrier.body.velocity.y)
 		// this.carrier.flipX = !this.carrier.flipX;
 	}
 }

@@ -19,7 +19,6 @@ class BaldPirate extends Enemy {
 			new EnemyDeadHit(this),
 		];
 		this.setState('IDLE');
-		this.createAtackHitbox();
 		this.properties = {
 			canRun: true,
 			canDash: true,
@@ -34,41 +33,16 @@ class BaldPirate extends Enemy {
 			atackRange: 40,
 			scaryRunRange: 60,
 			direction: 'right',
+			atackHitboxRadius: 20,
+			atackHitboxOffsetY: 10,
 			isInvulnerable: false,
 		}
+		this.createAtackHitbox();
 	}
 
-	hitBomb(colider) {
+	hitBomb(bomb) {
 		this.setState('HIT_BOMB');
-		if (this.anims.currentFrame.index === 5);
-		bomb.setVelocity(200, -200);
-	}
-
-
-	createAtackHitbox() {
-		this.atackHitbox = this.scene.add.circle(this.x, this.y, 30, 0x918f8d);
-		this.atackHitbox = this.scene.physics.add.existing(this.atackHitbox);
-		this.atackHitbox.body.setCircle(25);
-		this.atackHitbox.body.setOffset(0, 15);
-		this.atackHitbox.body.setAllowGravity(false);
-		this.atackHitbox.setVisible(false);
-		let playerCollider = this.scene.physics.add.overlap(this.atackHitbox, player, () => {
-			if (this.anims.currentFrame.index === 5 && !this.isAtacking && ['ATACK', 'AIR_ATACK'].includes(this.currentState.name)) {
-				player.health--;
-				// const angle = Phaser.Math.Angle.BetweenPoints(this.getCenter(), player.getCenter());
-				// this.scene.physics.velocityFromRotation(angle, 200, player.body.velocity);
-				player.setState('HIT')
-				if (player.health === 0) player.scene.scene.restart();
-				console.log('hit')
-				this.isAtacking = true;
-			}
-			if (this.anims.currentFrame.index !== 5) this.isAtacking = false;
-			// player.setState('HIT');
-			// const angle = Phaser.Math.Angle.BetweenPoints(this.getCenter(), player.getCenter());
-			// this.atackHitbox.body.enable = false;
-			// this.scene.physics.velocityFromRotation(angle, 200, player.body.velocity);
-			// this.scene.physics.world.removeCollider(playerCollider);
-		});
+		if (this.anims.currentFrame.index > 4) bomb.setVelocity((this.getDirection() === 'right' ? 250 : -250), -250);
 	}
 
 	createAnimations(textureKey) {

@@ -17,8 +17,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
 		if (this.atackHitbox) {
-			if (this.getDirection() === 'right') return this.atackHitbox.setPosition(this.body.position.x + this.body.width, this.body.position.y + 30)
-			this.atackHitbox.setPosition(this.body.position.x, this.body.position.y + 30)
+			const posY = this.body.position.y + this.body.height * 0.5 + this.properties.atackHitboxOffsetY
+			if (this.getDirection() === 'right') return this.atackHitbox.setPosition(this.body.position.x + this.body.width, posY)
+			this.atackHitbox.setPosition(this.body.position.x, posY)
 		}
 	}
 
@@ -95,8 +96,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		let bomb = bombs.getChildren().sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
 		this.scene.physics.moveTo(this, bomb.x, this.y, this.properties.speedX);
 		let bombCollider = this.scene.physics.add.overlap(this, bomb, () => {
-			console.log('bam')
+			if (this.canHitBomb()) this.hitBomb(bomb);
 		});
+		this.scene.physics.world.removeCollider(bombCollider);
 	}
 
 	makeDash() {
@@ -116,19 +118,24 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.setState('DEAD_HIT');
 	}
 
-	createAtackOverlap() {
-		// let playerCollider = this.scene.physics.add.overlap(this.atackHitbox, player, () => {
-		// 	if (this.anims.currentFrame.index === 5) {
-		// 		console.log('hit')
-		// 		this.body.setEnable(false)
-		// 	}
-		// 	if (this.anims.currentFrame.index !== 5) this.body.setEnable(true)
-		// 	// player.setState('HIT');
-		// 	// const angle = Phaser.Math.Angle.BetweenPoints(this.getCenter(), player.getCenter());
-		// 	// this.atackHitbox.body.enable = false;
-		// 	// this.scene.physics.velocityFromRotation(angle, 200, player.body.velocity);
-		// 	// this.scene.physics.world.removeCollider(playerCollider);
-		// });
+
+	createAtackHitbox() {
+		this.atackHitbox = this.scene.add.circle(this.x, this.y, this.properties.atackHitboxRadius, 0x646464);
+		this.atackHitbox.setVisible(false);
+		this.atackHitbox = this.scene.physics.add.existing(this.atackHitbox);
+		this.atackHitbox.body.setCircle(this.properties.atackHitboxRadius);
+		this.atackHitbox.body.setAllowGravity(false);
+		this.scene.physics.add.overlap(this.atackHitbox, player, () => {
+			if (this.anims.currentFrame.index === 5 && !this.isAtacking && ['ATACK', 'AIR_ATACK'].includes(this.currentState.name)) {
+				const angle = Phaser.Math.Angle.BetweenPoints(this.getCenter(), player.getCenter());
+				//this.scene.physics.velocityFromRotation(angle, 200, player.body.velocity);
+				player.setState('HIT');
+				//player.setVelocity((this.getDirection() === 'right' ? 200 : -200), -200);
+				if (player.health === 0) player.scene.scene.restart();
+				this.isAtacking = true;
+			}
+			if (this.anims.currentFrame.index !== 5) this.isAtacking = false;
+		});
 	}
 
 	canMoveForward() {
