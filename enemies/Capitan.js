@@ -15,25 +15,23 @@ class Capitan extends Enemy {
 			new EnemyScaryRun(this),
 		];
 		this.setState('IDLE');
-		this.velocityX = 120;
+		this.canRun = true;
+		this.canDash = true;
+		this.canJump = true;
+		this.canScaryRun = false;
+		this.canHitBomb = true;
 		this.health = 2;
+		this.speedX = 120;
+		this.dashSpeedX = 250;
+		this.scaryRunSpeed = 200;
+		this.visionRange = 200;
+		this.atackRange = 40;
+		this.scaryRunRange = 60;
+		this.direction = 'right';
+		this.atackHitboxRadius = 20;
+		this.atackHitboxOffsetY = 10;
+		this.isInvulnerable = false;
 		this.createAtackHitbox();
-		this.properties = {
-			canRun: false,
-			canDash: false,
-			canJump: false,
-			canScaryRun: true,
-			canHitBomb: false,
-			health: 2,
-			speedX: 120,
-			dashSpeedX: 180,
-			scaryRunSpeed: 200,
-			visionRange: 200,
-			atackRange: 50,
-			scaryRunRange: 60,
-			direction: 'right',
-			isInvulnerable: false,
-		}
 	}
 
 	checkScaryRun() {

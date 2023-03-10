@@ -4,6 +4,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y, textureKey);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
+		this.createAnimations(textureKey);
 		this.states = [
 			new Idle(this),
 			new Running(this),
@@ -12,7 +13,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			new Landing(this),
 			new Hit(this),
 		];
-		this.createAnimations(textureKey);
 		this.setState('IDLE');
 		this.setSize(25, 50);
 		this.setOffset(20, 8);
@@ -45,6 +45,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			this.flipX = false;
 			this.setOffset(20, 8);
 		}
+	}
+
+	takeDamage(atackHitbox) {
+		//const angle = Phaser.Math.Angle.BetweenPoints(atackHitbox, this);
+		//console.log(atackHitbox)
+		//this.scene.physics.velocityFromRotation(angle, 250, this.body.velocity);
+		//this.setVelocityY(-250);
+		console.log(this.body.velocity.y)
+		this.setState('HIT');
+		//this.setVelocity(250, -250)
+		// if (player.health === 0) player.scene.scene.restart();
+		// player.health--;
 	}
 
 	createAnimations(textureKey) {

@@ -28,9 +28,7 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.setOffset(0, 12);
 		this.setOrigin(0.5, 0.5);
 		let playerCollider = this.scene.physics.add.overlap(this, player, () => {
-			player.setState('HIT');
-			const angle = Phaser.Math.Angle.BetweenPoints(this.getCenter(), player.getCenter());
-			this.scene.physics.velocityFromRotation(angle, 200, player.body.velocity);
+			player.takeDamage(this);
 			this.scene.physics.world.removeCollider(playerCollider);
 		});
 		let enemyCollider = this.scene.physics.add.overlap(this, enemies, (bomb, enemy) => enemy.takeDamage(bomb, enemyCollider));

@@ -64,6 +64,8 @@ function update() {
 	enemies.getChildren().forEach(enemy => enemy.currentState.handleState())
 	//enemies.getChildren().forEach(enemy => console.log(enemy.properties.direction))
 	//console.log(enemies.getChildren()[0].currentState.name)
+	//console.log(player.body.velocity.y)
+	//console.log(player.currentState.name)
 }
 
 function getObjectCoordinateX(gameObject) {

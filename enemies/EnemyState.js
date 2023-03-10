@@ -14,8 +14,8 @@ class EnemyIdle extends EnemyState {
 		this.enemy.setVelocityX(0);
 	}
 	handleState() {
-		if (this.enemy.canRun()) return this.enemy.setState('RUN');
-		if (this.enemy.canDash() && this.enemy.checkDashRange()) return this.enemy.setState('DASH');
+		if (this.enemy.canRun) return this.enemy.setState('RUN');
+		if (this.enemy.canDash && this.enemy.checkDashRange()) return this.enemy.setState('DASH');
 	}
 }
 
@@ -29,9 +29,9 @@ class EnemyRun extends EnemyState {
 	handleState() {
 		//if (this.enemy.canScaryRun() && this.enemy.checkScaryRun()) return this.enemy.setState('SCARY_RUN');
 		if (this.enemy.checkAtackRange()) return this.enemy.setState('ATACK');
-		if (this.enemy.canDash() && this.enemy.checkDashRange()) return this.enemy.setState('DASH');
-		if (this.enemy.canHitBomb() && this.enemy.checkBombRange()) return this.enemy.setState('MOVE_TO_BOMB');
-		if (this.enemy.canDash() && this.enemy.checkDashRange() && !this.enemy.canMoveForward()) return this.enemy.setState('ATACK');
+		if (this.enemy.canDash && this.enemy.checkDashRange()) return this.enemy.setState('DASH');
+		if (this.enemy.canHitBomb && this.enemy.checkBombRange()) return this.enemy.setState('MOVE_TO_BOMB');
+		if (this.enemy.canDash && this.enemy.checkDashRange() && !this.enemy.canMoveForward()) return this.enemy.setState('ATACK');
 		if (!this.enemy.canMoveForward()) this.enemy.toogleDirection();
 		if (this.enemy.body.velocity.x === 0) this.enemy.setVelocityXByDirection();
 	}
@@ -46,7 +46,7 @@ class EnemyDash extends EnemyState {
 	}
 	handleState() {
 		if (Phaser.Math.Distance.BetweenPoints(player, this.enemy) < 10) return this.enemy.setState('ATACK');
-		if (this.enemy.canJump() && player.y < this.enemy.y && Phaser.Math.Distance.BetweenPoints(player, this.enemy) < 100) return this.enemy.setState('JUMP');
+		if (this.enemy.canJump && player.y < this.enemy.y && Phaser.Math.Distance.BetweenPoints(player, this.enemy) < 100) return this.enemy.setState('JUMP');
 		if (!this.enemy.checkDashRange()) return this.enemy.setState('RUN');
 		if (!this.enemy.canMoveForward()) this.enemy.toogleDirection();
 	}
@@ -85,9 +85,9 @@ class EnemyAtack extends EnemyState {
 		this.enemy.setVelocityX(0);
 	}
 	handleState() {
-		if (!this.enemy.checkAtackRange() && !this.enemy.canDash() ||
-			!this.enemy.checkAtackRange() && this.enemy.canDash() && this.enemy.canMoveForward()) return this.enemy.setState('RUN');
-		if (!this.enemy.checkDashRange() && this.enemy.canDash()) return this.enemy.setState('RUN');
+		if (!this.enemy.checkAtackRange() && !this.enemy.canDash ||
+			!this.enemy.checkAtackRange() && this.enemy.canDash && this.enemy.canMoveForward()) return this.enemy.setState('RUN');
+		if (!this.enemy.checkDashRange() && this.enemy.canDash) return this.enemy.setState('RUN');
 		//if (!this.enemy.checkAtackRange() && this.enemy.properties.canDash && this.enemy.canMoveForward()) this.enemy.setState('RUNNING');
 		//if (this.enemy.properties.canDash && !this.enemy.canMoveForward() && !this.enemy.checkDashRange()) this.enemy.setState('RUNNING');
 	}
@@ -113,7 +113,7 @@ class EnemyHit extends EnemyState {
 	}
 	enter() {
 		setTimeout(() => this.enemy.setState('FALL'), 300);
-		setTimeout(() => this.enemy.properties.isInvulnerable = false, 1000);
+		setTimeout(() => this.enemy.isInvulnerable = false, 1000);
 	}
 	handleState() {
 	}
@@ -169,7 +169,7 @@ class EnemyScaryRun extends EnemyState {
 	}
 	handleState() {
 		if (!this.enemy.canMoveForward()) this.enemy.toogleDirection();
-		this.enemy.setVelocityXByDirection(this.enemy.getDirection(), this.enemy.properties.scaryRunSpeed);
+		this.enemy.setVelocityXByDirection(this.enemy.scaryRunSpeed);
 		if (this.enemy.body.velocity.y > 0) this.enemy.setState('FALL');
 		setTimeout(() => this.enemy.setState('RUN'), 500);
 	}

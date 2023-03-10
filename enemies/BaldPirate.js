@@ -19,30 +19,29 @@ class BaldPirate extends Enemy {
 			new EnemyDeadHit(this),
 		];
 		this.setState('IDLE');
-		this.properties = {
-			canRun: true,
-			canDash: true,
-			canJump: true,
-			canScaryRun: false,
-			canHitBomb: true,
-			health: 2,
-			speedX: 120,
-			dashSpeedX: 250,
-			scaryRunSpeed: 200,
-			visionRange: 200,
-			atackRange: 40,
-			scaryRunRange: 60,
-			direction: 'right',
-			atackHitboxRadius: 20,
-			atackHitboxOffsetY: 10,
-			isInvulnerable: false,
-		}
+		this.canRun = true;
+		this.canDash = true;
+		this.canJump = true;
+		this.canScaryRun = false;
+		this.canHitBomb = true;
+		this.health = 2;
+		this.speedX = 120;
+		this.dashSpeedX = 250;
+		this.scaryRunSpeed = 200;
+		this.visionRange = 200;
+		this.atackRange = 40;
+		this.scaryRunRange = 60;
+		this.direction = 'right';
+		this.atackHitboxRadius = 20;
+		this.atackHitboxOffsetY = 10;
+		this.isInvulnerable = false;
+		this.isAtacking = false;
 		this.createAtackHitbox();
 	}
 
 	hitBomb(bomb) {
 		this.setState('HIT_BOMB');
-		if (this.anims.currentFrame.index > 4) bomb.setVelocity((this.getDirection() === 'right' ? 250 : -250), -250);
+		if (this.anims.currentFrame.index > 4) bomb.setVelocity((this.direction === 'right' ? 250 : -250), -250);
 	}
 
 	createAnimations(textureKey) {
