@@ -1,79 +1,225 @@
-function preload() {
-	this.load.image('tiles', './assets/tileset.png');
-	this.load.tilemapTiledJSON('map', './assets/demo_level.json');
-	this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
-	this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
-	this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
-	this.load.spritesheet('capitan', 'assets/capitan.png', { frameWidth: 80, frameHeight: 72 });
-	this.load.spritesheet('bald_pirate', 'assets/bald_pirate.png', { frameWidth: 63, frameHeight: 67 });
-	this.load.spritesheet('door', 'assets/door.png', { frameWidth: 78, frameHeight: 96 });
-}
+class MainScene extends Phaser.Scene {
+	//currentLevel
 
-function create() {
+	constructor() {
+		super({ key: 'MainScene' })
+		this.levels = [
+			{ tilemapKey: 'map', hasLight: false },
+			{ tilemapKey: 'map2', hasLight: false },
+		];
+	}
 
-	cursors = this.input.keyboard.createCursorKeys();
-	keyUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-	keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+	init(props) {
+		const { level = 0 } = props
+		this.currentLevel = level;
+	}
 
-	map = this.make.tilemap({ key: 'map', tileWidth: 64, tileHeight: 64 });
-	tileset = map.addTilesetImage('tileset', 'tiles');
-	groundLayer = map.createLayer('ground', tileset);
-	groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26]);
-	platformsLayer = map.createLayer('platforms', tileset);
-	platformsLayer.filterTiles(tile => tile.index > 0).forEach(tile => tile.setCollision(false, false, true, false, false))
+	preload() {
+		this.load.image('tiles', './assets/tileset.png');
+		this.load.tilemapTiledJSON('map', './assets/demo_level.json');
+		this.load.tilemapTiledJSON('map2', './assets/demo_level2.json');
 
-	this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+		this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
+		this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
+		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 
-	let doorInObject = map.getObjectLayer('door_in').objects[0];
-	let doorIn = new Door({ scene: this, x: getObjectCoordinateX(doorInObject), y: getObjectCoordinateY(doorInObject), textureKey: 'door' });
+		this.load.spritesheet('canon', 'assets/canon.png', { frameWidth: 62, frameHeight: 46 });
+		this.load.image('canon_ball', 'assets/canon_ball.png');
+		this.load.spritesheet('bald_pirate', 'assets/bald_pirate.png', { frameWidth: 63, frameHeight: 67 });
+		this.load.spritesheet('capitan', 'assets/capitan.png', { frameWidth: 80, frameHeight: 72 });
+		this.load.spritesheet('cucumber', 'assets/cucumber.png', { frameWidth: 64, frameHeight: 68 });
 
-	let playerObject = map.getObjectLayer('player').objects[0];
-	player = new Player({ scene: this, x: getObjectCoordinateX(playerObject), y: getObjectCoordinateY(playerObject), textureKey: 'bomb_guy' });
-	doorIn.openAndClose();
+		this.load.spritesheet('door', 'assets/door.png', { frameWidth: 78, frameHeight: 96 });
 
-	bombBar = new BombBar({ scene: this, player, textureKey: 'bomb_bar' });
-	bombs = new Bombs({ scene: this, textureKey: 'bomb' });
+		this.load.spritesheet('candle', 'assets/lighting/candle.png', { frameWidth: 14, frameHeight: 32 });
+		this.load.spritesheet('candle_light', 'assets/lighting/candle_light.png', { frameWidth: 60, frameHeight: 58 });
+		this.load.image('window', 'assets/lighting/window.png');
+		this.load.spritesheet('window_light', 'assets/lighting/window_light.png', { frameWidth: 170, frameHeight: 139 });
 
-	enemies = this.physics.add.group();
+		this.load.spritesheet('small_chain', 'assets/small_chain.png', { frameWidth: 9, frameHeight: 52 });
+		this.load.spritesheet('big_chain', 'assets/big_chain.png', { frameWidth: 9, frameHeight: 100 });
 
-	// let capitansLayer = map.getObjectLayer('capitans');
-	// capitansLayer.objects.forEach(capitan => {
-	// 	let newCapitan = new BaldPirate(this, capitan.x - capitan.width * 0.5, capitan.y - capitan.height * 0.5, 'bald_pirate');
-	// 	enemies.add(newCapitan);
-	// })
+		this.load.image('barrel', 'assets/decoration/barrel.png');
+		this.load.image('blue_bottle', 'assets/decoration/blue_bottle.png');
+		this.load.image('chair', 'assets/decoration/chair.png');
+		this.load.image('green_bottle', 'assets/decoration/green_bottle.png');
+		this.load.image('red_bottle', 'assets/decoration/red_bottle.png');
+		this.load.image('table', 'assets/decoration/table.png');
+		this.load.image('skull', 'assets/decoration/skull.png');
+	}
 
-	let baldPiratesLayer = map.getObjectLayer('bald_pirates');
-	baldPiratesLayer.objects.forEach(pirate => {
-		let newCapitan = new BaldPirate(this, pirate.x - pirate.width * 0.5, pirate.y - pirate.height * 0.5, 'bald_pirate');
-		enemies.add(newCapitan);
-	})
+	create() {
+		cursors = this.input.keyboard.createCursorKeys();
+		keyUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+		keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-	this.physics.add.collider(player, [groundLayer, platformsLayer]);
-	this.physics.add.collider(enemies, [groundLayer, platformsLayer]);
-	this.physics.add.collider(bombs, [groundLayer, platformsLayer]);
+		this.hasLight = this.levels[this.currentLevel].hasLight;
 
-	camera = this.cameras.main;
-	camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-	camera.startFollow(player, true, 1, 1, 0, 0);
+		this.map = this.make.tilemap({ key: this.levels[this.currentLevel].tilemapKey, tileWidth: 64, tileHeight: 64 });
+		this.tileset = this.map.addTilesetImage('tileset', 'tiles');
+		this.groundLayer = this.map.createLayer('ground', this.tileset);
+		this.groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26]);
+		this.platformsLayer = this.map.createLayer('platforms', this.tileset);
+		this.platformsLayer.filterTiles(tile => tile.index > 0).forEach(tile => tile.setCollision(false, false, true, false, false))
 
-}
+		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
-function update() {
-	player.currentState.handleInput({ cursors, keyUp });
-	bombBar.update();
-	enemies.getChildren().forEach(enemy => enemy.currentState.handleState())
-	//enemies.getChildren().forEach(enemy => console.log(enemy.properties.direction))
-	//console.log(enemies.getChildren()[0].currentState.name)
-	//console.log(player.body.velocity.y)
-	//console.log(player.currentState.name)
-}
+		this.doorGroup = this.physics.add.group({
+			immovable: true,
+			allowGravity: false
+		});
+		this.enemyGroup = this.physics.add.group();
+		this.enemyHurtboxGroup = this.physics.add.group();
+		this.canonBallGroup = this.physics.add.group({
+			defaultKey: 'canon_ball',
+			classType: CanonBall,
+			allowGravity: false,
+			angularVelocity: 1000,
+		});
+		this.bottleGroup = this.physics.add.group({
+			defaultKey: 'blue_bottle',
+			classType: Bottle,
+			allowGravity: false,
+			angularVelocity: 1000,
+		});
+		this.pushableDecorationGroup = this.physics.add.group({
+			bounceX: 0.5,
+			bounceY: 0.5,
+			dragX: 100,
+			dragY: 100,
+		});
 
-function getObjectCoordinateX(gameObject) {
-	return gameObject.x + gameObject.width * 0.5
-}
+		this.createDoors();
+		this.createPlayer();
+		this.createCamera();
+		this.createEnemies();
+		this.createPushableDecorations();
+		this.createDecorations();
 
-function getObjectCoordinateY(gameObject) {
-	return gameObject.y - gameObject.height * 0.5
+		if (this.hasLight) this.createLight();
+
+		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer]);
+		this.physics.add.collider(this.enemyGroup, [this.groundLayer, this.platformsLayer]);
+		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer]); // more colissions?
+		this.physics.add.overlap(this.player.bombGroup, this.player, (player, bomb) => player.takeBombDamage(bomb));
+		this.physics.add.overlap(this.player.bombGroup, this.enemyGroup, (bomb, enemy) => enemy.takeBombDamage(bomb));
+		this.physics.add.overlap(this.player.bombGroup, this.pushableDecorationGroup, (bomb, object) => bomb.push(object));
+		this.physics.add.overlap(this.enemyHurtboxGroup, this.player, (player, hurtbox) => hurtbox.atack(player));
+		this.physics.add.collider([this.canonBallGroup, this.bottleGroup], [this.groundLayer], (projectile) => projectile.destroy());
+
+		this.physics.add.overlap([this.canonBallGroup, this.bottleGroup], this.player, (player, projectile) => player.takeDamage(projectile));
+
+		//this.physics.add.overlap(this.bottleGroup, this.player, (player, bottle) => player.takeDamage(bottle));
+
+		this.physics.add.collider(this.pushableDecorationGroup, [this.groundLayer, this.platformsLayer, this.pushableDecorationGroup]);
+
+		this.physics.add.overlap(this.doorGroup, this.player, (player, door) => this.changeLevel(door));
+
+	}
+	update() {
+		this.player.currentState.handleInput({ cursors, keyUp });
+		this.player.handleBombListener();
+		this.enemyGroup.getChildren().forEach(enemy => {
+			enemy.currentState.handleState();
+		});
+	}
+
+	changeLevel(door) {
+		if (door.id === this.scene.currentLevel || door.id === -1 || !cursors.down.isDown) return
+		this.player.setState('DOOR_IN');
+		door.anims.play('opening');
+		door.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'opening', function (anims) {
+			this.scene.restart({ level: door.id });
+		}, this);
+
+	}
+
+	getObjectCoordinateX(gameObject) {
+		return gameObject.x + gameObject.width * 0.5
+	}
+
+	getObjectCoordinateY(gameObject) {
+		return gameObject.y - gameObject.height * 0.5
+	}
+	createDoors() {
+		this.map.getObjectLayer('doors').objects.forEach(object => {
+			const id = object.properties.find(item => item.name === 'id').value;
+			const door = new Door({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'door', id });
+			this.doorGroup.add(door);
+		});
+	}
+	createPlayer() {
+		const door = this.doorGroup.getChildren().find(item => item.id === this.currentLevel - 1);
+		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textureKey: 'bomb_guy' });
+	}
+	createCamera() {
+		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+		this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
+	}
+	createEnemies() {
+		const classes = {
+			'BaldPirate': BaldPirate,
+			'Capitan': Capitan,
+			'Canon': Canon,
+			'Cucumber': Cucumber,
+		}
+		if (!this.map.getObjectLayer('enemies')) return
+		this.map.getObjectLayer('enemies').objects.forEach(object => {
+			const className = classes[object.properties.find(item => item.name === 'className').value];
+			const textureKey = object.properties.find(item => item.name === 'texture').value;
+			let direction = 'right';
+			if (object.flippedHorizontal) direction = 'left';
+			const enemy = new className({
+				scene: this,
+				x: this.getObjectCoordinateX(object),
+				y: this.getObjectCoordinateY(object),
+				textureKey,
+				direction,
+			});
+			this.enemyGroup.add(enemy);
+		})
+	}
+	createPushableDecorations() {
+		if (!this.map.getObjectLayer('decorations')) return
+		this.map.getObjectLayer('decorations').objects.forEach(object => {
+			const textureKey = object.properties.find(item => item.name === 'texture').value;
+			const newObject = new DecorationObject({
+				scene: this,
+				x: this.getObjectCoordinateX(object),
+				y: this.getObjectCoordinateY(object),
+				textureKey,
+				flipX: object.flippedHorizontal,
+			});
+			this.pushableDecorationGroup.add(newObject);
+		})
+	}
+	createDecorations() {
+		const layers = {
+			'small_chains': { className: Chain, textureKey: 'small_chain' },
+			'big_chains': { className: Chain, textureKey: 'big_chain' },
+			'candles': { className: Candle, textureKey: 'candle' },
+			'windows': { className: Window, textureKey: 'window' },
+		}
+		for (let key in layers) {
+			const { className, textureKey } = layers[key];
+			const layer = this.map.getObjectLayer(key);
+			if (layer) layer.objects.forEach(object => {
+				const newObject = new className({
+					scene: this,
+					x: this.getObjectCoordinateX(object),
+					y: this.getObjectCoordinateY(object),
+					textureKey
+				});
+			})
+		}
+	}
+	createLight() {
+		this.children.list.forEach(item => item.setPipeline('Light2D'))
+		this.children.list.forEach(item => {
+			if (item.light) this.lights.addLight(item.x, item.y, 900, 0xffffff, 0.7);
+		})
+		this.lights.enable().setAmbientColor(0x000000);
+	}
 }
 
 function getKeyFrames(array) {
@@ -88,4 +234,31 @@ function getKeyFrames(array) {
 	return result
 }
 
-console.log(getKeyFrames([34, 14, 1, 4, 2, 3, 12, 8, 6, 4]))
+console.log(getKeyFrames([36, 12, 1, 4, 2, 3, 11, 11, 8, 6, 4]))
+
+
+// this.states2 = {
+// 	'IDLE': {
+// 		eneter: () => {
+// 			console.log('enter idle');
+// 			setTimeout(() => this.setState2('RUN'), 3000);
+// 		},
+// 		handle: () => console.log('handle idle'),
+// 	},
+// 	'RUN': {
+// 		eneter: () => {
+// 			console.log('enter run');
+// 			setTimeout(() => this.setState2('IDLE'), 3000);
+// 		},
+// 		handle: () => console.log('handle run'),
+// 	}
+// }
+
+
+// this.currentState2 = this.states2['IDLE'];
+// this.currentState2.eneter();
+
+// setState2(name) {
+// 	this.currentState2 = this.states2[name];
+// 	this.currentState2.eneter()
+// }

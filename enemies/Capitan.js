@@ -1,73 +1,64 @@
 class Capitan extends Enemy {
 
-	constructor(scene, x, y, textureKey) {
-		super(scene, x, y, textureKey);
-		this.setSize(30, 67);
-		this.setOffset(20, 5);
-		this.createAnimations(textureKey);
-		this.states = [
-			new EnemyIdle(this),
-			new EnemyRun(this),
-			new EnemyFall(this),
-			new EnemyAtack(this),
-			new EnemyHit(this),
-			new EnemyDeadHit(this),
-			new EnemyScaryRun(this),
-		];
-		this.setState('IDLE');
-		this.canRun = true;
-		this.canDash = true;
-		this.canJump = true;
-		this.canScaryRun = false;
-		this.canHitBomb = true;
+	constructor({ scene, x, y, textureKey, direction }) {
+		super({ scene, x, y, textureKey });
+
+		this.bottleGroup = scene.bottleGroup;
 		this.health = 2;
 		this.speedX = 120;
-		this.dashSpeedX = 250;
-		this.scaryRunSpeed = 200;
-		this.visionRange = 200;
+		this.throwRange = 300;
 		this.atackRange = 40;
-		this.scaryRunRange = 60;
-		this.direction = 'right';
-		this.atackHitboxRadius = 20;
-		this.atackHitboxOffsetY = 10;
+		this.hurtboxRadius = 25;
+		this.hurtboxOffsetY = 0;
+		this.bodyProperties = { width: 30, height: 67, offsetX: 20, offsetY: 5, flipOffsetX: 30 };
 		this.isInvulnerable = false;
-		this.createAtackHitbox();
+		this.isAtacking = false;
+		this.canThrow = true;
+		this.setBodyProperties(direction);
+		this.createHurtbox();
+		this.createAnimations(textureKey);
+		this.states = [
+			new CapitanIdle(this),
+			new CapitanRun(this),
+			new CapitanThrowBottle(this),
+			new EnemyAtack(this),
+			new EnemyFall(this),
+			new EnemyHit(this),
+			new EnemyDeadHit(this),
+		];
+		this.setState('IDLE');
+	}
+
+	checkThrowRange() {
+		return Phaser.Math.Distance.BetweenPoints(this.player, this) < this.throwRange
+	}
+
+	throwBottle() {
+		if (this.anims.currentFrame.index === 5 && this.canThrow && ['THROW_BOTTLE'].includes(this.currentState.name)) {
+			this.canThrow = false;
+			const bottle = this.bottleGroup.get();
+			bottle.setPosition(this.x, this.y);
+			const angle = Phaser.Math.Angle.BetweenPoints(this, this.player);
+			this.scene.physics.velocityFromRotation(angle, 400, bottle.body.velocity);
+			this.scene.time.delayedCall(3000, () => this.canThrow = true);
+			this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'air_atack', function (anims) {
+				this.setState('IDLE')
+			}, this);
+		}
 	}
 
 	checkScaryRun() {
-		if (bombs.getChildren().length === 0) return
-		for (let i = 0; i < bombs.getChildren().length; i++) {
-			if (Phaser.Math.Distance.BetweenPoints(bombs.getChildren()[i], this) < this.properties.scaryRunRange) return true
+		if (this.bombGroup.getChildren().length === 0) return
+		for (let i = 0; i < this.bombGroup.getChildren().length; i++) {
+			if (Phaser.Math.Distance.BetweenPoints(this.bombGroup.getChildren()[i], this) < this.scaryRunRange) return true
 		}
 		return false
 	}
 
 	makeScaryRun() {
-		let bomb = bombs.getChildren().sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
-		if (bomb.x < this.x) return this.setDirection('right', this.properties.scaryRunSpeed)
-		this.setDirection('left', this.properties.scaryRunSpeed);
-	}
-
-	createAtackHitbox() {
-		this.atackHitbox = this.scene.add.circle(this.x, this.y, 30, 0x918f8d);
-		this.atackHitbox = this.scene.physics.add.existing(this.atackHitbox);
-		this.atackHitbox.body.setCircle(30);
-		this.atackHitbox.body.setAllowGravity(false);
-		this.atackHitbox.setVisible(false);
-		let playerCollider = this.scene.physics.add.overlap(this.atackHitbox, player, () => {
-			if (this.anims.currentFrame.index === 5 && !this.isAtacking && this.currentState.name === 'ATACK') {
-				player.health--;
-				if (player.health === 0) player.scene.scene.restart();
-				console.log('hit')
-				this.isAtacking = true;
-			}
-			if (this.anims.currentFrame.index !== 5) this.isAtacking = false;
-			// player.setState('HIT');
-			// const angle = Phaser.Math.Angle.BetweenPoints(this.getCenter(), player.getCenter());
-			// this.atackHitbox.body.enable = false;
-			// this.scene.physics.velocityFromRotation(angle, 200, player.body.velocity);
-			// this.scene.physics.world.removeCollider(playerCollider);
-		});
+		const bomb = this.bombGroup.getChildren().sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
+		if (bomb.x < this.x) return this.setDirection('right')
+		this.setDirection('left');
 	}
 
 	createAnimations(textureKey) {
@@ -84,6 +75,18 @@ class Capitan extends Enemy {
 			repeat: -1,
 		});
 		this.anims.create({
+			key: 'dash',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 32, end: 45 }),
+			frameRate: 40,
+			repeat: -1,
+		});
+		this.anims.create({
+			key: 'jump',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 47, end: 50 }),
+			frameRate: 20,
+			repeat: 0,
+		});
+		this.anims.create({
 			key: 'fall',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 51, end: 52 }),
 			frameRate: 20,
@@ -94,6 +97,12 @@ class Capitan extends Enemy {
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 56, end: 62 }),
 			frameRate: 20,
 			repeat: -1,
+		});
+		this.anims.create({
+			key: 'air_atack',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 56, end: 62 }),
+			frameRate: 20,
+			repeat: 0,
 		});
 		this.anims.create({
 			key: 'scary_run',
@@ -112,6 +121,12 @@ class Capitan extends Enemy {
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 83, end: 88 }),
 			frameRate: 20,
 			repeat: 0,
+		});
+		this.anims.create({
+			key: 'dead_ground',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 89, end: 92 }),
+			frameRate: 20,
+			repeat: -1,
 		});
 	}
 

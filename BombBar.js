@@ -10,20 +10,20 @@ class BombBar extends Phaser.Physics.Arcade.Sprite {
 
 	update() {
 		this.setPosition(this.player.body.center.x, this.player.body.y - 15);
-		if (Phaser.Input.Keyboard.JustDown(keySpace)) this.chargeBomb();
-		if (Phaser.Input.Keyboard.JustUp(keySpace)) this.throwBomb();
 	}
 
-	chargeBomb() {
-		if (bombs.getChildren().length === bombs.maxSize) return
+	startCharging() {
 		this.setVisible(true);
 		this.anims.play('CHARGING');
 	}
 
-	throwBomb() {
-		if (this.visible === false) return
+	stopCharging() {
 		this.setVisible(false);
-		bombs.throwBomb(this.anims.getProgress());
+		return this.anims.getProgress();
+	}
+
+	isVisible() {
+		return this.visible
 	}
 
 	createAnimations(textureKey) {

@@ -1,105 +1,134 @@
+// class State {
+// 	constructor(name, player, animation) {
+// 		this.name = name;
+// 		this.player = player;
+// 		this.animation = animation;
+// 	}
+// }
+
 class Idle extends State {
-	constructor(carrier) {
-		super('IDLE', carrier);
+	constructor(player) {
+		super({ name: 'IDLE', player, animation: 'idle' });
 	}
 	enter() {
 	}
 	handleInput({ cursors, keyUp }) {
-		if (cursors.right.isDown || cursors.left.isDown) this.carrier.setState('RUNNING');
-		if (Phaser.Input.Keyboard.JustDown(keyUp)) this.carrier.setState('JUMPING');
-		if (this.carrier.body.velocity.y > 0) this.carrier.setState('FALLING');
+		if (cursors.right.isDown || cursors.left.isDown) this.player.setState('RUN');
+		if (Phaser.Input.Keyboard.JustDown(keyUp)) this.player.setState('JUMP');
+		if (this.player.body.velocity.y > 0) this.player.setState('JUMP');
 	}
 }
 
-class Running extends State {
-	constructor(carrier) {
-		super('RUNNING', carrier);
+class Run extends State {
+	constructor(player) {
+		super({ name: 'RUN', player, animation: 'run' });
 	}
 	enter() {
 	}
 	handleInput({ cursors }) {
 		if (cursors.right.isDown) {
-			this.carrier.setVelocityX(160);
+			this.player.setVelocityX(160);
 		} else if (cursors.left.isDown) {
-			this.carrier.setVelocityX(-160);
+			this.player.setVelocityX(-160);
 		} else {
-			this.carrier.setVelocityX(0);
-			this.carrier.setState('IDLE');
+			this.player.setVelocityX(0);
+			this.player.setState('IDLE');
 		}
-		if (Phaser.Input.Keyboard.JustDown(keyUp)) this.carrier.setState('JUMPING');
-		if (this.carrier.body.velocity.y > 0) this.carrier.setState('FALLING');
+		if (Phaser.Input.Keyboard.JustDown(keyUp)) this.player.setState('JUMP');
+		if (this.player.body.velocity.y > 0) this.player.setState('FALL');
 	}
 }
 
-class Jumping extends State {
-	constructor(carrier) {
-		super('JUMPING', carrier);
+class Jump extends State {
+	constructor(player) {
+		super({ name: 'JUMP', player, animation: 'jump' });
 	}
 	enter() {
-		this.carrier.setVelocityY(-250);
+		this.player.setVelocityY(-250);
 	}
 	handleInput({ cursors }) {
 		if (cursors.right.isDown) {
-			this.carrier.setVelocityX(160);
+			this.player.setVelocityX(160);
 		} else if (cursors.left.isDown) {
-			this.carrier.setVelocityX(-160);
+			this.player.setVelocityX(-160);
 		} else {
-			this.carrier.setVelocityX(0);
+			this.player.setVelocityX(0);
 		}
-		if (this.carrier.body.velocity.y > 0) this.carrier.setState('FALLING');
+		if (this.player.body.velocity.y > 0) this.player.setState('FALL');
 	}
 }
 
-class Falling extends State {
-	constructor(carrier) {
-		super('FALLING', carrier);
+class Fall extends State {
+	constructor(player) {
+		super({ name: 'FALL', player, animation: 'fall' });
 	}
 	enter() {
 	}
 	handleInput({ cursors }) {
 		if (cursors.right.isDown) {
-			this.carrier.setVelocityX(160);
+			this.player.setVelocityX(160);
 		} else if (cursors.left.isDown) {
-			this.carrier.setVelocityX(-160);
+			this.player.setVelocityX(-160);
 		} else {
-			this.carrier.setVelocityX(0);
+			this.player.setVelocityX(0);
 		}
-		if (this.carrier.body.blocked.down) this.carrier.setState('LANDING');
+		if (this.player.body.blocked.down) this.player.setState('LAND');
 	}
 }
 
-class Landing extends State {
-	constructor(carrier) {
-		super('LANDING', carrier);
+class Land extends State {
+	constructor(player) {
+		super({ name: 'LAND', player, animation: 'land' });
 	}
 	enter() {
-		this.carrier.setVelocityX(0);
-		this.carrier.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'LANDING', function (anims) {
-			this.carrier.setState('IDLE');
+		this.player.setVelocityX(0);
+		this.player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'land', function (anims) {
+			this.player.setState('IDLE');
 		}, this);
 	}
 	handleInput({ cursors }) {
-		if (cursors.right.isDown) {
-			this.carrier.setVelocityX(160);
-		} else if (cursors.left.isDown) {
-			this.carrier.setVelocityX(-160);
-		} else {
-			this.carrier.setVelocityX(0);
-		}
+		if (cursors.right.isDown || cursors.left.isDown) this.player.setState('RUN');
 	}
 }
 
 class Hit extends State {
-	constructor(carrier) {
-		super('HIT', carrier);
+	constructor(player) {
+		super({ name: 'HIT', player, animation: 'hit' });
 	}
 	enter() {
-		this.carrier.setPosition(this.carrier.x, this.carrier.y - 100);
-		this.carrier.setVelocityY(-250);
-		setTimeout(() => this.carrier.setState('FALLING'), 300);
+		this.player.isInvulnerable = true;
+		this.player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hit', function (anims) {
+			this.player.setState('FALL');
+		}, this);
+		// if (player.health === 0) player.scene.scene.restart();
+		// player.health--;
+		setTimeout(() => this.player.isInvulnerable = false, 1000)
 	}
 	handleInput() {
-		console.log(this.carrier.body.velocity.y)
-		// this.carrier.flipX = !this.carrier.flipX;
+
+	}
+}
+
+class DoorIn extends State {
+	constructor(player) {
+		super({ name: 'DOOR_IN', player, animation: 'door_in' });
+	}
+	enter() {
+		this.player.setVelocityX(0);
+	}
+	handleInput() {
+	}
+}
+
+class DoorOut extends State {
+	constructor(player) {
+		super({ name: 'DOOR_OUT', player, animation: 'door_out' });
+	}
+	enter() {
+		this.player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'door_out', function (anims) {
+			this.player.setState('IDLE');
+		}, this);
+	}
+	handleInput() {
 	}
 }

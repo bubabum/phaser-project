@@ -6,17 +6,31 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="./phaser.min.js"></script>
-	<script src="./GlobalVariables.js"></script>
 	<script src="./State.js"></script>
 	<script src="./objects/Door.js"></script>
+	<script src="./objects/Candle.js"></script>
+	<script src="./objects/Window.js"></script>
+	<script src="./objects/Chain.js"></script>
+	<script src="./objects/DecorationObject.js"></script>
+
+	<script src="./enemies/projectiles/CanonBall.js"></script>
+	<script src="./enemies/projectiles/Bottle.js"></script>
+
 	<script src="./enemies/Enemy.js"></script>
 	<script src="./enemies/EnemyState.js"></script>
+	<script src="./enemies/Canon.js"></script>
+	<script src="./enemies/CanonState.js"></script>
 	<script src="./enemies/Capitan.js"></script>
+	<script src="./enemies/CapitanState.js"></script>
+	<script src="./enemies/Cucumber.js"></script>
 	<script src="./enemies/BaldPirate.js"></script>
+	<script src="./enemies/BaldPirateState.js"></script>
+
 	<script src="./PlayerState.js"></script>
 	<script src="./Player.js"></script>
-	<script src="./Bombs.js"></script>
+	<script src="./Bomb.js"></script>
 	<script src="./BombBar.js"></script>
+	<script src="./GlobalVariables.js"></script>
 	<script src="./script.js"></script>
 	<title>Document</title>
 	<style>
@@ -48,14 +62,10 @@
 				default: 'arcade',
 				arcade: {
 					gravity: { y: 400 },
-					debug: true,
+					debug: false,
 				},
 			},
-			scene: {
-				preload: preload,
-				create: create,
-				update: update,
-			}
+			scene: MainScene
 		};
 		const game = new Phaser.Game(config);
 	</script>

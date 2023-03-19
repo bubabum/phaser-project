@@ -1,7 +1,8 @@
 class State {
-   constructor(name, carrier, animation) {
-      this.name = name;
-      this.carrier = carrier;
-      this.animation = animation;
-   }
+	constructor({ name, player = null, enemy = null, animation }) {
+		this.name = name;
+		this.player = player;
+		this.enemy = enemy;
+		this.animation = animation;
+	}
 }
