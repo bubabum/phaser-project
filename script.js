@@ -109,8 +109,6 @@ class MainScene extends Phaser.Scene {
 
 		this.physics.add.overlap([this.canonBallGroup, this.bottleGroup], this.player, (player, projectile) => player.takeDamage(projectile));
 
-		//this.physics.add.overlap(this.bottleGroup, this.player, (player, bottle) => player.takeDamage(bottle));
-
 		this.physics.add.collider(this.pushableDecorationGroup, [this.groundLayer, this.platformsLayer, this.pushableDecorationGroup]);
 
 		this.physics.add.overlap(this.doorGroup, this.player, (player, door) => this.changeLevel(door));

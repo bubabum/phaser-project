@@ -2,13 +2,10 @@ class Cucumber extends Enemy {
 
 	constructor({ scene, x, y, textureKey, direction }) {
 		super({ scene, x, y, textureKey });
-		//this.canScaryRun = false;
-		//this.canHitBomb = true;
-		//this.canShoot = false;
 		this.health = 2;
-		this.speedX = 100;
-		this.dashSpeedX = 180;
-		this.moveToBombSpeedX = 180;
+		this.speedX = 120;
+		this.dashSpeedX = 250;
+		//this.moveToBombSpeedX = 180;
 		this.visionRange = 200;
 		this.atackRange = 40;
 		this.hurtboxRadius = 15;
@@ -20,17 +17,14 @@ class Cucumber extends Enemy {
 		this.createHurtbox();
 		this.createAnimations(textureKey);
 		this.states = [
-			new EnemyIdle(this),
-			new EnemyRun(this),
-			new EnemyDash(this),
-			new EnemyJump(this),
-			new EnemyJumpUp(this),
-			new EnemyJumpDown(this),
-			new EnemyFall(this),
+			new CucumberIdle(this),
+			new CucumberRun(this),
+			new CucumberDash(this),
 			new EnemyAtack(this),
 			new EnemyAirAtack(this),
 			new EnemyMoveToBomb(this),
-			//new EnemyHitBomb(this),
+			new EnemyJump(this),
+			new EnemyFall(this),
 			new EnemyHit(this),
 			new EnemyDeadHit(this),
 		];
