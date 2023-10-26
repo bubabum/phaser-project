@@ -2,13 +2,14 @@ class Cucumber extends Enemy {
 
 	constructor({ scene, x, y, textureKey, direction }) {
 		super({ scene, x, y, textureKey });
-		this.health = 2;
+		this.health = 5;
+		this.maxHealth = 5;
 		this.speedX = 120;
 		this.dashSpeedX = 250;
 		//this.moveToBombSpeedX = 180;
 		this.visionRange = 200;
-		this.atackRange = 40;
-		this.hurtboxRadius = 15;
+		this.atackRange = 10;
+		this.hurtboxRadius = 20;
 		this.hurtboxOffsetY = -10;
 		this.bodyProperties = { width: 27, height: 60, offsetX: 19, offsetY: 5, flipOffsetX: 17 };
 		this.isInvulnerable = false;
@@ -21,9 +22,9 @@ class Cucumber extends Enemy {
 			new CucumberRun(this),
 			new CucumberDash(this),
 			new EnemyAtack(this),
-			new EnemyAirAtack(this),
+			//new EnemyAirAtack(this),
 			new EnemyMoveToBomb(this),
-			new EnemyJump(this),
+			//new EnemyJump(this),
 			new EnemyFall(this),
 			new EnemyHit(this),
 			new EnemyDeadHit(this),
@@ -76,7 +77,7 @@ class Cucumber extends Enemy {
 		this.anims.create({
 			key: 'atack',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 58, end: 68 }),
-			frameRate: 20,
+			frameRate: 40,
 			repeat: -1,
 		});
 		this.anims.create({

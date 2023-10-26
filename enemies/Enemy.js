@@ -21,16 +21,21 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
 
-		// if (this.healthBar) this.healthBar.destroy();
-		// let tint = 0.33 * this.health / 2;
+		// if (this.healthBar || this.health === 0) this.healthBar.destroy();
+		// let tint = 0.33 * this.health / this.maxHealth;
 		// let color = Phaser.Display.Color.HSLToColor(tint, 1, 0.5);
 		// let r = Phaser.Display.Color.ComponentToHex(color.r);
 		// let g = Phaser.Display.Color.ComponentToHex(color.g);
 		// let b = Phaser.Display.Color.ComponentToHex(color.b);
-		// this.healthBar = this.scene.add.rectangle(this.x, this.y - 30, 30 * this.health / 2, 4, `0x${r}${g}${b}`, 1);
+		//this.graphics = this.scene.add.graphics();
+		//this.graphics.fillStyle(`0x${r}${g}${b}`, 1);
+		//this.healthBar = this.graphics.fillRoundedRect(this.x, this.y - 40, 30 * this.health / this.maxHealth, 5, 2);
+		//this.healthBar = this.scene.add.rectangle(this.x, this.y - 40, 30 * this.health / this.maxHealth, 5, `0x${r}${g}${b}`, 1);
+
+		console.log(this?.currentState?.name)
 
 		if (this.stateName) this.stateName.destroy();
-		this.stateName = this.scene.add.text(this.x, this.y - 50, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
+		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
 		this.stateName.x -= this.stateName.width * 0.5
 
 		if (this?.hurtbox?.body) {

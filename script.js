@@ -232,7 +232,7 @@ function getKeyFrames(array) {
 	return result
 }
 
-console.log(getKeyFrames([36, 12, 1, 4, 2, 3, 11, 11, 8, 6, 4]))
+//console.log(getKeyFrames([36, 12, 1, 4, 2, 3, 11, 11, 8, 6, 4]))
 
 
 // this.states2 = {
