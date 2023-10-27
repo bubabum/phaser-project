@@ -32,7 +32,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		//this.healthBar = this.graphics.fillRoundedRect(this.x, this.y - 40, 30 * this.health / this.maxHealth, 5, 2);
 		//this.healthBar = this.scene.add.rectangle(this.x, this.y - 40, 30 * this.health / this.maxHealth, 5, `0x${r}${g}${b}`, 1);
 
-		console.log(this?.currentState?.name)
+		//console.log(this?.currentState?.name)
 
 		if (this.stateName) this.stateName.destroy();
 		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
@@ -68,6 +68,10 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	setVelocityXByDirection(speed = this.speedX, direction = this.direction) {
 		if (direction === 'right') return this.setVelocityX(speed).setFlipX(false);
 		this.setVelocityX(-speed).setFlipX(true);
+	}
+
+	checkDirectionToPlayer() {
+		if (this.direction === 'left' && this.player.x < this.x || this.direction === 'right' && this.player.x > this.x) return true
 	}
 
 	turnToPlayer() {
@@ -162,7 +166,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	takeBombDamage(bomb) {
-		if (this.isInvulnerable || this.canShoot || !bomb.isExploded()) return
+		if (this.isInvulnerable || this.canShoot || !bomb.exploded) return
 		bomb.push(this)
 		if (this.health === 1) return this.setState('DEAD_HIT');
 		this.setState('HIT');
@@ -180,11 +184,11 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 			this.scene.physics.velocityFromRotation(angle, 250, object.body.velocity);
 		}
 		this.hurtbox.atack = (player) => {
-			if (this.anims.currentFrame.index === 5 && !this.isAtacking && ['ATACK', 'AIR_ATACK'].includes(this.currentState.name)) {
-				this.isAtacking = true;
+			if (this.anims.currentFrame.index === 5 && ['ATACK', 'AIR_ATACK'].includes(this.currentState.name)) {
 				player.takeDamage(this.hurtbox);
+				//this.isAtacking = false;
 			}
-			if (this.anims.currentFrame.index !== 5) this.isAtacking = false;
+			//if (this.anims.currentFrame.index !== 5) this.isAtacking = false;
 		}
 		this.enemyHurtboxGroup.add(this.hurtbox);
 		this.hurtbox.body.setCircle(this.hurtboxRadius);

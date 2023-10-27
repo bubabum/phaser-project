@@ -2,13 +2,14 @@ class Cucumber extends Enemy {
 
 	constructor({ scene, x, y, textureKey, direction }) {
 		super({ scene, x, y, textureKey });
+		this.canHitBomb = true;
 		this.health = 5;
 		this.maxHealth = 5;
 		this.speedX = 120;
 		this.dashSpeedX = 250;
 		//this.moveToBombSpeedX = 180;
 		this.visionRange = 200;
-		this.atackRange = 10;
+		this.atackRange = 20;
 		this.hurtboxRadius = 20;
 		this.hurtboxOffsetY = -10;
 		this.bodyProperties = { width: 27, height: 60, offsetX: 19, offsetY: 5, flipOffsetX: 17 };
@@ -21,10 +22,9 @@ class Cucumber extends Enemy {
 			new CucumberIdle(this),
 			new CucumberRun(this),
 			new CucumberDash(this),
+			new CucumberBlowTheWick(this),
 			new EnemyAtack(this),
-			//new EnemyAirAtack(this),
 			new EnemyMoveToBomb(this),
-			//new EnemyJump(this),
 			new EnemyFall(this),
 			new EnemyHit(this),
 			new EnemyDeadHit(this),
@@ -33,8 +33,8 @@ class Cucumber extends Enemy {
 	}
 
 	hitBomb(bomb) {
-		this.setState('HIT_BOMB');
-		if (this.anims.currentFrame.index > 4) bomb.setVelocity((this.direction === 'right' ? 250 : -250), -250);
+		this.setState('BLOW_THE_WICK');
+		if (this.anims.currentFrame.index > 4) bomb.setVelocity(0);
 	}
 
 	createAnimations(textureKey) {
@@ -78,7 +78,7 @@ class Cucumber extends Enemy {
 			key: 'atack',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 58, end: 68 }),
 			frameRate: 40,
-			repeat: -1,
+			repeat: 0,
 		});
 		this.anims.create({
 			key: 'air_atack',

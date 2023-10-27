@@ -96,7 +96,7 @@ class Capitan extends Enemy {
 			key: 'atack',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 56, end: 62 }),
 			frameRate: 20,
-			repeat: -1,
+			repeat: 0,
 		});
 		this.anims.create({
 			key: 'air_atack',

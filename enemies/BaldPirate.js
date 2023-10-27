@@ -81,13 +81,13 @@ class BaldPirate extends Enemy {
 		this.anims.create({
 			key: 'atack',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 58, end: 69 }),
-			frameRate: 20,
-			repeat: -1,
+			frameRate: 40,
+			repeat: 0,
 		});
 		this.anims.create({
 			key: 'air_atack',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 58, end: 69 }),
-			frameRate: 20,
+			frameRate: 40,
 			repeat: 0,
 		});
 		this.anims.create({

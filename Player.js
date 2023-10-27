@@ -87,7 +87,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	takeBombDamage(bomb) {
-		if (!bomb.isExploded() || this.isInvulnerable) return
+		if (!bomb.exploded || this.isInvulnerable) return
 		this.setState('HIT');
 		bomb.push(this);
 	}

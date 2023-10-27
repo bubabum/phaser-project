@@ -46,18 +46,3 @@ class CapitanThrowBottle extends State {
 		enemy.throwBottle();
 	}
 }
-
-class CapitanAtack extends State {
-	constructor(enemy) {
-		super({ name: 'ATACK', enemy, animation: 'atack' });
-	}
-	enter() {
-		const { enemy } = this;
-		enemy.setVelocityX(0);
-	}
-	handleState() {
-		const { enemy } = this;
-		enemy.turnToPlayer();
-		if (!enemy.checkAtackRange()) return enemy.setState('IDLE');
-	}
-}

@@ -82,10 +82,11 @@ class EnemyAtack extends State {
 	}
 	enter() {
 		this.enemy.setVelocityX(0);
+		this.enemy.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'atack', function (anims) {
+			this.enemy.setState('IDLE');
+		}, this);
 	}
 	handleState() {
-		this.enemy.turnToPlayer();
-		if (!this.enemy.checkAtackRange()) return this.enemy.setState('IDLE');
 	}
 }
 

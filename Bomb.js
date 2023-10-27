@@ -44,10 +44,6 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		}, this);
 	}
 
-	isExploded() {
-		return this.exploded
-	}
-
 	createAnimations(textureKey) {
 		this.anims.create({
 			key: 'on',
@@ -57,7 +53,13 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		});
 		this.anims.create({
 			key: 'explosion',
-			frames: this.anims.generateFrameNumbers(textureKey, { start: 10, end: 19 }),
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 10, end: 18 }),
+			frameRate: 20,
+			repeat: 0,
+		});
+		this.anims.create({
+			key: 'off',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 19, end: 19 }),
 			frameRate: 20,
 			repeat: 0,
 		});
