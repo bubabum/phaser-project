@@ -8,6 +8,7 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.setOffset(34, 58);
 		this.setOrigin(0.51, 0.67);
 		this.createAnimations(textureKey);
+		this.isOff = false;
 		this.body.gameObject = this;
 		if (scene.hasLight) this.setPipeline('Light2D')
 	}
@@ -31,17 +32,27 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	explode() {
+		if (this.isOff) return
 		this.anims.play('explosion');
 		this.exploded = true;
-		this.scene.cameras.main.shake(150, 0.005);
 		this.body.moves = false;
+		this.scene.cameras.main.shake(150, 0.005);
 		this.setCircle(48);
 		this.setOffset(0, 12);
 		this.setOrigin(0.5, 0.5);
-		setTimeout(() => this.body.destroy(), 100)
+		//setTimeout(() => this.body.destroy(), 100)
 		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'explosion', function (anims) {
 			this.destroy();
 		}, this);
+	}
+
+	turnOff() {
+		this.setVelocityX(0);
+		this.anims.play('off');
+		this.isOff = true;
+		setTimeout(() => {
+			this.destroy();
+		}, 1000)
 	}
 
 	createAnimations(textureKey) {

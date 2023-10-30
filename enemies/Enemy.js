@@ -151,11 +151,12 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
 	moveToBomb() {
 		if (this.bombGroup.getChildren().length === 0) return
-		const bomb = this.bombGroup.getChildren().sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
+		const bomb = this.bombGroup.getChildren().filter(item => item.isOff === false).sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
+		if (!bomb) return
 		this.scene.physics.moveTo(this, bomb.x, this.y, this.speedX);
 		const collider = this.scene.physics.add.overlap(this, bomb, () => {
-			if (this.canHitBomb) this.hitBomb(bomb);
-			//other behaviors
+			if (bomb.isOff) return
+			if (this.canInteractWithBomb) this.interactWithBomb(bomb);
 		});
 		this.scene.physics.world.removeCollider(collider);
 	}

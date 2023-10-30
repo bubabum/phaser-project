@@ -2,7 +2,7 @@ class BaldPirate extends Enemy {
 
 	constructor({ scene, x, y, textureKey, direction }) {
 		super({ scene, x, y, textureKey });
-		this.canHitBomb = true;
+		this.canInteractWithBomb = true;
 		this.health = 2;
 		this.speedX = 170;
 		//this.visionRange = 200;
@@ -36,7 +36,7 @@ class BaldPirate extends Enemy {
 		this.setState('IDLE');
 	}
 
-	hitBomb(bomb) {
+	interactWithBomb(bomb) {
 		this.setState('HIT_BOMB');
 		if (this.anims.currentFrame.index > 4) bomb.setVelocity((this.direction === 'right' ? 250 : -250), -250);
 	}
