@@ -2,11 +2,11 @@ class Capitan extends Enemy {
 
 	constructor({ scene, x, y, textureKey, direction }) {
 		super({ scene, x, y, textureKey });
-
 		this.bottleGroup = scene.bottleGroup;
-		this.health = 2;
+		this.maxHealth = 2;
+		this.health = this.maxHealth;
 		this.speedX = 120;
-		this.throwRange = 300;
+		this.throwRange = 270;
 		this.atackRange = 40;
 		this.hurtboxRadius = 25;
 		this.hurtboxOffsetY = 0;
@@ -39,7 +39,7 @@ class Capitan extends Enemy {
 			const bottle = this.bottleGroup.get();
 			bottle.setPosition(this.x, this.y);
 			const angle = Phaser.Math.Angle.BetweenPoints(this, this.player);
-			this.scene.physics.velocityFromRotation(angle, 400, bottle.body.velocity);
+			this.scene.physics.velocityFromRotation(angle, 300, bottle.body.velocity);
 			this.scene.time.delayedCall(3000, () => this.canThrow = true);
 			this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'air_atack', function (anims) {
 				this.setState('IDLE')

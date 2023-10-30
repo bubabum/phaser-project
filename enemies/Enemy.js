@@ -8,6 +8,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.enemyHurtboxGroup = scene.enemyHurtboxGroup;
 		this.canonBallGroup = scene.canonBallGroup;
 		this.bombGroup = this.player.bombGroup;
+		this.setDepth(24);
 	}
 
 	setState(name) {
@@ -21,28 +22,33 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
 
-		// if (this.healthBar || this.health === 0) this.healthBar.destroy();
-		// let tint = 0.33 * this.health / this.maxHealth;
-		// let color = Phaser.Display.Color.HSLToColor(tint, 1, 0.5);
-		// let r = Phaser.Display.Color.ComponentToHex(color.r);
-		// let g = Phaser.Display.Color.ComponentToHex(color.g);
-		// let b = Phaser.Display.Color.ComponentToHex(color.b);
-		//this.graphics = this.scene.add.graphics();
-		//this.graphics.fillStyle(`0x${r}${g}${b}`, 1);
-		//this.healthBar = this.graphics.fillRoundedRect(this.x, this.y - 40, 30 * this.health / this.maxHealth, 5, 2);
-		//this.healthBar = this.scene.add.rectangle(this.x, this.y - 40, 30 * this.health / this.maxHealth, 5, `0x${r}${g}${b}`, 1);
-
-		//console.log(this?.currentState?.name)
-
-		if (this.stateName) this.stateName.destroy();
-		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
-		this.stateName.x -= this.stateName.width * 0.5
+		// if (this.stateName) this.stateName.destroy();
+		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
+		// this.stateName.x -= this.stateName.width * 0.5
 
 		if (this?.hurtbox?.body) {
 			const posY = this.body.position.y + this.body.height * 0.5 + this.hurtboxOffsetY;
 			if (this.direction === 'right') return this.hurtbox.setPosition(this.body.position.x + this.body.width, posY);
 			this.hurtbox.setPosition(this.body.position.x, posY);
 		}
+	}
+
+	drawHealthBar() {
+		//console.log(this.body.left)
+		if (this.healthBar || this.health === 0) this.healthBar.destroy();
+		if (this.health === 0) return
+		const tint = 0.33 * this.health / this.maxHealth;
+		const color = Phaser.Display.Color.HSLToColor(tint, 1, 0.5);
+		const r = Phaser.Display.Color.ComponentToHex(color.r);
+		const g = Phaser.Display.Color.ComponentToHex(color.g);
+		const b = Phaser.Display.Color.ComponentToHex(color.b);
+		const x = this.body.left + this.body.width / 2
+		const { y } = this.getTopCenter();
+		this.healthBar = this.scene.add.graphics();
+		this.healthBar.fillStyle(`0x${r}${g}${b}`, 1);
+		this.healthBar.fillRoundedRect(x - 15, y - 10, 30 * this.health / this.maxHealth, 1, 0);
+		// this.healthBar.lineStyle(2, 0xffffff, 0.6);
+		// this.healthBar.strokeRect(x - 15, y - 10, 30 * this.health / this.maxHealth, 3);
 	}
 
 	setBodyProperties(direction) {
@@ -143,8 +149,10 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	checkBombRange() {
 		if (this.bombGroup.getChildren().length === 0) return
 		for (let i = 0; i < this.bombGroup.getChildren().length; i++) {
-			if (Phaser.Math.Distance.BetweenPoints(this.bombGroup.getChildren()[i], this) < 50 && this.bombGroup.getChildren()[i].x < this.x && this.direction === 'left' ||
-				Phaser.Math.Distance.BetweenPoints(this.bombGroup.getChildren()[i], this) < 50 && this.bombGroup.getChildren()[i].x > this.x && this.direction === 'right') return true
+			const bomb = this.bombGroup.getChildren()[i];
+			if (bomb.body.velocity.x !== 0 || bomb.isOff || bomb.exploded) continue
+			if (Phaser.Math.Distance.BetweenPoints(bomb, this) < 50 && bomb.x < this.x && this.direction === 'left' ||
+				Phaser.Math.Distance.BetweenPoints(bomb, this) < 50 && bomb.x > this.x && this.direction === 'right') return true
 		}
 		return false
 	}
@@ -155,7 +163,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		if (!bomb) return
 		this.scene.physics.moveTo(this, bomb.x, this.y, this.speedX);
 		const collider = this.scene.physics.add.overlap(this, bomb, () => {
-			if (bomb.isOff) return
 			if (this.canInteractWithBomb) this.interactWithBomb(bomb);
 		});
 		this.scene.physics.world.removeCollider(collider);
@@ -167,8 +174,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	takeBombDamage(bomb) {
-		if (this.isInvulnerable || this.canShoot || !bomb.exploded) return
-		bomb.push(this)
+		if (this.isInvulnerable || !bomb.exploded) return
+		bomb.push(this);
 		if (this.health === 1) return this.setState('DEAD_HIT');
 		this.setState('HIT');
 	}
@@ -187,9 +194,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.hurtbox.atack = (player) => {
 			if (this.anims.currentFrame.index === 5 && ['ATACK', 'AIR_ATACK'].includes(this.currentState.name)) {
 				player.takeDamage(this.hurtbox);
-				//this.isAtacking = false;
 			}
-			//if (this.anims.currentFrame.index !== 5) this.isAtacking = false;
 		}
 		this.enemyHurtboxGroup.add(this.hurtbox);
 		this.hurtbox.body.setCircle(this.hurtboxRadius);

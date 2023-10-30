@@ -4,22 +4,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y - 25, textureKey);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
-
-		this.setDepth(1);
+		this.setDepth(23);
 		this.setSize(25, 50);
 		this.setOffset(20, 8);
+		this.setDepth(3);
 		this.health = 5;
 		this.isInvulnerable = false;
 		this.bombMaxVelocity = 300;
+		this.healthBarImage = scene.add.image(this.x, this.y, 'health_bar');
 
 		this.bombBar = new BombBar({ scene: scene, player: this, textureKey: 'bomb_bar' });
 		this.bombGroup = scene.physics.add.group({
 			defaultKey: 'bomb',
 			classType: Bomb,
 			maxSize: 3,
-			bounceX: 1,
-			bounceY: 0.5,
-			dragX: 80,
+			bounceX: 0.8,
+			bounceY: 0.3,
+			dragX: 20,
 			dragY: 20,
 		});
 
@@ -61,6 +62,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			this.flipX = false;
 			this.setOffset(20, 8);
 		}
+
+	}
+
+	drawHealthBar() {
+
 	}
 
 	handleBombListener() {

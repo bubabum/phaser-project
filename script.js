@@ -22,12 +22,14 @@ class MainScene extends Phaser.Scene {
 		this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
 		this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
 		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
+		this.load.image('health_bar', 'assets/health_bar.png');
 
 		this.load.spritesheet('canon', 'assets/canon.png', { frameWidth: 62, frameHeight: 46 });
 		this.load.image('canon_ball', 'assets/canon_ball.png');
 		this.load.spritesheet('bald_pirate', 'assets/bald_pirate.png', { frameWidth: 63, frameHeight: 67 });
 		this.load.spritesheet('capitan', 'assets/capitan.png', { frameWidth: 80, frameHeight: 72 });
 		this.load.spritesheet('cucumber', 'assets/cucumber.png', { frameWidth: 64, frameHeight: 68 });
+		this.load.spritesheet('big_guy', 'assets/big_guy.png', { frameWidth: 77, frameHeight: 74 });
 
 		this.load.spritesheet('door', 'assets/door.png', { frameWidth: 78, frameHeight: 96 });
 
@@ -119,6 +121,7 @@ class MainScene extends Phaser.Scene {
 		this.player.handleBombListener();
 		this.enemyGroup.getChildren().forEach(enemy => {
 			enemy.currentState.handleState();
+			enemy.drawHealthBar();
 		});
 	}
 
@@ -160,6 +163,7 @@ class MainScene extends Phaser.Scene {
 			'Capitan': Capitan,
 			'Canon': Canon,
 			'Cucumber': Cucumber,
+			'BigGuy': BigGuy,
 		}
 		if (!this.map.getObjectLayer('enemies')) return
 		this.map.getObjectLayer('enemies').objects.forEach(object => {
@@ -232,7 +236,7 @@ function getKeyFrames(array) {
 	return result
 }
 
-//console.log(getKeyFrames([36, 12, 1, 4, 2, 3, 11, 11, 8, 6, 4]))
+console.log(getKeyFrames([38, 16, 1, 4, 2, 3, 11, 8, 1, 16, 11, 8, 6, 4]))
 
 
 // this.states2 = {

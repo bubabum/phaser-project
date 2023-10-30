@@ -527,49 +527,26 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":41,
-                 "height":68,
-                 "id":138,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"className",
-                         "type":"string",
-                         "value":"Cucumber"
-                        }, 
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"cucumber"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":640,
-                 "y":896
-                }, 
-                {
-                 "class":"BaldPirate",
-                 "gid":31,
-                 "height":67,
+                 "gid":34,
+                 "height":74,
                  "id":140,
                  "name":"",
                  "properties":[
                         {
                          "name":"className",
                          "type":"string",
-                         "value":"BaldPirate"
+                         "value":"BigGuy"
                         }, 
                         {
                          "name":"texture",
                          "type":"string",
-                         "value":"bald_pirate"
+                         "value":"big_guy"
                         }],
                  "rotation":0,
                  "visible":true,
-                 "width":63,
-                 "x":927.5,
-                 "y":1216
+                 "width":77,
+                 "x":708,
+                 "y":895
                 }, 
                 {
                  "class":"Capitan",
@@ -591,31 +568,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":80,
-                 "x":763.5,
-                 "y":832
-                }, 
-                {
-                 "class":"Canon",
-                 "gid":38,
-                 "height":46,
-                 "id":142,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"className",
-                         "type":"string",
-                         "value":"Canon"
-                        }, 
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"canon"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":62,
-                 "x":765.5,
-                 "y":1023.5
+                 "x":817.333333333333,
+                 "y":1216.66666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -624,7 +578,7 @@
          "y":0
         }],
  "nextlayerid":29,
- "nextobjectid":143,
+ "nextobjectid":142,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
@@ -716,9 +670,30 @@
          "imagewidth":77,
          "margin":0,
          "name":"big_guy",
+         "properties":[
+                {
+                 "name":"className",
+                 "type":"string",
+                 "value":"BigGuy"
+                }],
          "spacing":0,
          "tilecount":1,
          "tileheight":74,
+         "tiles":[
+                {
+                 "id":0,
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"BigGuy"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"big_guy"
+                        }]
+                }],
          "tilewidth":77
         }, 
         {
