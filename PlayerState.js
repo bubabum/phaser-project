@@ -24,6 +24,7 @@ class Run extends State {
 		super({ name: 'RUN', player, animation: 'run' });
 	}
 	enter() {
+
 	}
 	handleInput({ cursors, keyUp }) {
 		if (cursors.right.isDown) {
@@ -102,7 +103,6 @@ class Hit extends State {
 		player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hit', function (anims) {
 			player.setState('FALL');
 		}, this);
-		if (player.health === 0) player.scene.scene.restart();
 		setTimeout(() => this.player.isInvulnerable = false, 1000)
 	}
 	handleInput() {
@@ -116,14 +116,25 @@ class DeadHit extends State {
 	}
 	enter() {
 		const { player } = this;
-		// player.health--;
-		player.setVelocity(0);
+		player.health--;
 		player.isInvulnerable = true;
-		// player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hit', function (anims) {
-		// 	player.setState('FALL');
+		// player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'dead_hit', function (anims) {
+		// 	player.setState('DEAD_GROUND');
 		// }, this);
-		// if (player.health === 0) player.scene.scene.restart();
-		// setTimeout(() => this.player.isInvulnerable = false, 1000)
+	}
+	handleInput() {
+		if (this.player.body.onFloor()) this.player.setState('DEAD_GROUND');
+	}
+}
+
+class DeadGround extends State {
+	constructor(player) {
+		super({ name: 'DEAD_GROUND', player, animation: 'dead_ground' });
+	}
+	enter() {
+		const { player } = this;
+		player.setVelocityX(0);
+		player.scene.time.delayedCall(3000, () => player.scene.scene.restart());
 	}
 	handleInput() {
 

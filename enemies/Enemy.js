@@ -34,21 +34,30 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	drawHealthBar() {
-		//console.log(this.body.left)
 		if (this.healthBar || this.health === 0) this.healthBar.destroy();
 		if (this.health === 0) return
-		const tint = 0.33 * this.health / this.maxHealth;
-		const color = Phaser.Display.Color.HSLToColor(tint, 1, 0.5);
-		const r = Phaser.Display.Color.ComponentToHex(color.r);
-		const g = Phaser.Display.Color.ComponentToHex(color.g);
-		const b = Phaser.Display.Color.ComponentToHex(color.b);
-		const x = this.body.left + this.body.width / 2
-		const { y } = this.getTopCenter();
+		const tint = 0.30 * this.health / this.maxHealth;
+		//const color = Phaser.Display.Color.HSLToColor(tint, 1, 0.5);
+		// const r = Phaser.Display.Color.ComponentToHex(color.r);
+		// const g = Phaser.Display.Color.ComponentToHex(color.g);
+		// const b = Phaser.Display.Color.ComponentToHex(color.b);
+		let color = '0xffff00';
+		if (this.health / this.maxHealth < 0.34) {
+			color = '0xff0000';
+		} else if (this.health / this.maxHealth > 0.7) {
+			color = '0x00ff4c';
+		}
+		const width = 30;
+		const x = Math.floor(this.body.left + this.body.width / 2 - width / 2)
+		const y = Math.floor(this.getTopCenter().y - 10);
 		this.healthBar = this.scene.add.graphics();
-		this.healthBar.fillStyle(`0x${r}${g}${b}`, 1);
-		this.healthBar.fillRoundedRect(x - 15, y - 10, 30 * this.health / this.maxHealth, 1, 0);
-		// this.healthBar.lineStyle(2, 0xffffff, 0.6);
-		// this.healthBar.strokeRect(x - 15, y - 10, 30 * this.health / this.maxHealth, 3);
+		this.healthBar.fillStyle(`0x333333`, 1);
+		this.healthBar.fillRect(x, y, width, 6);
+		this.healthBar.fillStyle(`0xeeeeee`, 1);
+		this.healthBar.fillRect(x + 1, y + 1, width - 2, 4);
+		this.healthBar.fillStyle(color, 1);
+		//this.healthBar.fillStyle(`0x${r}${g}${b}`, 1);
+		this.healthBar.fillRect(x + 1, y + 1, (width - 2) * this.health / this.maxHealth, 4);
 	}
 
 	setBodyProperties(direction) {
@@ -88,7 +97,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	checkAtackRange() {
 		return Phaser.Math.Distance.BetweenPoints(this.player, this) < this.atackRange &&
 			this.player.y > this.y - this.height * 0.5 &&
-			this.player.y < this.y + this.height * 0.5
+			this.player.y < this.y + this.height * 0.5 &&
+			this.player.health > 0
 	}
 
 	checkVisionRange() {

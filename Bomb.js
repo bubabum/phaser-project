@@ -17,6 +17,7 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
 		if (!this.body) return
+		if (!this?.body.onFloor()) this.setDragX(80);
 		if (this?.body.onFloor()) this.setDragX(400);
 	}
 

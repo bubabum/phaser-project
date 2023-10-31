@@ -11,9 +11,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.health = 3;
 		this.isInvulnerable = false;
 		this.bombMaxVelocity = 300;
-		//this.healthBar = new this.healthBar({ scene: scene, player: this, textureKey: textures.lifeBar })
-		//this.healthBar = scene.add.image(5, 5, textures.healthBar).setOrigin(0, 0).setScrollFactor(0, 0);
-		//this.life = scene.add.image(46, 27, textures.life).setOrigin(0, 0).setScrollFactor(0, 0);
 		this.bombBar = new BombBar({ scene: scene, player: this, textureKey: textures.bombBar });
 		this.bombGroup = scene.physics.add.group({
 			defaultKey: 'bomb',
@@ -30,6 +27,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
 		this.createAnimations(textures.player);
+
 		this.states = [
 			new Idle(this),
 			new Run(this),
@@ -38,6 +36,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			new Land(this),
 			new Hit(this),
 			new DeadHit(this),
+			new DeadGround(this),
 			new DoorIn(this),
 			new DoorOut(this),
 		];
@@ -71,19 +70,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	update() {
-		const { currentState, cursors, keyUp } = this;
+		const { currentState, cursors, keyUp, scene } = this;
 		currentState.handleInput({ cursors, keyUp });
 		this.handleBombListener();
-		//this.drawHealthBar();
+		if (this.currentState.name === 'RUN' && !this.timedEvent) {
+			this.timedEvent = scene.time.addEvent({ delay: 500, callback: this.emitRunParticle, callbackScope: this, loop: true });
+		}
 	}
 
-	drawHealthBar() {
-		const { scrollX, scrollY } = this.scene.cameras.main;
-		this.healthBar.x = scrollX;
-		this.healthBar.y = scrollY;
-		//console.log(this.healthBar)
-		//console.log(this.scene.cameras.main)
-		//console.log(scrollX, scrollY)
+	emitRunParticle() {
+		const y = this.body.bottom;
+		let x = this.body.left;
+		if (this.flipX === true) x += this.body.width;
+		let particle = new RunParticle({ scene: this.scene, x, y, textureKey: 'run_particles' });
+		if (this.flipX === true) particle.setFlipX(true).setOrigin(0, 1);
 	}
 
 	handleBombListener() {
@@ -116,8 +116,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 	takeBombDamage(bomb) {
 		if (!bomb.exploded || this.isInvulnerable) return
-		this.setState('HIT');
 		bomb.push(this);
+		if (this.health === 1) {
+			this.scene.time.delayedCall(50, () => this.setState('DEAD_HIT'));
+		} else {
+			this.setState('HIT');
+		}
+		this.scene.time.delayedCall(50, () => { });
 	}
 
 	createAnimations(textureKey) {
@@ -133,12 +138,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			frameRate: 20,
 			repeat: -1,
 		});
-		// this.anims.create({
-		// 	key: 'jump_anticipation',
-		// 	frames: this.anims.generateFrameNumbers(textureKey, { start: 40, end: 40 }),
-		// 	frameRate: 20,
-		// 	repeat: 0,
-		// });
+		this.anims.create({
+			key: 'jump_anticipation',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 40, end: 40 }),
+			frameRate: 20,
+			repeat: 0,
+		});
 		this.anims.create({
 			key: 'jump',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 41, end: 44 }),
@@ -172,8 +177,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.anims.create({
 			key: 'dead_ground',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 64, end: 67 }),
-			frameRate: 20,
-			repeat: 0,
+			frameRate: 10,
+			repeat: -1,
 		});
 		this.anims.create({
 			key: 'door_in',

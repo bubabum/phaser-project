@@ -5,7 +5,7 @@ class MainScene extends Phaser.Scene {
 		super({ key: 'MainScene' })
 		this.levels = [
 			{ tilemapKey: 'map', hasLight: false },
-			{ tilemapKey: 'map2', hasLight: false },
+			{ tilemapKey: 'map2', hasLight: true },
 		];
 	}
 
@@ -24,6 +24,7 @@ class MainScene extends Phaser.Scene {
 		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 		this.load.image('health_bar', 'assets/health_bar.png');
 		this.load.image('life', 'assets/life.png');
+		this.load.spritesheet('run_particles', 'assets/run_particles.png', { frameWidth: 12, frameHeight: 10 });
 
 		this.load.spritesheet('canon', 'assets/canon.png', { frameWidth: 62, frameHeight: 46 });
 		this.load.image('canon_ball', 'assets/canon_ball.png');
@@ -152,8 +153,6 @@ class MainScene extends Phaser.Scene {
 		const textures = {
 			player: 'bomb_guy',
 			bombBar: 'bomb_bar',
-			healthBar: 'health_bar',
-			life: 'life',
 		}
 		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures });
 	}
@@ -227,8 +226,8 @@ class MainScene extends Phaser.Scene {
 		}
 	}
 	createLight() {
-		this.children.list.forEach(item => item.setPipeline('Light2D'))
 		this.children.list.forEach(item => {
+			item.setPipeline('Light2D')
 			if (item.light) this.lights.addLight(item.x, item.y, 900, 0xffffff, 0.7);
 		})
 		this.lights.enable().setAmbientColor(0x000000);
