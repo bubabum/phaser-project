@@ -25,7 +25,7 @@ class Run extends State {
 	}
 	enter() {
 	}
-	handleInput({ cursors }) {
+	handleInput({ cursors, keyUp }) {
 		if (cursors.right.isDown) {
 			this.player.setVelocityX(160);
 		} else if (cursors.left.isDown) {
@@ -96,13 +96,34 @@ class Hit extends State {
 		super({ name: 'HIT', player, animation: 'hit' });
 	}
 	enter() {
-		this.player.isInvulnerable = true;
-		this.player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hit', function (anims) {
-			this.player.setState('FALL');
+		const { player } = this;
+		player.health--;
+		player.isInvulnerable = true;
+		player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hit', function (anims) {
+			player.setState('FALL');
 		}, this);
-		// if (player.health === 0) player.scene.scene.restart();
-		// player.health--;
+		if (player.health === 0) player.scene.scene.restart();
 		setTimeout(() => this.player.isInvulnerable = false, 1000)
+	}
+	handleInput() {
+
+	}
+}
+
+class DeadHit extends State {
+	constructor(player) {
+		super({ name: 'DEAD_HIT', player, animation: 'dead_hit' });
+	}
+	enter() {
+		const { player } = this;
+		// player.health--;
+		player.setVelocity(0);
+		player.isInvulnerable = true;
+		// player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hit', function (anims) {
+		// 	player.setState('FALL');
+		// }, this);
+		// if (player.health === 0) player.scene.scene.restart();
+		// setTimeout(() => this.player.isInvulnerable = false, 1000)
 	}
 	handleInput() {
 

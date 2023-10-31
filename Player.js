@@ -1,19 +1,20 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
 
-	constructor({ scene, x, y, textureKey }) {
-		super(scene, x, y - 25, textureKey);
+	constructor({ scene, x, y, textures }) {
+		super(scene, x, y - 25, textures.player);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 		this.setDepth(23);
 		this.setSize(25, 50);
 		this.setOffset(20, 8);
 		this.setDepth(3);
-		this.health = 5;
+		this.health = 3;
 		this.isInvulnerable = false;
 		this.bombMaxVelocity = 300;
-		this.healthBarImage = scene.add.image(this.x, this.y, 'health_bar');
-
-		this.bombBar = new BombBar({ scene: scene, player: this, textureKey: 'bomb_bar' });
+		//this.healthBar = new this.healthBar({ scene: scene, player: this, textureKey: textures.lifeBar })
+		//this.healthBar = scene.add.image(5, 5, textures.healthBar).setOrigin(0, 0).setScrollFactor(0, 0);
+		//this.life = scene.add.image(46, 27, textures.life).setOrigin(0, 0).setScrollFactor(0, 0);
+		this.bombBar = new BombBar({ scene: scene, player: this, textureKey: textures.bombBar });
 		this.bombGroup = scene.physics.add.group({
 			defaultKey: 'bomb',
 			classType: Bomb,
@@ -24,7 +25,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			dragY: 20,
 		});
 
-		this.createAnimations(textureKey);
+		this.cursors = scene.input.keyboard.createCursorKeys();
+		this.keyUp = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+		this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+		this.createAnimations(textures.player);
 		this.states = [
 			new Idle(this),
 			new Run(this),
@@ -32,6 +37,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			new Fall(this),
 			new Land(this),
 			new Hit(this),
+			new DeadHit(this),
 			new DoorIn(this),
 			new DoorOut(this),
 		];
@@ -62,15 +68,27 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			this.flipX = false;
 			this.setOffset(20, 8);
 		}
+	}
 
+	update() {
+		const { currentState, cursors, keyUp } = this;
+		currentState.handleInput({ cursors, keyUp });
+		this.handleBombListener();
+		//this.drawHealthBar();
 	}
 
 	drawHealthBar() {
-
+		const { scrollX, scrollY } = this.scene.cameras.main;
+		this.healthBar.x = scrollX;
+		this.healthBar.y = scrollY;
+		//console.log(this.healthBar)
+		//console.log(this.scene.cameras.main)
+		//console.log(scrollX, scrollY)
 	}
 
 	handleBombListener() {
-		this.bombBar.update();
+		const { bombBar, keySpace } = this;
+		bombBar.update();
 		if (Phaser.Input.Keyboard.JustDown(keySpace)) this.chargeBomb();
 		if (Phaser.Input.Keyboard.JustUp(keySpace)) this.throwBomb();
 	}
@@ -88,8 +106,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 	takeDamage(object) {
 		if (this.isInvulnerable) return
-		this.setState('HIT');
 		object.push(this);
+		if (this.health === 1) {
+			this.setState('DEAD_HIT');
+		} else {
+			this.setState('HIT');
+		}
 	}
 
 	takeBombDamage(bomb) {

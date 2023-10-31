@@ -23,6 +23,7 @@ class MainScene extends Phaser.Scene {
 		this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
 		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 		this.load.image('health_bar', 'assets/health_bar.png');
+		this.load.image('life', 'assets/life.png');
 
 		this.load.spritesheet('canon', 'assets/canon.png', { frameWidth: 62, frameHeight: 46 });
 		this.load.image('canon_ball', 'assets/canon_ball.png');
@@ -51,10 +52,6 @@ class MainScene extends Phaser.Scene {
 	}
 
 	create() {
-		cursors = this.input.keyboard.createCursorKeys();
-		keyUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-		keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
 		this.hasLight = this.levels[this.currentLevel].hasLight;
 
 		this.map = this.make.tilemap({ key: this.levels[this.currentLevel].tilemapKey, tileWidth: 64, tileHeight: 64 });
@@ -94,6 +91,7 @@ class MainScene extends Phaser.Scene {
 		this.createDoors();
 		this.createPlayer();
 		this.createCamera();
+		this.createHealthBar();
 		this.createEnemies();
 		this.createPushableDecorations();
 		this.createDecorations();
@@ -117,8 +115,8 @@ class MainScene extends Phaser.Scene {
 
 	}
 	update() {
-		this.player.currentState.handleInput({ cursors, keyUp });
-		this.player.handleBombListener();
+		this.player.update();
+		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => {
 			enemy.currentState.handleState();
 			enemy.drawHealthBar();
@@ -126,7 +124,7 @@ class MainScene extends Phaser.Scene {
 	}
 
 	changeLevel(door) {
-		if (door.id === this.scene.currentLevel || door.id === -1 || !cursors.down.isDown) return
+		if (door.id === this.scene.currentLevel || door.id === -1 || !this.player.cursors.down.isDown) return
 		this.player.setState('DOOR_IN');
 		door.anims.play('opening');
 		door.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'opening', function (anims) {
@@ -151,11 +149,24 @@ class MainScene extends Phaser.Scene {
 	}
 	createPlayer() {
 		const door = this.doorGroup.getChildren().find(item => item.id === this.currentLevel - 1);
-		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textureKey: 'bomb_guy' });
+		const textures = {
+			player: 'bomb_guy',
+			bombBar: 'bomb_bar',
+			healthBar: 'health_bar',
+			life: 'life',
+		}
+		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures });
 	}
 	createCamera() {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 		this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
+	}
+	createHealthBar() {
+		const textures = {
+			healthBar: 'health_bar',
+			life: 'life',
+		}
+		this.healthBar = new HealthBar({ scene: this, player: this.player, textures });
 	}
 	createEnemies() {
 		const classes = {
