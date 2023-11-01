@@ -24,7 +24,7 @@ class MainScene extends Phaser.Scene {
 		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 		this.load.image('health_bar', 'assets/health_bar.png');
 		this.load.image('life', 'assets/life.png');
-		this.load.spritesheet('run_particles', 'assets/run_particles.png', { frameWidth: 12, frameHeight: 10 });
+		this.load.spritesheet('run_particle', 'assets/run_particles.png', { frameWidth: 12, frameHeight: 10 });
 
 		this.load.spritesheet('canon', 'assets/canon.png', { frameWidth: 62, frameHeight: 46 });
 		this.load.image('canon_ball', 'assets/canon_ball.png');
@@ -153,6 +153,7 @@ class MainScene extends Phaser.Scene {
 		const textures = {
 			player: 'bomb_guy',
 			bombBar: 'bomb_bar',
+			runParticle: 'run_particle',
 		}
 		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures });
 	}

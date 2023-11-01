@@ -24,7 +24,6 @@ class Run extends State {
 		super({ name: 'RUN', player, animation: 'run' });
 	}
 	enter() {
-
 	}
 	handleInput({ cursors, keyUp }) {
 		if (cursors.right.isDown) {

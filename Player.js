@@ -26,6 +26,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.keyUp = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 		this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+		this.runParticle = new ParticlesGroup({ scene: this.scene, types: ['RUN'], textureKey: textures.runParticle, emitter: this });
+
 		this.createAnimations(textures.player);
 
 		this.states = [
@@ -70,20 +72,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	update() {
-		const { currentState, cursors, keyUp, scene } = this;
+		const { currentState, cursors, keyUp } = this;
 		currentState.handleInput({ cursors, keyUp });
 		this.handleBombListener();
-		if (this.currentState.name === 'RUN' && !this.timedEvent) {
-			this.timedEvent = scene.time.addEvent({ delay: 500, callback: this.emitRunParticle, callbackScope: this, loop: true });
-		}
+		// if (this.currentState.name === 'RUN' && !this.timedEvent) {
+		// 	this.timedEvent = scene.time.addEvent({ delay: 500, callback: this.emitRunParticle, callbackScope: this, loop: true });
+		// }
 	}
 
 	emitRunParticle() {
-		const y = this.body.bottom;
-		let x = this.body.left;
-		if (this.flipX === true) x += this.body.width;
-		let particle = new RunParticle({ scene: this.scene, x, y, textureKey: 'run_particles' });
-		if (this.flipX === true) particle.setFlipX(true).setOrigin(0, 1);
+		// const y = this.body.bottom;
+		// let x = this.body.left;
+		// if (this.flipX === true) x += this.body.width;
+		// let particle = new RunParticle({ scene: this.scene, x, y, textureKey: 'run_particles' });
+		// if (this.flipX === true) particle.setFlipX(true).setOrigin(0, 1);
 	}
 
 	handleBombListener() {
