@@ -9,6 +9,15 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.canonBallGroup = scene.canonBallGroup;
 		this.bombGroup = this.player.bombGroup;
 		this.setDepth(24);
+		this.particles = new ParticlesGroup({
+			scene: this.scene,
+			textures: {
+				run: 'run_particles',
+				jump: 'jump_particles',
+				land: 'land_particles',
+			},
+			emitter: this,
+		});
 	}
 
 	setState(name) {
@@ -22,9 +31,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
 
-		// if (this.stateName) this.stateName.destroy();
-		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
-		// this.stateName.x -= this.stateName.width * 0.5
+		if (this.stateName) this.stateName.destroy();
+		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
+		this.stateName.x -= this.stateName.width * 0.5
 
 		if (this?.hurtbox?.body) {
 			const posY = this.body.position.y + this.body.height * 0.5 + this.hurtboxOffsetY;
@@ -169,13 +178,14 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
 	moveToBomb() {
 		if (this.bombGroup.getChildren().length === 0) return
-		const bomb = this.bombGroup.getChildren().filter(item => item.isOff === false).sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
+		//const bomb = this.bombGroup.getChildren().filter(item => item.isOff === false).sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
+		const bomb = this.bombGroup.getChildren().sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
 		if (!bomb) return
 		this.scene.physics.moveTo(this, bomb.x, this.y, this.speedX);
 		const collider = this.scene.physics.add.overlap(this, bomb, () => {
 			if (this.canInteractWithBomb) this.interactWithBomb(bomb);
+			this.scene.physics.world.removeCollider(collider);
 		});
-		this.scene.physics.world.removeCollider(collider);
 	}
 
 	makeDash() {

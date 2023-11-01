@@ -1,21 +1,17 @@
 class ParticlesGroup extends Phaser.GameObjects.Group {
 
-	constructor({ scene, types, textureKey, emitter }) {
-		console.log(scene)
+	constructor({ scene, textures, emitter }) {
 		super(scene);
 		scene.add.existing(this);
 		this.emitter = emitter;
-		this.types = types;
-		this.textureKey = textureKey;
+		this.textures = textures;
 	}
+
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
 		const type = this.emitter?.currentState?.name;
-		if (!type) return
-		if (this.types.includes(type) && this.getChildren().length === 0) {
-			const particle = new Particle({ textureKey: this.textureKey, emitter: this.emitter, group: this, type });
-			this.add(particle);
-		}
+		const textureKey = this.textures[type.toLowerCase()];
+		if (type && textureKey && !this.getChildren().find(item => item.type === type)) return this.add(new Particle({ textureKey, emitter: this.emitter, group: this, type }));
 	}
 
 }
@@ -24,17 +20,17 @@ class ParticlesGroup extends Phaser.GameObjects.Group {
 class Particle extends Phaser.Physics.Arcade.Sprite {
 
 	constructor({ textureKey, emitter, group, type }) {
-		super(emitter.scene, emitter.x, emitter.y - 100, textureKey);
+		super(emitter.scene, emitter.x, emitter.y, textureKey);
 		emitter.scene.add.existing(this);
 		this.emitter = emitter;
 		this.group = group;
-		this.setOrigin(1, 1);
+		this.type = type;
+		this.setPosition(emitter.getBottomCenter().x, emitter.getBottomCenter().y);
+		this.setOrigin(0.5, 1);
+		this.setFlipX(emitter.flipX)
 		this.createAnimations(textureKey);
 		this.anims.play('idle');
-		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'idle', function (anims) {
-			//this.group.clear(true, true);
-			this.destroy();
-		}, this);
+		this.destroyHandler(type);
 	}
 
 	createAnimations(textureKey) {
@@ -46,8 +42,15 @@ class Particle extends Phaser.Physics.Arcade.Sprite {
 		});
 	}
 
-	preUpdate(time, delta) {
-		super.preUpdate(time, delta);
+	destroyHandler(type) {
+		if (type === 'JUMP') {
+			this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'idle', () => this.setVisible(false), this);
+			this.emitter.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'fall', () => this.destroy(), this.emitter);
+		} else {
+			this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'idle', function (anims) {
+				this.destroy();
+			}, this);
+		}
 
 	}
 

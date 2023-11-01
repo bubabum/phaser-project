@@ -6,13 +6,13 @@ class Cucumber extends Enemy {
 		this.health = 5;
 		this.maxHealth = 5;
 		this.speedX = 120;
-		this.dashSpeedX = 200;
+		this.dashSpeedX = 230;
 		//this.moveToBombSpeedX = 180;
 		this.visionRange = 200;
 		this.atackRange = 20;
 		this.hurtboxRadius = 20;
 		this.hurtboxOffsetY = 0;
-		this.bodyProperties = { width: 27, height: 60, offsetX: 19, offsetY: 5, flipOffsetX: 17 };
+		this.bodyProperties = { width: 27, height: 63, offsetX: 19, offsetY: 5, flipOffsetX: 17 };
 		this.isInvulnerable = false;
 		this.isAtacking = false;
 		this.setBodyProperties(direction);
@@ -34,12 +34,10 @@ class Cucumber extends Enemy {
 
 	interactWithBomb(bomb) {
 		this.setState('BLOW_THE_WICK');
-		if (this.anims.currentFrame.index > 4) {
+		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'blow_the_wick', () => {
+			this.setState('IDLE');
 			bomb.turnOff();
-			this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'blow_the_wick', function (anims) {
-				this.setState('IDLE');
-			}, this);
-		}
+		}, this);
 	}
 
 	createAnimations(textureKey) {

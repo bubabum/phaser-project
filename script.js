@@ -24,7 +24,10 @@ class MainScene extends Phaser.Scene {
 		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 		this.load.image('health_bar', 'assets/health_bar.png');
 		this.load.image('life', 'assets/life.png');
-		this.load.spritesheet('run_particle', 'assets/run_particles.png', { frameWidth: 12, frameHeight: 10 });
+		this.load.spritesheet('run_particles', 'assets/run_particles.png', { frameWidth: 12, frameHeight: 10 });
+		this.load.spritesheet('jump_particles', 'assets/jump_particles.png', { frameWidth: 40, frameHeight: 28 });
+		this.load.spritesheet('land_particles', 'assets/land_particles.png', { frameWidth: 80, frameHeight: 10 });
+		this.load.spritesheet('life_idle', 'assets/life_idle.png', { frameWidth: 20, frameHeight: 18 });
 
 		this.load.spritesheet('canon', 'assets/canon.png', { frameWidth: 62, frameHeight: 46 });
 		this.load.image('canon_ball', 'assets/canon_ball.png');
@@ -68,6 +71,9 @@ class MainScene extends Phaser.Scene {
 			immovable: true,
 			allowGravity: false
 		});
+		this.livesGroup = this.physics.add.group({
+			immovable: true,
+		});
 		this.enemyGroup = this.physics.add.group();
 		this.enemyHurtboxGroup = this.physics.add.group();
 		this.canonBallGroup = this.physics.add.group({
@@ -90,6 +96,7 @@ class MainScene extends Phaser.Scene {
 		});
 
 		this.createDoors();
+		this.createLives();
 		this.createPlayer();
 		this.createCamera();
 		this.createHealthBar();
@@ -101,7 +108,9 @@ class MainScene extends Phaser.Scene {
 
 		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer]);
 		this.physics.add.collider(this.enemyGroup, [this.groundLayer, this.platformsLayer]);
+		this.physics.add.collider(this.livesGroup, [this.groundLayer, this.platformsLayer]);
 		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer]); // more colissions?
+		this.physics.add.overlap(this.player, this.livesGroup, (player, life) => player.addLife(life));
 		this.physics.add.overlap(this.player.bombGroup, this.player, (player, bomb) => player.takeBombDamage(bomb));
 		this.physics.add.overlap(this.player.bombGroup, this.enemyGroup, (bomb, enemy) => enemy.takeBombDamage(bomb));
 		this.physics.add.overlap(this.player.bombGroup, this.pushableDecorationGroup, (bomb, object) => bomb.push(object));
@@ -148,12 +157,24 @@ class MainScene extends Phaser.Scene {
 			this.doorGroup.add(door);
 		});
 	}
+	createLives() {
+		const layer = this.map.getObjectLayer('lives')?.objects;
+		if (!layer) return
+		layer.forEach(object => {
+			const live = new Life({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'life_idle' });
+			this.livesGroup.add(live);
+		});
+	}
 	createPlayer() {
 		const door = this.doorGroup.getChildren().find(item => item.id === this.currentLevel - 1);
 		const textures = {
 			player: 'bomb_guy',
 			bombBar: 'bomb_bar',
-			runParticle: 'run_particle',
+			particles: {
+				run: 'run_particles',
+				jump: 'jump_particles',
+				land: 'land_particles',
+			},
 		}
 		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures });
 	}
@@ -176,7 +197,7 @@ class MainScene extends Phaser.Scene {
 			'Cucumber': Cucumber,
 			'BigGuy': BigGuy,
 		}
-		if (!this.map.getObjectLayer('enemies')) return
+		if (!this.map.getObjectLayer('enemies')?.objects) return
 		this.map.getObjectLayer('enemies').objects.forEach(object => {
 			const className = classes[object.properties.find(item => item.name === 'className').value];
 			const textureKey = object.properties.find(item => item.name === 'texture').value;
@@ -228,14 +249,14 @@ class MainScene extends Phaser.Scene {
 	}
 	createLight() {
 		this.children.list.forEach(item => {
-			item.setPipeline('Light2D')
+			if (!item.lifeTexture) item.setPipeline('Light2D');
 			if (item.light) this.lights.addLight(item.x, item.y, 900, 0xffffff, 0.7);
 		})
 		this.lights.enable().setAmbientColor(0x000000);
 	}
 }
 
-function getKeyFrames(array) {
+function getKeyFrames(array) { //utility for production
 	let start = 0;
 	let end = -1;
 	let result = [];
@@ -248,30 +269,3 @@ function getKeyFrames(array) {
 }
 
 console.log(getKeyFrames([38, 16, 1, 4, 2, 3, 11, 8, 1, 16, 11, 8, 6, 4]))
-
-
-// this.states2 = {
-// 	'IDLE': {
-// 		eneter: () => {
-// 			console.log('enter idle');
-// 			setTimeout(() => this.setState2('RUN'), 3000);
-// 		},
-// 		handle: () => console.log('handle idle'),
-// 	},
-// 	'RUN': {
-// 		eneter: () => {
-// 			console.log('enter run');
-// 			setTimeout(() => this.setState2('IDLE'), 3000);
-// 		},
-// 		handle: () => console.log('handle run'),
-// 	}
-// }
-
-
-// this.currentState2 = this.states2['IDLE'];
-// this.currentState2.eneter();
-
-// setState2(name) {
-// 	this.currentState2 = this.states2[name];
-// 	this.currentState2.eneter()
-// }

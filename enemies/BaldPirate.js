@@ -3,9 +3,9 @@ class BaldPirate extends Enemy {
 	constructor({ scene, x, y, textureKey, direction }) {
 		super({ scene, x, y, textureKey });
 		this.canInteractWithBomb = true;
-		this.health = 2;
+		this.maxHealth = 2;
+		this.health = this.maxHealth;
 		this.speedX = 170;
-		//this.visionRange = 200;
 		this.atackRange = 40;
 		this.hurtboxRadius = 20;
 		this.hurtboxOffsetY = 10;
@@ -38,7 +38,7 @@ class BaldPirate extends Enemy {
 
 	interactWithBomb(bomb) {
 		this.setState('HIT_BOMB');
-		if (this.anims.currentFrame.index > 4) bomb.setVelocity((this.direction === 'right' ? 250 : -250), -250);
+		bomb.setVelocity((this.direction === 'right' ? 250 : -250), -250);
 	}
 
 	createAnimations(textureKey) {
