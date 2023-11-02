@@ -8,6 +8,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.enemyHurtboxGroup = scene.enemyHurtboxGroup;
 		this.canonBallGroup = scene.canonBallGroup;
 		this.bombGroup = this.player.bombGroup;
+		this.bombToInteract = null;
 		this.setDepth(24);
 		this.particles = new ParticlesGroup({
 			scene: this.scene,
@@ -28,9 +29,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.anims.play(this.currentState.animation);
 	}
 
-	preUpdate(time, delta) {
-		super.preUpdate(time, delta);
-
+	update() {
+		this.currentState.handleState();
+		this.drawHealthBar();
 		if (this.stateName) this.stateName.destroy();
 		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
 		this.stateName.x -= this.stateName.width * 0.5
@@ -43,6 +44,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	drawHealthBar() {
+		if (this instanceof Canon) return
 		if (this.healthBar || this.health === 0) this.healthBar.destroy();
 		if (this.health === 0) return
 		const tint = 0.30 * this.health / this.maxHealth;
@@ -178,12 +180,12 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
 	moveToBomb() {
 		if (this.bombGroup.getChildren().length === 0) return
-		//const bomb = this.bombGroup.getChildren().filter(item => item.isOff === false).sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
-		const bomb = this.bombGroup.getChildren().sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
+		const bomb = this.bombGroup.getChildren().filter(item => item.isOff === false).filter(item => item.exploded === false).sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
 		if (!bomb) return
-		this.scene.physics.moveTo(this, bomb.x, this.y, this.speedX);
-		const collider = this.scene.physics.add.overlap(this, bomb, () => {
-			if (this.canInteractWithBomb) this.interactWithBomb(bomb);
+		this.bombToInteract = bomb;
+		this.scene.physics.moveTo(this, this.bombToInteract.x, this.y, this.speedX);
+		const collider = this.scene.physics.add.overlap(this, this.bombToInteract, () => {
+			if (this.canInteractWithBomb) this.setState('INTERACT_WITH_BOMB');
 			this.scene.physics.world.removeCollider(collider);
 		});
 	}

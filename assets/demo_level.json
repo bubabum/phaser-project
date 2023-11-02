@@ -549,10 +549,10 @@
          "name":"enemies",
          "objects":[
                 {
-                 "class":"",
+                 "class":"Cucumber",
                  "gid":41,
                  "height":68,
-                 "id":138,
+                 "id":145,
                  "name":"",
                  "properties":[
                         {
@@ -568,31 +568,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":640,
-                 "y":896
-                }, 
-                {
-                 "class":"BaldPirate",
-                 "gid":31,
-                 "height":67,
-                 "id":141,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"className",
-                         "type":"string",
-                         "value":"BaldPirate"
-                        }, 
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"bald_pirate"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":63,
-                 "x":768.333333333333,
-                 "y":1214
+                 "x":684.5,
+                 "y":895.5
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -601,7 +578,7 @@
          "y":0
         }],
  "nextlayerid":30,
- "nextobjectid":142,
+ "nextobjectid":146,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
@@ -842,6 +819,7 @@
          "tileheight":68,
          "tiles":[
                 {
+                 "class":"Cucumber",
                  "id":0,
                  "properties":[
                         {

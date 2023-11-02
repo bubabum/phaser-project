@@ -51,16 +51,17 @@ class CucumberDash extends State {
 
 class CucumberBlowTheWick extends State {
 	constructor(enemy) {
-		super({ name: 'BLOW_THE_WICK', enemy, animation: 'blow_the_wick' });
+		super({ name: 'INTERACT_WITH_BOMB', enemy, animation: 'blow_the_wick' });
 	}
 	enter() {
 		const { enemy } = this;
 		enemy.setVelocity(0);
-		enemy.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'blow_the_wick', function (anims) {
-			enemy.setState('IDLE')
+		enemy.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'blow_the_wick', () => {
+			enemy.setState('IDLE');
 		}, enemy);
 	}
 	handleState() {
 		const { enemy } = this;
+		if (enemy.anims.getProgress() === 1 && enemy.bombToInteract) enemy.interactWithBomb();
 	}
 }

@@ -36,9 +36,9 @@ class BaldPirate extends Enemy {
 		this.setState('IDLE');
 	}
 
-	interactWithBomb(bomb) {
-		this.setState('HIT_BOMB');
-		bomb.setVelocity((this.direction === 'right' ? 250 : -250), -250);
+	interactWithBomb() {
+		this.bombToInteract.setVelocity((this.direction === 'right' ? 250 : -250), -250);
+		this.bombToInteract = null;
 	}
 
 	createAnimations(textureKey) {

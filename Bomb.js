@@ -11,6 +11,7 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.setDepth(25)
 		this.createAnimations(textureKey);
 		this.isOff = false;
+		this.exploded = false;
 		this.body.gameObject = this;
 		if (scene.hasLight) this.setPipeline('Light2D')
 	}
@@ -27,7 +28,7 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.exploded = false;
 		this.setPosition(player.x + (player.flipX ? -10 : 10), player.y);
 		this.setVelocity((player.flipX ? -1 : 1) * velocity * 0.75, -velocity);
-		this.scene.time.delayedCall(16000, () => this.explode());
+		this.scene.time.delayedCall(2000, () => this.explode());
 	}
 
 	push(object) {
@@ -53,19 +54,17 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.setCircle(48);
 		this.setOffset(0, 12);
 		this.setOrigin(0.5, 0.5);
-		setTimeout(() => this.body.destroy(), 100)
+		this.scene.time.delayedCall(100, () => this.body.destroy());
 		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'explosion', function (anims) {
 			this.destroy();
 		}, this);
 	}
 
 	turnOff() {
-		//this.destroy()
-		//setTimeout(() => this.destroy(), 1000)
-		this.scene.time.delayedCall(1000, () => this.destroy());
 		this.isOff = true;
 		this.setVelocityX(0);
 		this.anims.play('off');
+		this.scene.time.delayedCall(1000, () => this.destroy());
 	}
 
 	createAnimations(textureKey) {

@@ -3,8 +3,8 @@ class Cucumber extends Enemy {
 	constructor({ scene, x, y, textureKey, direction }) {
 		super({ scene, x, y, textureKey });
 		this.canInteractWithBomb = true;
-		this.health = 5;
-		this.maxHealth = 5;
+		this.maxHealth = 1;
+		this.health = this.maxHealth;
 		this.speedX = 120;
 		this.dashSpeedX = 230;
 		//this.moveToBombSpeedX = 180;
@@ -32,12 +32,10 @@ class Cucumber extends Enemy {
 		this.setState('IDLE');
 	}
 
-	interactWithBomb(bomb) {
-		this.setState('BLOW_THE_WICK');
-		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'blow_the_wick', () => {
-			this.setState('IDLE');
-			bomb.turnOff();
-		}, this);
+	interactWithBomb() {
+		if (!this.bombToInteract || this?.bombToInteract.exploded) return
+		this.bombToInteract.turnOff();
+		this.bombToInteract = null;
 	}
 
 	createAnimations(textureKey) {

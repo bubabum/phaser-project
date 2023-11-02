@@ -134,7 +134,7 @@ class BaldPirateLongJumpDown extends State {
 
 class BaldPirateHitBomb extends State {
 	constructor(enemy) {
-		super({ name: 'HIT_BOMB', enemy, animation: 'hit_bomb' });
+		super({ name: 'INTERACT_WITH_BOMB', enemy, animation: 'hit_bomb' });
 	}
 	enter() {
 		const { enemy } = this;
@@ -144,6 +144,7 @@ class BaldPirateHitBomb extends State {
 		}, enemy);
 	}
 	handleState() {
-
+		const { enemy } = this;
+		if (enemy.anims.currentFrame.index > 4 && enemy.bombToInteract) enemy.interactWithBomb();
 	}
 }

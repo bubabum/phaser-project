@@ -78,7 +78,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	addLife(life) {
-		console.log('test')
 		if (this.health === this.maxHeath) return
 		life.destroy()
 		this.health++

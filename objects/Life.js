@@ -5,7 +5,8 @@ class Life extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 		this.scene = scene;
-		this.setPosition(this.getTileCenterX(x))
+		this.setPosition(this.getTileCenterX(x));
+		this.setDepth(25);
 		this.createAnimations(textureKey);
 		this.anims.play('idle');
 	}

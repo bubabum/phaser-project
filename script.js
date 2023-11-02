@@ -127,10 +127,7 @@ class MainScene extends Phaser.Scene {
 	update() {
 		this.player.update();
 		this.healthBar.update();
-		this.enemyGroup.getChildren().forEach(enemy => {
-			enemy.currentState.handleState();
-			enemy.drawHealthBar();
-		});
+		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
 	}
 
 	changeLevel(door) {
