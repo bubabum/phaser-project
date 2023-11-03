@@ -37,6 +37,7 @@ class MainScene extends Phaser.Scene {
 		this.load.spritesheet('big_guy', 'assets/big_guy.png', { frameWidth: 77, frameHeight: 74 });
 
 		this.load.spritesheet('door', 'assets/door.png', { frameWidth: 78, frameHeight: 96 });
+		this.load.image('moving_platform', 'assets/moving_platform.png');
 
 		this.load.spritesheet('candle', 'assets/lighting/candle.png', { frameWidth: 14, frameHeight: 32 });
 		this.load.spritesheet('candle_light', 'assets/lighting/candle_light.png', { frameWidth: 60, frameHeight: 58 });
@@ -96,6 +97,7 @@ class MainScene extends Phaser.Scene {
 		});
 
 		this.createDoors();
+		this.createMovingPlatforms()
 		this.createLives();
 		this.createPlayer();
 		this.createCamera();
@@ -106,11 +108,15 @@ class MainScene extends Phaser.Scene {
 
 		if (this.hasLight) this.createLight();
 
-		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer]);
+		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer, this.movingVerticalPlatformsGroup]);
+		this.physics.add.collider(this.movingVerticalPlatformsGroup, [this.groundLayer, this.platformsLayer]);
 		this.physics.add.collider(this.enemyGroup, [this.groundLayer, this.platformsLayer]);
 		this.physics.add.collider(this.livesGroup, [this.groundLayer, this.platformsLayer]);
 		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer]); // more colissions?
 		this.physics.add.overlap(this.player, this.livesGroup, (player, life) => player.addLife(life));
+
+		this.physics.add.collider(this.player.bombGroup, this.player.bombGroup, (bomb1, bomb2) => { bomb1.push(bomb2) }); // bomb with bomb
+
 		this.physics.add.overlap(this.player.bombGroup, this.player, (player, bomb) => player.takeBombDamage(bomb));
 		this.physics.add.overlap(this.player.bombGroup, this.enemyGroup, (bomb, enemy) => enemy.takeBombDamage(bomb));
 		this.physics.add.overlap(this.player.bombGroup, this.pushableDecorationGroup, (bomb, object) => bomb.push(object));
@@ -128,6 +134,7 @@ class MainScene extends Phaser.Scene {
 		this.player.update();
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
+		this.movingVerticalPlatformsGroup.getChildren().forEach(platform => platform.update());
 	}
 
 	changeLevel(door) {
@@ -139,7 +146,6 @@ class MainScene extends Phaser.Scene {
 		}, this);
 
 	}
-
 	getObjectCoordinateX(gameObject) {
 		return gameObject.x + gameObject.width * 0.5
 	}
@@ -147,11 +153,29 @@ class MainScene extends Phaser.Scene {
 	getObjectCoordinateY(gameObject) {
 		return gameObject.y - gameObject.height * 0.5
 	}
+	normalaizeCoordinate() {
+
+	}
 	createDoors() {
 		this.map.getObjectLayer('doors').objects.forEach(object => {
 			const id = object.properties.find(item => item.name === 'id').value;
 			const door = new Door({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'door', id });
 			this.doorGroup.add(door);
+		});
+	}
+	createMovingPlatforms() {
+		this.movingVerticalPlatformsGroup = this.physics.add.group({
+			bounceY: 1,
+			velocityY: 100,
+			immovable: true,
+			allowGravity: false
+		});
+		const layer = this.map.getObjectLayer('moving_platforms')?.objects;
+		if (!layer) return
+		layer.forEach(object => {
+			const type = object.properties.find(item => item.name === 'type').value;
+			const movingPlatform = new MovingPlatform({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'moving_platform', type })
+			this.movingVerticalPlatformsGroup.add(movingPlatform);
 		});
 	}
 	createLives() {

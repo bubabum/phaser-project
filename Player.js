@@ -8,7 +8,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setSize(25, 50);
 		this.setOffset(20, 8);
 		this.setDepth(3);
-		this.health = 3;
+		this.maxHeath = 3;
+		this.health = this.maxHeath;
 		this.isInvulnerable = false;
 		this.bombMaxVelocity = 300;
 		this.bombBar = new BombBar({ scene: scene, player: this, textureKey: textures.bombBar });
@@ -72,9 +73,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	update() {
+		if (this.stateName) this.stateName.destroy();
+		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
+		this.stateName.x -= this.stateName.width * 0.5
 		const { currentState, cursors, keyUp } = this;
 		currentState.handleInput({ cursors, keyUp });
 		this.handleBombListener();
+	}
+
+	setInvulnerability(status) {
+		this.isInvulnerable = status;
 	}
 
 	addLife(life) {
@@ -109,17 +117,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		} else {
 			this.setState('HIT');
 		}
+		this.health--;
+		this.isInvulnerable = true;
 	}
 
 	takeBombDamage(bomb) {
 		if (!bomb.exploded || this.isInvulnerable) return
 		bomb.push(this);
 		if (this.health === 1) {
-			this.scene.time.delayedCall(50, () => this.setState('DEAD_HIT'));
+			this.setState('DEAD_HIT');
 		} else {
 			this.setState('HIT');
 		}
-		this.scene.time.delayedCall(50, () => { });
+		this.health--;
+		this.isInvulnerable = true;
 	}
 
 	createAnimations(textureKey) {

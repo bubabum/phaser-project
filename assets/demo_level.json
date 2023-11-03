@@ -549,10 +549,33 @@
          "name":"enemies",
          "objects":[
                 {
+                 "class":"BaldPirate",
+                 "gid":31,
+                 "height":67,
+                 "id":141,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"BaldPirate"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"bald_pirate"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":63,
+                 "x":717.5,
+                 "y":893.5
+                }, 
+                {
                  "class":"Cucumber",
                  "gid":41,
                  "height":68,
-                 "id":145,
+                 "id":142,
                  "name":"",
                  "properties":[
                         {
@@ -568,7 +591,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":684.5,
+                 "x":645.5,
                  "y":895.5
                 }],
          "opacity":1,
@@ -576,8 +599,37 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":30,
+         "name":"moving_platforms",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":30,
+                 "height":64,
+                 "id":144,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"VERCTICAL"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":256,
+                 "y":1025
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":30,
+ "nextlayerid":31,
  "nextobjectid":146,
  "orientation":"orthogonal",
  "renderorder":"right-down",

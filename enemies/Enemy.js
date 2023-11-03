@@ -109,13 +109,15 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		return Phaser.Math.Distance.BetweenPoints(this.player, this) < this.atackRange &&
 			this.player.y > this.y - this.height * 0.5 &&
 			this.player.y < this.y + this.height * 0.5 &&
-			this.player.health > 0
+			this.player.health > 0 &&
+			!this.player.isInvulnerable
 	}
 
 	checkVisionRange() {
 		return Phaser.Math.Distance.BetweenPoints(this.player, this) < this.visionRange &&
 			this.player.y > this.y - this.height * 0.5 &&
-			this.player.y < this.y + this.height * 0.5
+			this.player.y < this.y + this.height * 0.5 &&
+			!this.player.isInvulnerable
 	}
 
 	checkMoveToPlayer() {
