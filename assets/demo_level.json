@@ -39,18 +39,18 @@
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 23, 24, 24, 24, 24, 24, 29, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0, 0, 30, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 30, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 30, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -139,18 +139,6 @@
          "id":28,
          "name":"windows",
          "objects":[
-                {
-                 "class":"",
-                 "gid":47,
-                 "height":61,
-                 "id":112,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":56,
-                 "x":512,
-                 "y":832
-                }, 
                 {
                  "class":"",
                  "gid":47,
@@ -549,33 +537,56 @@
          "name":"enemies",
          "objects":[
                 {
-                 "class":"BaldPirate",
-                 "gid":31,
-                 "height":67,
-                 "id":141,
+                 "class":"Canon",
+                 "gid":2147483686,
+                 "height":46,
+                 "id":157,
                  "name":"",
                  "properties":[
                         {
                          "name":"className",
                          "type":"string",
-                         "value":"BaldPirate"
+                         "value":"Canon"
                         }, 
                         {
                          "name":"texture",
                          "type":"string",
-                         "value":"bald_pirate"
+                         "value":"canon"
                         }],
                  "rotation":0,
                  "visible":true,
-                 "width":63,
-                 "x":717.5,
-                 "y":893.5
+                 "width":62,
+                 "x":511.666666666667,
+                 "y":834
+                }, 
+                {
+                 "class":"Canon",
+                 "gid":38,
+                 "height":46,
+                 "id":163,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"Canon"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"canon"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":62,
+                 "x":1023.66666666667,
+                 "y":255
                 }, 
                 {
                  "class":"Cucumber",
                  "gid":41,
                  "height":68,
-                 "id":142,
+                 "id":164,
                  "name":"",
                  "properties":[
                         {
@@ -591,8 +602,146 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":645.5,
-                 "y":895.5
+                 "x":845,
+                 "y":253
+                }, 
+                {
+                 "class":"BigGuy",
+                 "gid":34,
+                 "height":74,
+                 "id":165,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"BigGuy"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"big_guy"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":77,
+                 "x":440,
+                 "y":319
+                }, 
+                {
+                 "class":"BaldPirate",
+                 "gid":31,
+                 "height":67,
+                 "id":167,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"BaldPirate"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"bald_pirate"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":63,
+                 "x":768,
+                 "y":831
+                }, 
+                {
+                 "class":"Capitan",
+                 "gid":39,
+                 "height":72,
+                 "id":168,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"Capitan"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"capitan"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":80,
+                 "x":958,
+                 "y":894
+                }, 
+                {
+                 "class":"Capitan",
+                 "gid":39,
+                 "height":72,
+                 "id":169,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"Capitan"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"capitan"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":80,
+                 "x":888,
+                 "y":1152
+                }, 
+                {
+                 "class":"BigGuy",
+                 "gid":34,
+                 "height":74,
+                 "id":170,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"BigGuy"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"big_guy"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":77,
+                 "x":532,
+                 "y":1214
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":31,
+         "name":"keys",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":50,
+                 "height":24,
+                 "id":161,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":24,
+                 "x":965.333333333333,
+                 "y":571.333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -609,19 +758,55 @@
                  "class":"",
                  "gid":30,
                  "height":64,
-                 "id":144,
+                 "id":162,
                  "name":"",
                  "properties":[
                         {
                          "name":"type",
                          "type":"string",
-                         "value":"VERCTICAL"
+                         "value":"VERTICAL"
                         }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":256,
-                 "y":1025
+                 "x":1089.33333333333,
+                 "y":322.666666666667
+                }, 
+                {
+                 "class":"",
+                 "gid":30,
+                 "height":64,
+                 "id":166,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"VERTICAL"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":641,
+                 "y":643
+                }, 
+                {
+                 "class":"",
+                 "gid":30,
+                 "height":64,
+                 "id":171,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"HORIZONTAL"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":769.318181818182,
+                 "y":1041.45454545455
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -629,8 +814,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":31,
- "nextobjectid":146,
+ "nextlayerid":32,
+ "nextobjectid":172,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
@@ -725,6 +910,22 @@
          "spacing":0,
          "tilecount":1,
          "tileheight":74,
+         "tiles":[
+                {
+                 "class":"BigGuy",
+                 "id":0,
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"BigGuy"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"big_guy"
+                        }]
+                }],
          "tilewidth":77
         }, 
         {
@@ -1021,6 +1222,11 @@
         {
          "firstgid":49,
          "source":"life.tsx"
+        },
+    
+        {
+         "firstgid":50,
+         "source":"key.tsx"
         }],
  "tilewidth":64,
  "type":"map",

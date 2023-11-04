@@ -70,11 +70,24 @@ class EnemyDeadHit extends State {
 		super({ name: 'DEAD_HIT', enemy, animation: 'dead_hit' });
 	}
 	enter() {
+		this.enemy.isInvulnerable = true;
 		this.enemy.health--;
-		this.enemy.setSize(30, 45);
 		this.enemy.setDrag(100, 0);
 		this.enemy.hurtbox.destroy();
-		this.enemy.scene.time.delayedCall(2000, () => this.enemy.destroy());
+		//this.enemy.scene.time.delayedCall(2000, () => this.enemy.destroy());
+	}
+	handleState() {
+		const { enemy } = this;
+		if (enemy.body.velocity.y === 0) enemy.setState('DEAD_GROUND');
+	}
+}
+
+class EnemyDeadGround extends State {
+	constructor(enemy) {
+		super({ name: 'DEAD_GROUND', enemy, animation: 'dead_ground' });
+	}
+	enter() {
+		this.enemy.scene.time.delayedCall(5000, () => this.enemy.destroy());
 	}
 	handleState() {
 	}

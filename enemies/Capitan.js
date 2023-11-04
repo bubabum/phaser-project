@@ -25,12 +25,13 @@ class Capitan extends Enemy {
 			new EnemyFall(this),
 			new EnemyHit(this),
 			new EnemyDeadHit(this),
+			new EnemyDeadGround(this),
 		];
 		this.setState('IDLE');
 	}
 
 	checkThrowRange() {
-		return Phaser.Math.Distance.BetweenPoints(this.player, this) < this.throwRange
+		return Phaser.Math.Distance.BetweenPoints(this.player, this) < this.throwRange && !this.player.isInvulnerable
 	}
 
 	throwBottle() {
@@ -125,7 +126,7 @@ class Capitan extends Enemy {
 		this.anims.create({
 			key: 'dead_ground',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 89, end: 92 }),
-			frameRate: 20,
+			frameRate: 10,
 			repeat: -1,
 		});
 	}

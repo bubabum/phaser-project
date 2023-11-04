@@ -8,7 +8,7 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.setCircle(15);
 		this.setOffset(34, 58);
 		this.setOrigin(0.51, 0.67);
-		this.setDepth(25)
+		this.setDepth(25);
 		this.createAnimations(textureKey);
 		this.isOff = false;
 		this.exploded = false;
@@ -16,18 +16,11 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		if (scene.hasLight) this.setPipeline('Light2D')
 	}
 
-	preUpdate(time, delta) {
-		super.preUpdate(time, delta);
-		if (!this.body) return
-		if (!this?.body.onFloor()) this.setDragX(80);
-		if (this?.body.onFloor()) this.setDragX(400);
-	}
-
 	throw(velocity, player) {
 		this.anims.play('on');
 		this.exploded = false;
 		this.setPosition(player.x + (player.flipX ? -10 : 10), player.y);
-		this.setVelocity((player.flipX ? -1 : 1) * velocity * 0.75, -velocity);
+		this.setVelocity((player.flipX ? -1 : 1) * velocity, -velocity);
 		this.scene.time.delayedCall(2000, () => this.explode());
 	}
 

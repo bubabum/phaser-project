@@ -7,20 +7,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setDepth(23);
 		this.setSize(25, 50);
 		this.setOffset(20, 8);
-		this.setDepth(3);
+		this.setDepth(23);
 		this.maxHeath = 3;
 		this.health = this.maxHeath;
-		this.isInvulnerable = false;
+		this.jumpVelocity = 250;
 		this.bombMaxVelocity = 300;
+		this.isInvulnerable = false;
+		this.hasKey = false;
 		this.bombBar = new BombBar({ scene: scene, player: this, textureKey: textures.bombBar });
 		this.bombGroup = scene.physics.add.group({
 			defaultKey: 'bomb',
 			classType: Bomb,
 			maxSize: 3,
-			bounceX: 0.8,
-			bounceY: 0.3,
-			dragX: 20,
-			dragY: 20,
+			bounceX: 0.7,
+			bounceY: 0.7,
+			dragX: 80,
+			dragY: 80,
+			gravityY: 0,
 		});
 
 		this.cursors = scene.input.keyboard.createCursorKeys();
@@ -74,11 +77,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 	update() {
 		if (this.stateName) this.stateName.destroy();
-		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
+		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${Math.floor(this.body.velocity.y)}`, { font: '16px Courier', fill: '#ffffff' });
 		this.stateName.x -= this.stateName.width * 0.5
+
 		const { currentState, cursors, keyUp } = this;
+		this.handleBombListener()
+		if (this.touchingPlatform && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
+			const platformVelocityY = this.touchingPlatform.body.velocity.y;
+			if (platformVelocityY > 0) this.setVelocityY(platformVelocityY);
+		}
 		currentState.handleInput({ cursors, keyUp });
-		this.handleBombListener();
 	}
 
 	setInvulnerability(status) {
@@ -91,6 +99,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.health++
 	}
 
+	getKey() {
+		this.hasKey = true;
+	}
+
 	handleBombListener() {
 		const { bombBar, keySpace } = this;
 		bombBar.update();
@@ -99,7 +111,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	chargeBomb() {
-		if (this.bombGroup.getChildren().length === this.bombGroup.maxSize) return
+		if (this.bombGroup.getChildren().length === this.bombGroup.maxSize || this.isInvulnerable) return
 		this.bombBar.startCharging();
 	}
 

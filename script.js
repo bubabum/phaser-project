@@ -28,6 +28,7 @@ class MainScene extends Phaser.Scene {
 		this.load.spritesheet('jump_particles', 'assets/jump_particles.png', { frameWidth: 40, frameHeight: 28 });
 		this.load.spritesheet('land_particles', 'assets/land_particles.png', { frameWidth: 80, frameHeight: 10 });
 		this.load.spritesheet('life_idle', 'assets/life_idle.png', { frameWidth: 20, frameHeight: 18 });
+		this.load.spritesheet('key', 'assets/key.png', { frameWidth: 24, frameHeight: 24 });
 
 		this.load.spritesheet('canon', 'assets/canon.png', { frameWidth: 62, frameHeight: 46 });
 		this.load.image('canon_ball', 'assets/canon_ball.png');
@@ -68,39 +69,12 @@ class MainScene extends Phaser.Scene {
 
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
-		this.doorGroup = this.physics.add.group({
-			immovable: true,
-			allowGravity: false
-		});
-		this.livesGroup = this.physics.add.group({
-			immovable: true,
-		});
-		this.enemyGroup = this.physics.add.group();
-		this.enemyHurtboxGroup = this.physics.add.group();
-		this.canonBallGroup = this.physics.add.group({
-			defaultKey: 'canon_ball',
-			classType: CanonBall,
-			allowGravity: false,
-			angularVelocity: 1000,
-		});
-		this.bottleGroup = this.physics.add.group({
-			defaultKey: 'blue_bottle',
-			classType: Bottle,
-			allowGravity: false,
-			angularVelocity: 1000,
-		});
-		this.pushableDecorationGroup = this.physics.add.group({
-			bounceX: 0.5,
-			bounceY: 0.5,
-			dragX: 100,
-			dragY: 100,
-		});
-
 		this.createDoors();
 		this.createMovingPlatforms()
-		this.createLives();
 		this.createPlayer();
 		this.createCamera();
+		this.createLives();
+		this.createKeys()
 		this.createHealthBar();
 		this.createEnemies();
 		this.createPushableDecorations();
@@ -108,37 +82,23 @@ class MainScene extends Phaser.Scene {
 
 		if (this.hasLight) this.createLight();
 
-		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer, this.movingVerticalPlatformsGroup]);
-		this.physics.add.collider(this.movingVerticalPlatformsGroup, [this.groundLayer, this.platformsLayer]);
-		this.physics.add.collider(this.enemyGroup, [this.groundLayer, this.platformsLayer]);
-		this.physics.add.collider(this.livesGroup, [this.groundLayer, this.platformsLayer]);
-		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer]); // more colissions?
-		this.physics.add.overlap(this.player, this.livesGroup, (player, life) => player.addLife(life));
-
-		this.physics.add.collider(this.player.bombGroup, this.player.bombGroup, (bomb1, bomb2) => { bomb1.push(bomb2) }); // bomb with bomb
+		//this.physics.add.collider(this.player.bombGroup, this.player.bombGroup, (bomb1, bomb2) => { bomb1.push(bomb2) }); // bomb with bomb
 
 		this.physics.add.overlap(this.player.bombGroup, this.player, (player, bomb) => player.takeBombDamage(bomb));
 		this.physics.add.overlap(this.player.bombGroup, this.enemyGroup, (bomb, enemy) => enemy.takeBombDamage(bomb));
 		this.physics.add.overlap(this.player.bombGroup, this.pushableDecorationGroup, (bomb, object) => bomb.push(object));
-		this.physics.add.overlap(this.enemyHurtboxGroup, this.player, (player, hurtbox) => hurtbox.atack(player));
-		this.physics.add.collider([this.canonBallGroup, this.bottleGroup], [this.groundLayer], (projectile) => projectile.destroy());
-
-		this.physics.add.overlap([this.canonBallGroup, this.bottleGroup], this.player, (player, projectile) => player.takeDamage(projectile));
-
-		this.physics.add.collider(this.pushableDecorationGroup, [this.groundLayer, this.platformsLayer, this.pushableDecorationGroup]);
-
-		this.physics.add.overlap(this.doorGroup, this.player, (player, door) => this.changeLevel(door));
 
 	}
 	update() {
+		this.movingXPlatformsGroup.getChildren().forEach(platform => platform.update());
+		this.movingYPlatformsGroup.getChildren().forEach(platform => platform.update());
 		this.player.update();
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
-		this.movingVerticalPlatformsGroup.getChildren().forEach(platform => platform.update());
 	}
 
 	changeLevel(door) {
-		if (door.id === this.scene.currentLevel || door.id === -1 || !this.player.cursors.down.isDown) return
+		if (door.id === this.scene.currentLevel || door.id === -1 || !this.player.cursors.down.isDown || !this.player.hasKey) return
 		this.player.setState('DOOR_IN');
 		door.anims.play('opening');
 		door.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'opening', function (anims) {
@@ -153,10 +113,14 @@ class MainScene extends Phaser.Scene {
 	getObjectCoordinateY(gameObject) {
 		return gameObject.y - gameObject.height * 0.5
 	}
-	normalaizeCoordinate() {
-
+	normalaizeCoordinate(coordinate) {
+		return Math.floor(coordinate / this.tileset.tileWidth) * this.tileset.tileWidth
 	}
 	createDoors() {
+		this.doorGroup = this.physics.add.group({
+			immovable: true,
+			allowGravity: false
+		});
 		this.map.getObjectLayer('doors').objects.forEach(object => {
 			const id = object.properties.find(item => item.name === 'id').value;
 			const door = new Door({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'door', id });
@@ -164,26 +128,61 @@ class MainScene extends Phaser.Scene {
 		});
 	}
 	createMovingPlatforms() {
-		this.movingVerticalPlatformsGroup = this.physics.add.group({
+		this.movingXPlatformsGroup = this.physics.add.group({
+			bounceX: 1,
 			bounceY: 1,
+			frictionX: 1,
+			velocityX: 100,
+			immovable: true,
+			allowGravity: false,
+		});
+		this.movingYPlatformsGroup = this.physics.add.group({
+			bounceX: 1,
+			bounceY: 1,
+			frictionY: 1,
 			velocityY: 100,
 			immovable: true,
-			allowGravity: false
+			allowGravity: false,
 		});
+		this.physics.add.collider(this.movingXPlatformsGroup, this.movingXPlatformsGroup, (platform) => platform.toogleDirection());
+		this.physics.add.collider(this.movingYPlatformsGroup, this.movingYPlatformsGroup, (platform) => platform.toogleDirection());
 		const layer = this.map.getObjectLayer('moving_platforms')?.objects;
 		if (!layer) return
 		layer.forEach(object => {
 			const type = object.properties.find(item => item.name === 'type').value;
-			const movingPlatform = new MovingPlatform({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'moving_platform', type })
-			this.movingVerticalPlatformsGroup.add(movingPlatform);
+			const movingPlatform = new MovingPlatform({ scene: this, x: this.normalaizeCoordinate(object.x), y: this.normalaizeCoordinate(object.y), textureKey: 'moving_platform', type })
+			if (type === 'HORIZONTAL') return this.movingXPlatformsGroup.add(movingPlatform);
+			this.movingYPlatformsGroup.add(movingPlatform);
 		});
 	}
 	createLives() {
+		this.livesGroup = this.physics.add.group({
+			immovable: true,
+		});
+		this.physics.add.collider(this.livesGroup, [this.groundLayer, this.platformsLayer]);
+		this.physics.add.overlap(this.player, this.livesGroup, (player, life) => player.addLife(life));
 		const layer = this.map.getObjectLayer('lives')?.objects;
 		if (!layer) return
 		layer.forEach(object => {
 			const live = new Life({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'life_idle' });
 			this.livesGroup.add(live);
+		});
+	}
+	createKeys() {
+		this.keysGroup = this.physics.add.group({
+			immovable: true,
+			allowGravity: false,
+		});
+		this.keyOverlap = this.physics.add.overlap(this.player, this.keysGroup, (player, key) => {
+			player.getKey();
+			key.disappear();
+			this.physics.world.removeCollider(this.keyOverlap);
+		});
+		const layer = this.map.getObjectLayer('keys')?.objects;
+		if (!layer) return
+		layer.forEach(object => {
+			const key = new Key({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'key' });
+			this.keysGroup.add(key);
 		});
 	}
 	createPlayer() {
@@ -198,6 +197,10 @@ class MainScene extends Phaser.Scene {
 			},
 		}
 		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures });
+		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);
+		this.physics.add.collider(this.player, this.movingYPlatformsGroup, (player, platform) => player.touchingPlatform = platform);
+		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup]); // more colissions?
+		this.physics.add.overlap(this.player, this.doorGroup, (player, door) => this.changeLevel(door));
 	}
 	createCamera() {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -211,6 +214,20 @@ class MainScene extends Phaser.Scene {
 		this.healthBar = new HealthBar({ scene: this, player: this.player, textures });
 	}
 	createEnemies() {
+		this.enemyGroup = this.physics.add.group();
+		this.canonBallGroup = this.physics.add.group({
+			defaultKey: 'canon_ball',
+			classType: CanonBall,
+			allowGravity: false,
+			angularVelocity: 1000,
+		});
+		this.bottleGroup = this.physics.add.group({
+			defaultKey: 'blue_bottle',
+			classType: Bottle,
+			allowGravity: false,
+			angularVelocity: 1000,
+		});
+		this.enemyHurtboxGroup = this.physics.add.group();
 		const classes = {
 			'BaldPirate': BaldPirate,
 			'Capitan': Capitan,
@@ -233,8 +250,19 @@ class MainScene extends Phaser.Scene {
 			});
 			this.enemyGroup.add(enemy);
 		})
+		this.physics.add.collider(this.enemyGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);
+		this.physics.add.collider(this.enemyGroup, this.movingYPlatformsGroup, (enemy, platform) => enemy.touchingPlatform = platform);
+		this.physics.add.overlap(this.enemyHurtboxGroup, this.player, (player, hurtbox) => hurtbox.atack(player));
+		this.physics.add.collider([this.canonBallGroup, this.bottleGroup], [this.groundLayer], (projectile) => projectile.destroy());
+		this.physics.add.overlap([this.canonBallGroup, this.bottleGroup], this.player, (player, projectile) => player.takeDamage(projectile));
 	}
 	createPushableDecorations() {
+		this.pushableDecorationGroup = this.physics.add.group({
+			bounceX: 0.5,
+			bounceY: 0.5,
+			dragX: 100,
+			dragY: 100,
+		});
 		if (!this.map.getObjectLayer('decorations')) return
 		this.map.getObjectLayer('decorations').objects.forEach(object => {
 			const textureKey = object.properties.find(item => item.name === 'texture').value;
@@ -247,6 +275,7 @@ class MainScene extends Phaser.Scene {
 			});
 			this.pushableDecorationGroup.add(newObject);
 		})
+		this.physics.add.collider(this.pushableDecorationGroup, [this.groundLayer, this.platformsLayer, this.pushableDecorationGroup]);
 	}
 	createDecorations() {
 		const layers = {

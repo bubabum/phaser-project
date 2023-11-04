@@ -6,6 +6,7 @@ class BombBar extends Phaser.Physics.Arcade.Sprite {
 		this.player = player;
 		this.setVisible(false);
 		this.createAnimations(textureKey);
+		this.setDepth(25);
 	}
 
 	update() {

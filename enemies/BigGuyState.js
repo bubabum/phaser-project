@@ -10,6 +10,7 @@ class BigGuyIdle extends State {
 		const { enemy } = this;
 		enemy.turnToPlayer();
 		if (enemy.canRun()) return enemy.setState('RUN');
+		if (enemy.checkAtackRange()) return this.enemy.setState('ATACK');
 	}
 }
 

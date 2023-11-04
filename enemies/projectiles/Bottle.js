@@ -5,6 +5,7 @@ class Bottle extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 		this.setCircle(10);
+		this.setDepth(25);
 		if (scene.hasLight) this.setPipeline('Light2D');
 	}
 

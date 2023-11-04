@@ -28,6 +28,7 @@ class Cucumber extends Enemy {
 			new EnemyFall(this),
 			new EnemyHit(this),
 			new EnemyDeadHit(this),
+			new EnemyDeadGround(this),
 		];
 		this.setState('IDLE');
 	}
@@ -108,8 +109,8 @@ class Cucumber extends Enemy {
 		this.anims.create({
 			key: 'dead_ground',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 94, end: 97 }),
-			frameRate: 20,
-			repeat: 0,
+			frameRate: 10,
+			repeat: -1,
 		});
 	}
 

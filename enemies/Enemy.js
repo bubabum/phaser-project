@@ -23,19 +23,22 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
 	setState(name) {
 		if (this?.currentState?.name === name) return
-		if (this?.currentState?.name === 'DEAD_HIT') return
+		if (this?.currentState?.name === 'DEAD_GROUND') return
 		this.currentState = this.states.find(state => state.name === name);
 		this.currentState.enter();
 		this.anims.play(this.currentState.animation);
 	}
 
 	update() {
-		this.currentState.handleState();
 		this.drawHealthBar();
+		if (this.touchingPlatform && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
+			const platformVelocityY = this.touchingPlatform.body.velocity.y;
+			if (platformVelocityY > 0) this.setVelocityY(platformVelocityY);
+		}
+		this.currentState.handleState();
 		if (this.stateName) this.stateName.destroy();
 		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
-		this.stateName.x -= this.stateName.width * 0.5
-
+		this.stateName.x -= this.stateName.width * 0.5;
 		if (this?.hurtbox?.body) {
 			const posY = this.body.position.y + this.body.height * 0.5 + this.hurtboxOffsetY;
 			if (this.direction === 'right') return this.hurtbox.setPosition(this.body.position.x + this.body.width, posY);
@@ -58,17 +61,22 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		} else if (this.health / this.maxHealth > 0.7) {
 			color = '0x00ff4c';
 		}
-		const width = 30;
+		color = '0xe86363'
+		const width = 40;
+		const height = 6;
 		const x = Math.floor(this.body.left + this.body.width / 2 - width / 2)
 		const y = Math.floor(this.getTopCenter().y - 10);
+		// let radius = 0;
+		// if (this.health === this.maxHealth) radius = 4;
 		this.healthBar = this.scene.add.graphics();
 		this.healthBar.fillStyle(`0x333333`, 1);
-		this.healthBar.fillRect(x, y, width, 6);
-		this.healthBar.fillStyle(`0xeeeeee`, 1);
-		this.healthBar.fillRect(x + 1, y + 1, width - 2, 4);
+		this.healthBar.fillRect(x, y, width, height);
+		this.healthBar.fillStyle(`0xbd3b53`, 1);
+		this.healthBar.fillRect(x + 1, y + 1, width - 2, height - 2);
 		this.healthBar.fillStyle(color, 1);
 		//this.healthBar.fillStyle(`0x${r}${g}${b}`, 1);
-		this.healthBar.fillRect(x + 1, y + 1, (width - 2) * this.health / this.maxHealth, 4);
+		this.healthBar.fillRect(x + 1, y + 1, (width - 2) * this.health / this.maxHealth, height - 2);
+		this.healthBar.setDepth(25);
 	}
 
 	setBodyProperties(direction) {
@@ -121,7 +129,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	checkMoveToPlayer() {
-		const tileSize = 64;
+		const tileSize = this.scene.tileset.tileWidth;
 		const { x, y } = this.player;
 		const range = { x: 2 * tileSize, y: 1 * tileSize };
 		let { left, right, bottom, top } = this.getCurrentTile();
@@ -129,13 +137,13 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		right += range.x;
 		bottom += range.y;
 		top -= range.y;
-		return x > left && x < right && y > top && y < bottom
+		return x > left && x < right && y > top && y < bottom && !this.player.isInvulnerable
 	}
 
 	checkClimbUp() {
-		const { tileWidth } = this.scene.tileset;
+		const tileSize = this.scene.tileset.tileWidth;
 		const { x, y } = this;
-		const margin = (this.direction === 'right' ? tileWidth : -tileWidth);
+		const margin = (this.direction === 'right' ? tileSize : -tileSize);
 		const tile = this.scene.groundLayer.getTileAtWorldXY(x + margin, y);
 		return tile?.collideRight || tile?.collideLeft;
 	}
@@ -173,7 +181,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		if (this.bombGroup.getChildren().length === 0) return
 		for (let i = 0; i < this.bombGroup.getChildren().length; i++) {
 			const bomb = this.bombGroup.getChildren()[i];
-			if (bomb.body.velocity.x !== 0 || bomb.isOff || bomb.exploded) continue
+			if (bomb.isOff || bomb.exploded) continue
+			if (this instanceof Cucumber && bomb.body.velocity.x !== 0) continue
 			if (Phaser.Math.Distance.BetweenPoints(bomb, this) < 50 && bomb.x < this.x && this.direction === 'left' ||
 				Phaser.Math.Distance.BetweenPoints(bomb, this) < 50 && bomb.x > this.x && this.direction === 'right') return true
 		}
@@ -237,14 +246,15 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
 	canRun() {
 		const { x, y, width, height } = this.body;
+		const tileSize = this.scene.tileset.tileWidth;
 		const groundLayer = this.scene.groundLayer;
 		const platformsLayer = this.scene.platformsLayer;
-		const rightTile = groundLayer.getTileAtWorldXY(x + width * 0.5 + TILE, y + height * 0.5);
-		const leftTile = groundLayer.getTileAtWorldXY(x + width * 0.5 - TILE, y + height * 0.5);
-		const rightGroundTile = groundLayer.getTileAtWorldXY(x + width * 0.5 + TILE, y + height + 0.5);
-		const leftGroundTile = groundLayer.getTileAtWorldXY(x + width * 0.5 - TILE, y + height + 0.5);
-		const rightPlatformTile = platformsLayer.getTileAtWorldXY(x + width * 0.5 + TILE, y + height + 0.5);
-		const leftPlatformTile = platformsLayer.getTileAtWorldXY(x + width * 0.5 - TILE, y + height + 0.5);
+		const rightTile = groundLayer.getTileAtWorldXY(x + width * 0.5 + tileSize, y + height * 0.5);
+		const leftTile = groundLayer.getTileAtWorldXY(x + width * 0.5 - tileSize, y + height * 0.5);
+		const rightGroundTile = groundLayer.getTileAtWorldXY(x + width * 0.5 + tileSize, y + height + 0.5);
+		const leftGroundTile = groundLayer.getTileAtWorldXY(x + width * 0.5 - tileSize, y + height + 0.5);
+		const rightPlatformTile = platformsLayer.getTileAtWorldXY(x + width * 0.5 + tileSize, y + height + 0.5);
+		const leftPlatformTile = platformsLayer.getTileAtWorldXY(x + width * 0.5 - tileSize, y + height + 0.5);
 		if (!rightGroundTile?.collideUp && leftTile?.collideRight || !leftGroundTile?.collideUp && rightTile?.collideLeft) return false
 		return rightGroundTile?.collideUp || leftGroundTile?.collideUp || rightPlatformTile?.collideUp || leftPlatformTile?.collideUp
 	}

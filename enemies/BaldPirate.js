@@ -9,7 +9,7 @@ class BaldPirate extends Enemy {
 		this.atackRange = 40;
 		this.hurtboxRadius = 20;
 		this.hurtboxOffsetY = 10;
-		this.bodyProperties = { width: 30, height: 60, offsetX: 17, offsetY: 5, flipOffsetX: 17 };
+		this.bodyProperties = { width: 30, height: 62, offsetX: 17, offsetY: 5, flipOffsetX: 17 };
 		this.isInvulnerable = false;
 		this.isAtacking = false;
 		this.setBodyProperties(direction);
@@ -32,6 +32,7 @@ class BaldPirate extends Enemy {
 			new EnemyFall(this),
 			new EnemyHit(this),
 			new EnemyDeadHit(this),
+			new EnemyDeadGround(this),
 		];
 		this.setState('IDLE');
 	}
@@ -111,8 +112,8 @@ class BaldPirate extends Enemy {
 		this.anims.create({
 			key: 'dead_ground',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 84, end: 87 }),
-			frameRate: 20,
-			repeat: 0,
+			frameRate: 10,
+			repeat: -1,
 		});
 	}
 

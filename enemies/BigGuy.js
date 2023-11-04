@@ -2,10 +2,10 @@ class BigGuy extends Enemy {
 
 	constructor({ scene, x, y, textureKey, direction }) {
 		super({ scene, x, y, textureKey });
-		this.maxHealth = 3;
+		this.maxHealth = 1;
 		this.health = this.maxHealth;
 		this.speedX = 120;
-		this.atackRange = 20;
+		this.atackRange = 30;
 		this.hurtboxRadius = 25;
 		this.hurtboxOffsetY = 0;
 		this.bodyProperties = { width: 27, height: 60, offsetX: 19, offsetY: 13, flipOffsetX: 30 };
@@ -21,6 +21,7 @@ class BigGuy extends Enemy {
 			new EnemyFall(this),
 			new EnemyHit(this),
 			new EnemyDeadHit(this),
+			new EnemyDeadGround(this),
 		];
 		this.setState('IDLE');
 	}
@@ -77,8 +78,8 @@ class BigGuy extends Enemy {
 		this.anims.create({
 			key: 'dead_ground',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 125, end: 128 }),
-			frameRate: 20,
-			repeat: 0,
+			frameRate: 10,
+			repeat: -1,
 		});
 	}
 

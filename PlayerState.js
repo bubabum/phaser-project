@@ -8,7 +8,6 @@ class Idle extends State {
 		const { player } = this;
 		if (cursors.right.isDown || cursors.left.isDown) player.setState('RUN');
 		if (Phaser.Input.Keyboard.JustDown(keyUp)) player.setState('JUMP');
-		if (player.body.velocity.y > 0) player.setState('JUMP');
 	}
 }
 
@@ -29,7 +28,7 @@ class Run extends State {
 			player.setState('IDLE');
 		}
 		if (Phaser.Input.Keyboard.JustDown(keyUp)) player.setState('JUMP');
-		if (player.body.velocity.y > 0) player.setState('FALL');
+		if (player.body.velocity.y > 0 && !player.touchingPlatform || !player.body.onFloor()) player.setState('FALL');
 	}
 }
 
@@ -39,7 +38,8 @@ class Jump extends State {
 	}
 	enter() {
 		const { player } = this;
-		player.setVelocityY(-250);
+		player.setVelocityY(-player.jumpVelocity);
+		player.touchingPlatform = null;
 	}
 	handleInput({ cursors }) {
 		const { player } = this;
@@ -51,6 +51,7 @@ class Jump extends State {
 			player.setVelocityX(0);
 		}
 		if (player.body.velocity.y > 0) player.setState('FALL');
+		if (player.body.blocked.down) player.setState('LAND');
 	}
 }
 
@@ -59,6 +60,9 @@ class Fall extends State {
 		super({ name: 'FALL', player, animation: 'fall' });
 	}
 	enter() {
+		const { player } = this;
+		player.setVelocityY(0);
+		player.touchingPlatform = null;
 	}
 	handleInput({ cursors }) {
 		const { player } = this;
