@@ -76,9 +76,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	update() {
-		if (this.stateName) this.stateName.destroy();
-		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${Math.floor(this.body.velocity.y)}`, { font: '16px Courier', fill: '#ffffff' });
-		this.stateName.x -= this.stateName.width * 0.5
+		// if (this.stateName) this.stateName.destroy();
+		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${Math.floor(this.body.velocity.y)}`, { font: '16px Courier', fill: '#ffffff' });
+		// this.stateName.x -= this.stateName.width * 0.5
 
 		const { currentState, cursors, keyUp } = this;
 		this.handleBombListener()
@@ -93,10 +93,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.isInvulnerable = status;
 	}
 
-	addLife(life) {
+	addLife() {
 		if (this.health === this.maxHeath) return
-		life.destroy()
 		this.health++
+		return true
 	}
 
 	getKey() {

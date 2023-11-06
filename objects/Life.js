@@ -5,7 +5,7 @@ class Life extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 		this.scene = scene;
-		this.setPosition(this.getTileCenterX(x));
+		this.setPosition(this.getTileCenterX(x), y);
 		this.setDepth(25);
 		this.createAnimations(textureKey);
 		this.anims.play('idle');
@@ -16,12 +16,25 @@ class Life extends Phaser.Physics.Arcade.Sprite {
 		return Math.floor(x / tileWidth) * tileWidth + tileWidth / 2;
 	}
 
+	disappear() {
+		this.anims.play('effect');
+		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'effect', function (anims) {
+			this.destroy();
+		}, this);
+	}
+
 	createAnimations(textureKey) {
 		this.anims.create({
 			key: 'idle',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 0, end: 21 }),
 			frameRate: 20,
 			repeat: -1,
+		});
+		this.anims.create({
+			key: 'effect',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 22, end: 25 }),
+			frameRate: 10,
+			repeat: 0,
 		});
 	}
 

@@ -125,8 +125,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":20,
-                 "x":594,
-                 "y":638.333
+                 "x":128,
+                 "y":320
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -556,7 +556,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":62,
-                 "x":511.666666666667,
+                 "x":511.667,
                  "y":834
                 }, 
                 {
@@ -579,7 +579,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":62,
-                 "x":1023.66666666667,
+                 "x":1023.67,
                  "y":255
                 }, 
                 {
@@ -629,29 +629,6 @@
                  "y":319
                 }, 
                 {
-                 "class":"BaldPirate",
-                 "gid":31,
-                 "height":67,
-                 "id":167,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"className",
-                         "type":"string",
-                         "value":"BaldPirate"
-                        }, 
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"bald_pirate"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":63,
-                 "x":768,
-                 "y":831
-                }, 
-                {
                  "class":"Capitan",
                  "gid":39,
                  "height":72,
@@ -675,29 +652,6 @@
                  "y":894
                 }, 
                 {
-                 "class":"Capitan",
-                 "gid":39,
-                 "height":72,
-                 "id":169,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"className",
-                         "type":"string",
-                         "value":"Capitan"
-                        }, 
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"capitan"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":80,
-                 "x":888,
-                 "y":1152
-                }, 
-                {
                  "class":"BigGuy",
                  "gid":34,
                  "height":74,
@@ -719,6 +673,29 @@
                  "width":77,
                  "x":532,
                  "y":1214
+                }, 
+                {
+                 "class":"BaldPirate",
+                 "gid":31,
+                 "height":67,
+                 "id":176,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"BaldPirate"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"bald_pirate"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":63,
+                 "x":769,
+                 "y":832.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -740,8 +717,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":24,
-                 "x":965.333333333333,
-                 "y":571.333333333333
+                 "x":965.333,
+                 "y":571.333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -769,8 +746,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1089.33333333333,
-                 "y":322.666666666667
+                 "x":1089.33,
+                 "y":322.667
                 }, 
                 {
                  "class":"",
@@ -805,8 +782,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":769.318181818182,
-                 "y":1041.45454545455
+                 "x":640,
+                 "y":1088
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -815,7 +792,7 @@
          "y":0
         }],
  "nextlayerid":32,
- "nextobjectid":172,
+ "nextobjectid":177,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

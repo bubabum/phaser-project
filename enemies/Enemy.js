@@ -36,9 +36,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 			if (platformVelocityY > 0) this.setVelocityY(platformVelocityY);
 		}
 		this.currentState.handleState();
-		if (this.stateName) this.stateName.destroy();
-		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
-		this.stateName.x -= this.stateName.width * 0.5;
+		// if (this.stateName) this.stateName.destroy();
+		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
+		// this.stateName.x -= this.stateName.width * 0.5;
 		if (this?.hurtbox?.body) {
 			const posY = this.body.position.y + this.body.height * 0.5 + this.hurtboxOffsetY;
 			if (this.direction === 'right') return this.hurtbox.setPosition(this.body.position.x + this.body.width, posY);

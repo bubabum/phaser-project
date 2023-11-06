@@ -150,7 +150,14 @@ class MainScene extends Phaser.Scene {
 		if (!layer) return
 		layer.forEach(object => {
 			const type = object.properties.find(item => item.name === 'type').value;
-			const movingPlatform = new MovingPlatform({ scene: this, x: this.normalaizeCoordinate(object.x), y: this.normalaizeCoordinate(object.y), textureKey: 'moving_platform', type })
+			console.log(object.y)
+			const movingPlatform = new MovingPlatform({
+				scene: this,
+				x: this.normalaizeCoordinate(object.x),
+				y: this.normalaizeCoordinate(object.y - object.height * 0.5),
+				textureKey: 'moving_platform',
+				type,
+			})
 			if (type === 'HORIZONTAL') return this.movingXPlatformsGroup.add(movingPlatform);
 			this.movingYPlatformsGroup.add(movingPlatform);
 		});
@@ -160,11 +167,13 @@ class MainScene extends Phaser.Scene {
 			immovable: true,
 		});
 		this.physics.add.collider(this.livesGroup, [this.groundLayer, this.platformsLayer]);
-		this.physics.add.overlap(this.player, this.livesGroup, (player, life) => player.addLife(life));
+		this.physics.add.overlap(this.player, this.livesGroup, (player, life) => {
+			if (player.addLife()) life.disappear();
+		});
 		const layer = this.map.getObjectLayer('lives')?.objects;
 		if (!layer) return
 		layer.forEach(object => {
-			const live = new Life({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'life_idle' });
+			const live = new Life({ scene: this, x: object.x, y: object.y, textureKey: 'life_idle' });
 			this.livesGroup.add(live);
 		});
 	}
