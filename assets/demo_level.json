@@ -538,29 +538,6 @@
          "objects":[
                 {
                  "class":"Canon",
-                 "gid":2147483686,
-                 "height":46,
-                 "id":157,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"className",
-                         "type":"string",
-                         "value":"Canon"
-                        }, 
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"canon"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":62,
-                 "x":511.667,
-                 "y":834
-                }, 
-                {
-                 "class":"Canon",
                  "gid":38,
                  "height":46,
                  "id":163,
@@ -629,52 +606,6 @@
                  "y":319
                 }, 
                 {
-                 "class":"Capitan",
-                 "gid":39,
-                 "height":72,
-                 "id":168,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"className",
-                         "type":"string",
-                         "value":"Capitan"
-                        }, 
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"capitan"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":80,
-                 "x":958,
-                 "y":894
-                }, 
-                {
-                 "class":"BigGuy",
-                 "gid":34,
-                 "height":74,
-                 "id":170,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"className",
-                         "type":"string",
-                         "value":"BigGuy"
-                        }, 
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"big_guy"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":77,
-                 "x":532,
-                 "y":1214
-                }, 
-                {
                  "class":"BaldPirate",
                  "gid":31,
                  "height":67,
@@ -694,8 +625,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":63,
-                 "x":769,
-                 "y":832.666666666667
+                 "x":754,
+                 "y":1203.667
                 }],
          "opacity":1,
          "type":"objectgroup",

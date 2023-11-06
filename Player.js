@@ -10,7 +10,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setDepth(23);
 		this.maxHeath = 3;
 		this.health = this.maxHeath;
-		this.jumpVelocity = 250;
+		this.jumpVelocity = -250;
 		this.bombMaxVelocity = 300;
 		this.isInvulnerable = false;
 		this.hasKey = false;
@@ -76,15 +76,22 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	update() {
-		// if (this.stateName) this.stateName.destroy();
-		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${Math.floor(this.body.velocity.y)}`, { font: '16px Courier', fill: '#ffffff' });
-		// this.stateName.x -= this.stateName.width * 0.5
+		if (this.lastState !== this.currentState.name) {
+			this.lastState = this.currentState.name;
+			console.log(this.lastState);
+		}
+		if (this.stateName) this.stateName.destroy();
+		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${Math.floor(this.body.velocity.y)}`, { font: '16px Courier', fill: '#ffffff' });
+		this.stateName.x -= this.stateName.width * 0.5
 
 		const { currentState, cursors, keyUp } = this;
 		this.handleBombListener()
 		if (this.touchingPlatform && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
 			const platformVelocityY = this.touchingPlatform.body.velocity.y;
-			if (platformVelocityY > 0) this.setVelocityY(platformVelocityY);
+			if (platformVelocityY > 0) {
+				//Phaser.Display.Bounds.SetBottom(this, this.touchingPlatform.body.top);
+				this.setVelocityY(platformVelocityY);
+			}
 		}
 		currentState.handleInput({ cursors, keyUp });
 	}

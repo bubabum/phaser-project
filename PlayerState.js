@@ -38,7 +38,7 @@ class Jump extends State {
 	}
 	enter() {
 		const { player } = this;
-		player.setVelocityY(-player.jumpVelocity);
+		player.setVelocityY(player.jumpVelocity);
 		player.touchingPlatform = null;
 	}
 	handleInput({ cursors }) {
@@ -51,7 +51,7 @@ class Jump extends State {
 			player.setVelocityX(0);
 		}
 		if (player.body.velocity.y > 0) player.setState('FALL');
-		if (player.body.blocked.down) player.setState('LAND');
+		if (player.body.onFloor() && player.touchingPlatform) player.setState('LAND');
 	}
 }
 

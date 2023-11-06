@@ -3,7 +3,8 @@ class EnemyJump extends State {
 		super({ name: 'JUMP', enemy, animation: 'jump' });
 	}
 	enter() {
-		this.enemy.setVelocityY(-250)
+		const { enemy } = this;
+		enemy.setVelocityY(enemy.jumpVelocity)
 	}
 	handleState() {
 		if (this.enemy.checkAtackRange()) return this.enemy.setState('AIR_ATACK');

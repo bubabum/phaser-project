@@ -63,7 +63,7 @@ class BaldPirateClimbUp extends State {
 	}
 	enter() {
 		const { enemy } = this;
-		enemy.setVelocityY(-250)
+		enemy.setVelocityY(enemy.jumpVelocity)
 	}
 	handleState() {
 		const { enemy } = this;
@@ -78,7 +78,7 @@ class BaldPirateJumpUp extends State {
 	}
 	enter() {
 		const { enemy } = this;
-		enemy.setVelocityY(-230);
+		enemy.setVelocityY(enemy.jumpVelocity * 0.9)
 		enemy.setVelocityXByDirection(90);
 	}
 	handleState() {
@@ -93,7 +93,7 @@ class BaldPirateLongJumpUp extends State {
 	}
 	enter() {
 		const { enemy } = this;
-		enemy.setVelocityY(-250);
+		enemy.setVelocityY(enemy.jumpVelocity)
 		enemy.setVelocityXByDirection(120);
 	}
 	handleState() {
@@ -108,7 +108,7 @@ class BaldPirateJumpDown extends State {
 	}
 	enter() {
 		const { enemy } = this;
-		enemy.setVelocityY(-100);
+		enemy.setVelocityY(enemy.jumpVelocity * 0.4)
 		enemy.setVelocityXByDirection(70);
 	}
 	handleState() {
@@ -123,7 +123,7 @@ class BaldPirateLongJumpDown extends State {
 	}
 	enter() {
 		const { enemy } = this;
-		enemy.setVelocityY(-100);
+		enemy.setVelocityY(enemy.jumpVelocity * 0.4)
 		enemy.setVelocityXByDirection(120);
 	}
 	handleState() {
