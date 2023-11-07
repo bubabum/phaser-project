@@ -55,6 +55,8 @@ class MainScene extends Phaser.Scene {
 		this.load.image('red_bottle', 'assets/decoration/red_bottle.png');
 		this.load.image('table', 'assets/decoration/table.png');
 		this.load.image('skull', 'assets/decoration/skull.png');
+
+		this.load.aseprite('falling_barrel', 'assets/falling_barrel.png', 'assets/falling_barrel.json');
 	}
 
 	create() {
@@ -79,6 +81,11 @@ class MainScene extends Phaser.Scene {
 		this.createEnemies();
 		this.createPushableDecorations();
 		this.createDecorations();
+
+		this.barrel = new FallingBarrel({ scene: this, x: this.player.x + 128, y: this.player.y - 64 * 4 - 7, textureKey: 'falling_barrel' });
+		this.physics.add.collider(this.barrel, [this.groundLayer, this.platformsLayer]);
+
+
 
 		if (this.hasLight) this.createLight();
 
