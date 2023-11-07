@@ -28,7 +28,7 @@ class MainScene extends Phaser.Scene {
 		this.load.spritesheet('jump_particles', 'assets/jump_particles.png', { frameWidth: 40, frameHeight: 28 });
 		this.load.spritesheet('land_particles', 'assets/land_particles.png', { frameWidth: 80, frameHeight: 10 });
 		this.load.spritesheet('life_idle', 'assets/life_idle.png', { frameWidth: 20, frameHeight: 18 });
-		this.load.spritesheet('key', 'assets/key.png', { frameWidth: 24, frameHeight: 24 });
+		this.load.spritesheet('key', 'assets/key.png', { frameWidth: 30, frameHeight: 30 });
 
 		this.load.spritesheet('canon', 'assets/canon.png', { frameWidth: 62, frameHeight: 46 });
 		this.load.image('canon_ball', 'assets/canon_ball.png');
