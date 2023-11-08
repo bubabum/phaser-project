@@ -538,6 +538,29 @@
          "objects":[
                 {
                  "class":"Canon",
+                 "gid":2147483686,
+                 "height":46,
+                 "id":157,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"Canon"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"canon"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":62,
+                 "x":511.667,
+                 "y":834
+                }, 
+                {
+                 "class":"Canon",
                  "gid":38,
                  "height":46,
                  "id":163,
@@ -606,6 +629,52 @@
                  "y":319
                 }, 
                 {
+                 "class":"Capitan",
+                 "gid":39,
+                 "height":72,
+                 "id":168,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"Capitan"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"capitan"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":80,
+                 "x":958,
+                 "y":894
+                }, 
+                {
+                 "class":"BigGuy",
+                 "gid":34,
+                 "height":74,
+                 "id":170,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"BigGuy"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"big_guy"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":77,
+                 "x":532,
+                 "y":1214
+                }, 
+                {
                  "class":"BaldPirate",
                  "gid":31,
                  "height":67,
@@ -625,8 +694,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":63,
-                 "x":754,
-                 "y":1203.667
+                 "x":769,
+                 "y":832.667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -666,42 +735,6 @@
                  "class":"",
                  "gid":30,
                  "height":64,
-                 "id":162,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"VERTICAL"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":1089.33,
-                 "y":322.667
-                }, 
-                {
-                 "class":"",
-                 "gid":30,
-                 "height":64,
-                 "id":166,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"VERTICAL"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":641,
-                 "y":643
-                }, 
-                {
-                 "class":"",
-                 "gid":30,
-                 "height":64,
                  "id":171,
                  "name":"",
                  "properties":[
@@ -713,8 +746,31 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":640,
-                 "y":1088
+                 "x":64,
+                 "y":1024
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":32,
+         "name":"falling_barrels",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":51,
+                 "height":64,
+                 "id":177,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":256,
+                 "y":768
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -722,8 +778,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":32,
- "nextobjectid":177,
+ "nextlayerid":33,
+ "nextobjectid":178,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
@@ -1135,6 +1191,10 @@
         {
          "firstgid":50,
          "source":"key.tsx"
+        }, 
+        {
+         "firstgid":51,
+         "source":"Objects\/tiled\/falling_barrel.tsx"
         }],
  "tilewidth":64,
  "type":"map",

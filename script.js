@@ -72,7 +72,8 @@ class MainScene extends Phaser.Scene {
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
 		this.createDoors();
-		this.createMovingPlatforms()
+		this.createMovingPlatforms();
+		this.createFallingBarrels();
 		this.createPlayer();
 		this.createCamera();
 		this.createLives();
@@ -82,8 +83,8 @@ class MainScene extends Phaser.Scene {
 		this.createPushableDecorations();
 		this.createDecorations();
 
-		this.barrel = new FallingBarrel({ scene: this, x: this.player.x + 128, y: this.player.y - 64 * 4 - 7, textureKey: 'falling_barrel' });
-		this.physics.add.collider(this.barrel, [this.groundLayer, this.platformsLayer]);
+		// this.barrel = new FallingBarrel({ scene: this, x: this.player.x + 128, y: this.player.y - 64 * 4 - 7, textureKey: 'falling_barrel' });
+		// this.physics.add.collider(this.barrel, [this.groundLayer, this.platformsLayer]);
 
 
 
@@ -99,6 +100,7 @@ class MainScene extends Phaser.Scene {
 	update() {
 		this.movingXPlatformsGroup.getChildren().forEach(platform => platform.update());
 		this.movingYPlatformsGroup.getChildren().forEach(platform => platform.update());
+		this.fallenBarrelsGroup.getChildren().forEach(barrel => barrel.update());
 		this.player.update();
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
@@ -113,6 +115,14 @@ class MainScene extends Phaser.Scene {
 		}, this);
 
 	}
+	push(pusher, object) {
+		const point = {
+			x: object.x + (object.x < pusher.x ? -100 : 100),
+			y: object.y + 200,
+		}
+		const angle = Phaser.Math.Angle.BetweenPoints(point, object);
+		this.physics.velocityFromRotation(angle, 150, object.body.velocity);
+	}
 	getObjectCoordinateX(gameObject) {
 		return gameObject.x + gameObject.width * 0.5
 	}
@@ -120,8 +130,11 @@ class MainScene extends Phaser.Scene {
 	getObjectCoordinateY(gameObject) {
 		return gameObject.y - gameObject.height * 0.5
 	}
-	normalaizeCoordinate(coordinate) {
-		return Math.floor(coordinate / this.tileset.tileWidth) * this.tileset.tileWidth
+	normalaizeCoordinateX(gameObject) {
+		return Math.floor(gameObject.x / this.tileset.tileHeight) * this.tileset.tileHeight
+	}
+	normalaizeCoordinateY(gameObject) {
+		return Math.floor(gameObject.y / this.tileset.tileHeight) * this.tileset.tileHeight - gameObject.height
 	}
 	createDoors() {
 		this.doorGroup = this.physics.add.group({
@@ -157,17 +170,37 @@ class MainScene extends Phaser.Scene {
 		if (!layer) return
 		layer.forEach(object => {
 			const type = object.properties.find(item => item.name === 'type').value;
-			console.log(object.y)
 			const movingPlatform = new MovingPlatform({
 				scene: this,
-				x: this.normalaizeCoordinate(object.x),
-				y: this.normalaizeCoordinate(object.y - object.height * 0.5),
+				x: this.normalaizeCoordinateX(object),
+				y: this.normalaizeCoordinateY(object),
 				textureKey: 'moving_platform',
 				type,
 			})
 			if (type === 'HORIZONTAL') return this.movingXPlatformsGroup.add(movingPlatform);
 			this.movingYPlatformsGroup.add(movingPlatform);
 		});
+	}
+	createFallingBarrels() {
+		this.fallenBarrelsGroup = this.physics.add.group({
+			allowGravity: false,
+		});
+		this.fallenBarrelCollidersGroup = this.physics.add.group({
+			allowGravity: false,
+		});
+		const layer = this.map.getObjectLayer('falling_barrels')?.objects;
+		if (!layer) return
+		layer.forEach(object => {
+			const fallingBarrel = new FallingBarrel({
+				scene: this,
+				x: this.normalaizeCoordinateX(object),
+				y: this.normalaizeCoordinateY(object),
+				textureKey: 'falling_barrel',
+			})
+			this.fallenBarrelsGroup.add(fallingBarrel);
+			this.fallenBarrelCollidersGroup.add(fallingBarrel.checkCollider);
+		});
+		this.physics.add.collider(this.fallenBarrelsGroup, [this.groundLayer, this.platformsLayer]);
 	}
 	createLives() {
 		this.livesGroup = this.physics.add.group({
@@ -217,6 +250,11 @@ class MainScene extends Phaser.Scene {
 		this.physics.add.collider(this.player, this.movingYPlatformsGroup, (player, platform) => player.touchingPlatform = platform);
 		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup]); // more colissions?
 		this.physics.add.overlap(this.player, this.doorGroup, (player, door) => this.changeLevel(door));
+		this.physics.add.overlap(this.player, this.fallenBarrelCollidersGroup, (player, collider) => collider.barrel.fall());
+		this.physics.add.overlap(this.player, this.fallenBarrelsGroup, (player, barrel) => {
+			player.takeDamage();
+			this.push(barrel, player);
+		});
 	}
 	createCamera() {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);

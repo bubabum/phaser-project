@@ -76,10 +76,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	update() {
-		if (this.lastState !== this.currentState.name) {
-			this.lastState = this.currentState.name;
-			console.log(this.lastState);
-		}
+		// if (this.lastState !== this.currentState.name) {
+		// 	this.lastState = this.currentState.name;
+		// 	console.log(this.lastState);
+		// }
 		if (this.stateName) this.stateName.destroy();
 		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${Math.floor(this.body.velocity.y)}`, { font: '16px Courier', fill: '#ffffff' });
 		this.stateName.x -= this.stateName.width * 0.5
@@ -130,7 +130,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 	takeDamage(object) {
 		if (this.isInvulnerable) return
-		object.push(this);
+		if (object) object.push(this);
 		if (this.health === 1) {
 			this.setState('DEAD_HIT');
 		} else {
