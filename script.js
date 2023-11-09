@@ -38,7 +38,7 @@ class MainScene extends Phaser.Scene {
 		this.load.spritesheet('big_guy', 'assets/big_guy.png', { frameWidth: 77, frameHeight: 74 });
 
 		this.load.spritesheet('door', 'assets/door.png', { frameWidth: 78, frameHeight: 96 });
-		this.load.image('moving_platform', 'assets/moving_platform.png');
+		this.load.image('platform', 'assets/platform.png');
 
 		this.load.spritesheet('candle', 'assets/lighting/candle.png', { frameWidth: 14, frameHeight: 32 });
 		this.load.spritesheet('candle_light', 'assets/lighting/candle_light.png', { frameWidth: 60, frameHeight: 58 });
@@ -57,6 +57,8 @@ class MainScene extends Phaser.Scene {
 		this.load.image('skull', 'assets/decoration/skull.png');
 		this.load.image('spike', 'assets/spikes.png');
 
+		this.load.image('messagebox', 'assets/message_box.png');
+
 		this.load.aseprite('falling_barrel', 'assets/falling_barrel.png', 'assets/falling_barrel.json');
 	}
 
@@ -74,6 +76,7 @@ class MainScene extends Phaser.Scene {
 
 		this.createDoors();
 		this.createMovingPlatforms();
+		this.createFadingPlatforms();
 		this.createFallingBarrels();
 		this.createSpikes();
 		this.createPlayer();
@@ -86,6 +89,12 @@ class MainScene extends Phaser.Scene {
 		this.createDecorations();
 
 		if (this.hasLight) this.createLight();
+
+		console.log(this.cameras.main.midPoint)
+		let text = new MessageBox({ scene: this, x: this.player.x, y: this.player.y, width: 5, height: 5, text: 'fdgsgsf' });
+		//this.time.delayedCall(1000, () => text.destroy());
+
+		//this.add.text(this.player.x, this.player.y, "this is a textasdsa", { fontSize: '25px', fontFamily: 'Pixelify Sans', fontStyle: '700', fill: '#000000', });
 
 		//this.physics.add.collider(this.player.bombGroup, this.player.bombGroup, (bomb1, bomb2) => { bomb1.push(bomb2) }); // bomb with bomb
 
@@ -116,8 +125,8 @@ class MainScene extends Phaser.Scene {
 	}
 
 	changeLevel(door) {
+		if (door.id !== this.scene.currentLevel && door.id !== -1 && this.player.cursors.down.isDown && !this.player.hasKey) return this.add.sprite(512 - 128, 50, "messagebox").setOrigin(0, 0).setScrollFactor(0, 0).setDepth(30);
 		if (door.id === this.scene.currentLevel || door.id === -1 || !this.player.cursors.down.isDown || !this.player.hasKey) return
-		this.player.setState('DOOR_IN');
 		door.anims.play('opening');
 		door.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'opening', function (anims) {
 			this.scene.restart({ level: door.id });
@@ -183,11 +192,28 @@ class MainScene extends Phaser.Scene {
 				scene: this,
 				x: this.normalaizeCoordinateX(object),
 				y: this.normalaizeCoordinateY(object),
-				textureKey: 'moving_platform',
+				textureKey: 'platform',
 				type,
 			})
 			if (type === 'HORIZONTAL') return this.movingXPlatformsGroup.add(movingPlatform);
 			this.movingYPlatformsGroup.add(movingPlatform);
+		});
+	}
+	createFadingPlatforms() {
+		this.fadingPlatformsGroup = this.physics.add.group({
+			immovable: true,
+			allowGravity: false,
+		});
+		const layer = this.map.getObjectLayer('fading_platforms')?.objects;
+		if (!layer) return
+		layer.forEach(object => {
+			const fadingPlatform = new FadingPlatform({
+				scene: this,
+				x: this.normalaizeCoordinateX(object),
+				y: this.normalaizeCoordinateY(object),
+				textureKey: 'platform',
+			})
+			this.fadingPlatformsGroup.add(fadingPlatform);
 		});
 	}
 	createFallingBarrels() {
@@ -272,7 +298,10 @@ class MainScene extends Phaser.Scene {
 		}
 		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures });
 		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);
-		this.physics.add.collider(this.player, this.movingYPlatformsGroup, (player, platform) => player.touchingPlatform = platform);
+		this.physics.add.collider(this.player, this.movingYPlatformsGroup, (player, platform) => player.touchingPlatform = platform); // create player method
+		this.physics.add.collider(this.player, this.fadingPlatformsGroup, (player, platform) => {
+			if (player.body.onFloor()) platform.fade();
+		});
 		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup]); // more colissions?
 		this.physics.add.overlap(this.player, this.doorGroup, (player, door) => this.changeLevel(door));
 		this.physics.add.overlap(this.player, this.fallenBarrelCollidersGroup, (player, collider) => collider.barrel.fall());

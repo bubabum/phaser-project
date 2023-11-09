@@ -712,25 +712,7 @@
          "draworder":"topdown",
          "id":30,
          "name":"moving_platforms",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":30,
-                 "height":64,
-                 "id":171,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"HORIZONTAL"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":64,
-                 "y":1024
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -762,14 +744,14 @@
         }, 
         {
          "draworder":"topdown",
-         "id":33,
-         "name":"spikes",
+         "id":34,
+         "name":"fading_platforms",
          "objects":[
                 {
                  "class":"",
-                 "gid":52,
+                 "gid":30,
                  "height":64,
-                 "id":178,
+                 "id":180,
                  "name":"",
                  "rotation":0,
                  "visible":true,
@@ -782,9 +764,32 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":33,
+         "name":"spikes",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":52,
+                 "height":64,
+                 "id":178,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":448,
+                 "y":1152
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":34,
- "nextobjectid":179,
+ "nextlayerid":35,
+ "nextobjectid":181,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
