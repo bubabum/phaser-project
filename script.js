@@ -55,6 +55,7 @@ class MainScene extends Phaser.Scene {
 		this.load.image('red_bottle', 'assets/decoration/red_bottle.png');
 		this.load.image('table', 'assets/decoration/table.png');
 		this.load.image('skull', 'assets/decoration/skull.png');
+		this.load.image('spike', 'assets/spikes.png');
 
 		this.load.aseprite('falling_barrel', 'assets/falling_barrel.png', 'assets/falling_barrel.json');
 	}
@@ -74,6 +75,7 @@ class MainScene extends Phaser.Scene {
 		this.createDoors();
 		this.createMovingPlatforms();
 		this.createFallingBarrels();
+		this.createSpikes();
 		this.createPlayer();
 		this.createCamera();
 		this.createLives();
@@ -83,18 +85,25 @@ class MainScene extends Phaser.Scene {
 		this.createPushableDecorations();
 		this.createDecorations();
 
-		// this.barrel = new FallingBarrel({ scene: this, x: this.player.x + 128, y: this.player.y - 64 * 4 - 7, textureKey: 'falling_barrel' });
-		// this.physics.add.collider(this.barrel, [this.groundLayer, this.platformsLayer]);
-
-
-
 		if (this.hasLight) this.createLight();
 
 		//this.physics.add.collider(this.player.bombGroup, this.player.bombGroup, (bomb1, bomb2) => { bomb1.push(bomb2) }); // bomb with bomb
 
-		this.physics.add.overlap(this.player.bombGroup, this.player, (player, bomb) => player.takeBombDamage(bomb));
-		this.physics.add.overlap(this.player.bombGroup, this.enemyGroup, (bomb, enemy) => enemy.takeBombDamage(bomb));
-		this.physics.add.overlap(this.player.bombGroup, this.pushableDecorationGroup, (bomb, object) => bomb.push(object));
+		this.physics.add.overlap(this.player.bombGroup, this.player, (player, bomb) => {
+			if (bomb.exploded) {
+				if (!player.isInvulnerable) this.push(bomb, player);
+				player.takeDamage();
+			}
+		});
+		this.physics.add.overlap(this.player.bombGroup, this.enemyGroup, (bomb, enemy) => {
+			if (bomb.exploded) {
+				if (!enemy.isInvulnerable) this.push(bomb, enemy);
+				enemy.takeDamage();
+			}
+		});
+		this.physics.add.overlap(this.player.bombGroup, this.pushableDecorationGroup, (bomb, object) => {
+			if (bomb.exploded) this.push(bomb, object);
+		});
 
 	}
 	update() {
@@ -117,10 +126,10 @@ class MainScene extends Phaser.Scene {
 	}
 	push(pusher, object) {
 		const point = {
-			x: object.x + (object.x < pusher.x ? -100 : 100),
-			y: object.y + 200,
+			x: object.getCenter().x + (object.getCenter().x > pusher.getCenter().x ? -200 : 200),
+			y: object.getCenter().y + 200,
 		}
-		const angle = Phaser.Math.Angle.BetweenPoints(point, object);
+		const angle = Phaser.Math.Angle.BetweenPoints(point, object.getCenter());
 		this.physics.velocityFromRotation(angle, 150, object.body.velocity);
 	}
 	getObjectCoordinateX(gameObject) {
@@ -202,6 +211,22 @@ class MainScene extends Phaser.Scene {
 		});
 		this.physics.add.collider(this.fallenBarrelsGroup, [this.groundLayer, this.platformsLayer]);
 	}
+	createSpikes() {
+		this.spikesGroup = this.physics.add.group({
+			allowGravity: false,
+		});
+		const layer = this.map.getObjectLayer('spikes')?.objects;
+		if (!layer) return
+		layer.forEach(object => {
+			const spike = new Spike({
+				scene: this,
+				x: this.normalaizeCoordinateX(object),
+				y: this.normalaizeCoordinateY(object),
+				textureKey: 'spike',
+			})
+			this.spikesGroup.add(spike);
+		});
+	}
 	createLives() {
 		this.livesGroup = this.physics.add.group({
 			immovable: true,
@@ -252,8 +277,13 @@ class MainScene extends Phaser.Scene {
 		this.physics.add.overlap(this.player, this.doorGroup, (player, door) => this.changeLevel(door));
 		this.physics.add.overlap(this.player, this.fallenBarrelCollidersGroup, (player, collider) => collider.barrel.fall());
 		this.physics.add.overlap(this.player, this.fallenBarrelsGroup, (player, barrel) => {
+			if (!player.isInvulnerable) this.push(barrel, player);
 			player.takeDamage();
-			this.push(barrel, player);
+		});
+		console.log(this.spikesGroup)
+		this.physics.add.overlap(this.player, this.spikesGroup, (player, spike) => {
+			if (!player.isInvulnerable) this.push(spike, player);
+			player.takeDamage();
 		});
 	}
 	createCamera() {
@@ -269,6 +299,9 @@ class MainScene extends Phaser.Scene {
 	}
 	createEnemies() {
 		this.enemyGroup = this.physics.add.group();
+		this.enemyHurtboxGroup = this.physics.add.group({
+			allowGravity: false,
+		});
 		this.canonBallGroup = this.physics.add.group({
 			defaultKey: 'canon_ball',
 			classType: CanonBall,
@@ -281,7 +314,6 @@ class MainScene extends Phaser.Scene {
 			allowGravity: false,
 			angularVelocity: 1000,
 		});
-		this.enemyHurtboxGroup = this.physics.add.group();
 		const classes = {
 			'BaldPirate': BaldPirate,
 			'Capitan': Capitan,
@@ -303,12 +335,22 @@ class MainScene extends Phaser.Scene {
 				direction,
 			});
 			this.enemyGroup.add(enemy);
+			if (enemy.hurtbox) this.enemyHurtboxGroup.add(enemy.hurtbox);
 		})
 		this.physics.add.collider(this.enemyGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);
-		this.physics.add.collider(this.enemyGroup, this.movingYPlatformsGroup, (enemy, platform) => enemy.touchingPlatform = platform);
-		this.physics.add.overlap(this.enemyHurtboxGroup, this.player, (player, hurtbox) => hurtbox.atack(player));
+		this.physics.add.collider(this.enemyGroup, this.movingYPlatformsGroup, (enemy, platform) => enemy.setTouchingPlatform(platform));
+		this.physics.add.overlap(this.player, this.enemyHurtboxGroup, (player, hurtbox) => {
+			if (hurtbox.enemy.canHit) {
+				player.takeDamage();
+				hurtbox.enemy.completeAtack();
+				this.push(hurtbox.enemy, player);
+			}
+		});
 		this.physics.add.collider([this.canonBallGroup, this.bottleGroup], [this.groundLayer], (projectile) => projectile.destroy());
-		this.physics.add.overlap([this.canonBallGroup, this.bottleGroup], this.player, (player, projectile) => player.takeDamage(projectile));
+		this.physics.add.overlap([this.canonBallGroup, this.bottleGroup], this.player, (player, projectile) => {
+			if (!player.isInvulnerable) this.push(projectile, player);
+			player.takeDamage();
+		});
 	}
 	createPushableDecorations() {
 		this.pushableDecorationGroup = this.physics.add.group({

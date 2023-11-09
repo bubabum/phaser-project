@@ -14,13 +14,4 @@ class Bottle extends Phaser.Physics.Arcade.Sprite {
 		this.setVelocityX(direction === 'right' ? -speed : speed);
 	}
 
-	push(object) {
-		const point = {
-			x: this.x + (this.x < object.x ? -200 : 200),
-			y: this.y + 200,
-		}
-		const angle = Phaser.Math.Angle.BetweenPoints(point, this);
-		this.scene.physics.velocityFromRotation(angle, 250, object.body.velocity);
-	}
-
 }

@@ -5,7 +5,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 		this.player = scene.player;
-		this.enemyHurtboxGroup = scene.enemyHurtboxGroup;
+		this.hitFrame = 5;
+		this.canHit = false;
+		//this.enemyHurtboxGroup = scene.enemyHurtboxGroup;
 		this.canonBallGroup = scene.canonBallGroup;
 		this.bombGroup = this.player.bombGroup;
 		this.bombToInteract = null;
@@ -105,6 +107,10 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.setVelocityX(-speed).setFlipX(true);
 	}
 
+	setTouchingPlatform(platform) {
+		this.touchingPlatform = platform;
+	}
+
 	checkDirectionToPlayer() {
 		if (this.direction === 'left' && this.player.x < this.x || this.direction === 'right' && this.player.x > this.x) return true
 	}
@@ -120,6 +126,18 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 			this.player.y < this.y + this.height * 0.5 &&
 			this.player.health > 0 &&
 			!this.player.isInvulnerable
+	}
+
+	checkAtackFrame() {
+		return this.anims.currentFrame.index === this.hitFrame;
+	}
+
+	atack() {
+		this.canHit = true;
+	}
+
+	completeAtack() {
+		this.canHit = false;
 	}
 
 	checkVisionRange() {
@@ -207,9 +225,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.setVelocityXByDirection(this.dashSpeedX);
 	}
 
-	takeBombDamage(bomb) {
-		if (this.isInvulnerable || !bomb.exploded) return
-		bomb.push(this);
+	takeDamage() {
+		if (this.isInvulnerable) return
 		if (this.health === 1) return this.setState('DEAD_HIT');
 		this.setState('HIT');
 	}
@@ -217,23 +234,10 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	createHurtbox() {
 		this.hurtbox = this.scene.add.circle(this.x, this.y, this.hurtboxRadius, 0x646464);
 		this.hurtbox.setVisible(false);
-		this.hurtbox.push = (object) => {
-			const point = {
-				x: this.x + (this.x < object.x ? -200 : 200),
-				y: this.y + 200,
-			}
-			const angle = Phaser.Math.Angle.BetweenPoints(point, this);
-			this.scene.physics.velocityFromRotation(angle, 250, object.body.velocity);
-		}
-		this.hurtbox.atack = (player) => {
-			if (this.anims.currentFrame.index === 5 && ['ATACK', 'AIR_ATACK'].includes(this.currentState.name)) {
-				player.takeDamage(this.hurtbox);
-			}
-		}
-		this.enemyHurtboxGroup.add(this.hurtbox);
+		this.scene.physics.add.existing(this.hurtbox);
 		this.hurtbox.body.setCircle(this.hurtboxRadius);
 		this.hurtbox.body.setAllowGravity(false);
-		this.gameObject = this;
+		this.hurtbox.enemy = this;
 	}
 
 	isOnPlatform() {

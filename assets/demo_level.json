@@ -188,24 +188,6 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":35,
-                 "height":21,
-                 "id":98,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"blue_bottle"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":16,
-                 "x":301.938,
-                 "y":1023.88
-                }, 
-                {
-                 "class":"",
                  "gid":46,
                  "height":32,
                  "id":99,
@@ -648,8 +630,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":80,
-                 "x":958,
-                 "y":894
+                 "x":960,
+                 "y":1216
                 }, 
                 {
                  "class":"BigGuy",
@@ -671,8 +653,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":77,
-                 "x":532,
-                 "y":1214
+                 "x":850,
+                 "y":895
                 }, 
                 {
                  "class":"BaldPirate",
@@ -694,8 +676,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":63,
-                 "x":769,
-                 "y":832.667
+                 "x":640,
+                 "y":704
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -769,7 +751,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":256,
+                 "x":896,
                  "y":768
                 }],
          "opacity":1,
@@ -777,9 +759,32 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":33,
+         "name":"spikes",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":52,
+                 "height":64,
+                 "id":178,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":256,
+                 "y":1024
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":33,
- "nextobjectid":178,
+ "nextlayerid":34,
+ "nextobjectid":179,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
@@ -1195,6 +1200,10 @@
         {
          "firstgid":51,
          "source":"Objects\/tiled\/falling_barrel.tsx"
+        }, 
+        {
+         "firstgid":52,
+         "source":"Objects\/tiled\/spikes.tsx"
         }],
  "tilewidth":64,
  "type":"map",

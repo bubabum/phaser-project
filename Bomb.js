@@ -24,20 +24,6 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.scene.time.delayedCall(2000, () => this.explode());
 	}
 
-	push(object) {
-		if (!this.exploded) return
-		const point = {
-			x: this.x + (this.x < object.x ? -100 : 100),
-			y: this.y + 200,
-		}
-		const angle = Phaser.Math.Angle.BetweenPoints(point, this);
-		this.scene.physics.velocityFromRotation(angle, 150, object.body.velocity);
-		// object.setAngularDrag(1000)
-		// object.setAngularVelocity(
-		// 	Phaser.Math.RadToDeg(object.body.velocity.x / object.body.halfWidth)
-		// );
-	}
-
 	explode() {
 		if (this.isOff) return
 		this.anims.play('explosion');

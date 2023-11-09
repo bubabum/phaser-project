@@ -128,21 +128,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		if (bomb) bomb.throw(this.bombMaxVelocity * this.bombBar.stopCharging(), this)
 	}
 
-	takeDamage(object) {
+	takeDamage() {
 		if (this.isInvulnerable) return
-		if (object) object.push(this);
-		if (this.health === 1) {
-			this.setState('DEAD_HIT');
-		} else {
-			this.setState('HIT');
-		}
-		this.health--;
-		this.isInvulnerable = true;
-	}
-
-	takeBombDamage(bomb) {
-		if (!bomb.exploded || this.isInvulnerable) return
-		bomb.push(this);
 		if (this.health === 1) {
 			this.setState('DEAD_HIT');
 		} else {

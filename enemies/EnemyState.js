@@ -31,10 +31,12 @@ class EnemyAtack extends State {
 	enter() {
 		this.enemy.setVelocityX(0);
 		this.enemy.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'atack', function (anims) {
+			this.enemy.hit = false;
 			this.enemy.setState('IDLE');
 		}, this);
 	}
 	handleState() {
+		if (this.enemy.checkAtackFrame()) this.enemy.atack();
 	}
 }
 
@@ -45,10 +47,12 @@ class EnemyAirAtack extends State {
 	enter() {
 		this.enemy.setVelocityX(0);
 		this.enemy.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'air_atack', function (anims) {
+			this.enemy.hit = false;
 			this.enemy.setState('FALL');
 		}, this);
 	}
 	handleState() {
+		if (this.enemy.checkAtackFrame()) this.enemy.atack();
 	}
 }
 

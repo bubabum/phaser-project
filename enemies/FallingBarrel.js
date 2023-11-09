@@ -8,7 +8,7 @@ class FallingBarrel extends Phaser.Physics.Arcade.Sprite {
 		this.setSize(42, 44);
 		this.setOffset(11, 16);
 		this.setOrigin(0, 0);
-		this.getTile()
+		this.createCollider();
 		this.anims.createFromAseprite(textureKey);
 		this.anims.play({ key: 'Idle', repeat: -1 });
 		if (scene.hasLight) this.setPipeline('Light2D');
@@ -21,13 +21,18 @@ class FallingBarrel extends Phaser.Physics.Arcade.Sprite {
 		}
 	}
 
-	getTile() {
-		const groundLayer = this.scene.groundLayer;
-		const tilesToCheck = (this.scene.map.heightInPixels - this.y - this.height) / this.scene.map.tileHeight;
+	createCollider() {
+		const { groundLayer, platformsLayer } = this.scene;
+		const { x, y, width, height } = this;
+		const { heightInPixels, tileHeight } = this.scene.map;
+		const tilesToCheck = (heightInPixels - y - height) / tileHeight;
 		for (let i = 0; i < tilesToCheck; i++) {
-			let tile = groundLayer.getTileAtWorldXY(this.x + 0.5, this.y + this.height + 0.5 + i * 64);
-			if (tile?.collideUp) {
-				this.checkCollider = this.scene.add.rectangle(this.x, this.y + this.height, this.width, tile.pixelY - this.y - this.height, 0x646464);
+			const groundTile = groundLayer.getTileAtWorldXY(x + 0.5, y + height + 0.5 + i * 64);
+			const platformTile = platformsLayer.getTileAtWorldXY(x + 0.5, y + height + 0.5 + i * 64);
+			if (groundTile?.collideUp || platformTile?.collideUp) {
+				let tileY = groundTile.pixelY;
+				if (platformTile?.collideUp) tileY = platformTile.pixelY;
+				this.checkCollider = this.scene.add.rectangle(x, y + height, width, tileY - y - height, 0x646464);
 				this.checkCollider.setOrigin(0, 0);
 				this.checkCollider.setVisible(false);
 				this.scene.physics.add.existing(this.checkCollider);
@@ -47,6 +52,7 @@ class FallingBarrel extends Phaser.Physics.Arcade.Sprite {
 
 	brake() {
 		this.anims.play('Brake');
+		this.body.destroy();
 		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'Brake', function (anims) {
 			this.destroy();
 		}, this);
