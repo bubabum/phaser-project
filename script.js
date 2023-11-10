@@ -90,8 +90,6 @@ class MainScene extends Phaser.Scene {
 
 		if (this.hasLight) this.createLight();
 
-		console.log(this.cameras.main.midPoint)
-		let text = new MessageBox({ scene: this, x: this.player.x, y: this.player.y, width: 5, height: 5, text: 'fdgsgsf' });
 		//this.time.delayedCall(1000, () => text.destroy());
 
 		//this.add.text(this.player.x, this.player.y, "this is a textasdsa", { fontSize: '25px', fontFamily: 'Pixelify Sans', fontStyle: '700', fill: '#000000', });
@@ -122,10 +120,33 @@ class MainScene extends Phaser.Scene {
 		this.player.update();
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
+		if (this.messageBox) {
+			this.messageBox.x = Math.floor(this.player.x - this.cameras.main.worldView.x) + 50;
+			this.messageBox.y = Math.floor(this.player.y - this.cameras.main.worldView.y) - 50;
+		}
+	}
+
+	showMessageBox(message) {
+		if (this.messageBox) this.messageBox.destroy();
+		const textStyle = {
+			fontSize: '16px',
+			lineSpacing: 8,
+			fontFamily: 'PressStart2P',
+			fill: '#ffffff',
+			wordWrap: { width: 300, useAdvancedWrap: true }
+		};
+		const x = Math.floor(this.player.x - this.cameras.main.worldView.x);
+		const y = Math.floor(this.player.y - this.cameras.main.worldView.y);
+		this.messageBox = this.add.text(x, y, message, textStyle).setOrigin(0, 1).setScrollFactor(0, 0).setDepth(31).setShadow(1, 1, '#323443');
+		console.log(this.messageBox)
+		//this.box = this.add.rectangle();
+		this.box = this.add.rectangle(this.messageBox.x, this.messageBox.y, 300, 120, 0x323443, 1);
+		// this.box.fillStyle('0x323443', 0.25);
+		// this.box.fillRect(this.messageBox.x, this.messageBox.y, 300, 120).setDepth(30).setScrollFactor(0, 0).setOrigin(0, 0);
 	}
 
 	changeLevel(door) {
-		if (door.id !== this.scene.currentLevel && door.id !== -1 && this.player.cursors.down.isDown && !this.player.hasKey) return this.add.sprite(512 - 128, 50, "messagebox").setOrigin(0, 0).setScrollFactor(0, 0).setDepth(30);
+		if (door.id !== this.scene.currentLevel && door.id !== -1 && this.player.cursors.down.isDown && !this.player.hasKey) return this.showMessageBox('I need a key! Because I want to to save my parrot from pirate prison')
 		if (door.id === this.scene.currentLevel || door.id === -1 || !this.player.cursors.down.isDown || !this.player.hasKey) return
 		door.anims.play('opening');
 		door.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'opening', function (anims) {

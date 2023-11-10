@@ -46,10 +46,16 @@
 	<script src="./HealthBar.js"></script>
 	<script src="./MessageBox.js"></script>
 	<script src="./GlobalVariables.js"></script>
-	<script type="text/javascript">	WebFontConfig = { google: { families: ['Pixelify Sans::latin'] } }; (function () { var wf = document.createElement('script'); wf.src = ('https:' == document.location.protocol ? 'https' : 'http') + '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js'; wf.type = 'text/javascript'; wf.async = 'true'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wf, s); })();</script>
 	<script src="./script.js"></script>
 	<title>Document</title>
 	<style>
+		@font-face {
+			font-family: 'PressStart2P';
+			src: url('assets/PressStart2P.ttf');
+			font-weight: normal;
+			font-style: normal;
+		}
+
 		* {
 			margin: 0;
 			padding: 0;
@@ -62,10 +68,17 @@
 		canvas {
 			image-rendering: pixelated;
 		}
+
+		.fontload {
+			visibility: hidden;
+			position: absolute;
+			left: -9999px;
+		}
 	</style>
 </head>
 
 <body>
+	<div class="fontload" style="font-family: 'PressStart2P';">.</div>
 	<script>
 		const config = {
 			type: Phaser.AUTO,
