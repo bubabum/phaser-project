@@ -28,6 +28,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 		this.cursors = scene.input.keyboard.createCursorKeys();
 		this.keyUp = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+		this.keyDown = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
 		this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
 		this.particles = new ParticlesGroup({ scene: this.scene, textures: textures.particles, emitter: this });
@@ -80,9 +81,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		// 	this.lastState = this.currentState.name;
 		// 	console.log(this.lastState);
 		// }
-		if (this.stateName) this.stateName.destroy();
-		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${Math.floor(this.body.velocity.y)}`, { font: '16px Courier', fill: '#ffffff' });
-		this.stateName.x -= this.stateName.width * 0.5
+		// if (this.stateName) this.stateName.destroy();
+		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${Math.floor(this.body.velocity.y)}`, { font: '16px Courier', fill: '#ffffff' });
+		// this.stateName.x -= this.stateName.width * 0.5
 
 		const { currentState, cursors, keyUp } = this;
 		this.handleBombListener()

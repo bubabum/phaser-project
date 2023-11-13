@@ -88,7 +88,7 @@ class Land extends State {
 			player.setState('IDLE');
 		}, this);
 	}
-	handleInput({ cursors }) {
+	handleInput({ cursors, keyUp }) {
 		const { player } = this;
 		if (cursors.right.isDown || cursors.left.isDown) player.setState('RUN');
 	}

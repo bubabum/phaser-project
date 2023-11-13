@@ -46,7 +46,8 @@ class FallingBarrel extends Phaser.Physics.Arcade.Sprite {
 	fall() {
 		this.checkCollider.destroy();
 		this.body.setAllowGravity(true);
-		this.setVelocityY(350)
+		this.setVelocityY(350);
+		this.setSize(42, 42);
 		this.anims.play({ key: 'Fall', repeat: -1 });
 	}
 

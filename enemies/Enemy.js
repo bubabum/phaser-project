@@ -39,9 +39,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 			if (platformVelocityY > 0) this.setVelocityY(platformVelocityY);
 		}
 		this.currentState.handleState();
-		if (this.stateName) this.stateName.destroy();
-		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
-		this.stateName.x -= this.stateName.width * 0.5;
+		// if (this.stateName) this.stateName.destroy();
+		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
+		// this.stateName.x -= this.stateName.width * 0.5;
 		if (this?.hurtbox?.body) {
 			const posY = this.body.position.y + this.body.height * 0.5 + this.hurtboxOffsetY;
 			if (this.direction === 'right') return this.hurtbox.setPosition(this.body.position.x + this.body.width, posY);
@@ -51,35 +51,19 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
 	drawHealthBar() {
 		if (this instanceof Canon) return
-		if (this.healthBar || this.health === 0) this.healthBar.destroy();
-		if (this.health === 0) return
-		const tint = 0.30 * this.health / this.maxHealth;
-		//const color = Phaser.Display.Color.HSLToColor(tint, 1, 0.5);
-		// const r = Phaser.Display.Color.ComponentToHex(color.r);
-		// const g = Phaser.Display.Color.ComponentToHex(color.g);
-		// const b = Phaser.Display.Color.ComponentToHex(color.b);
-		let color = '0xffff00';
-		if (this.health / this.maxHealth < 0.34) {
-			color = '0xff0000';
-		} else if (this.health / this.maxHealth > 0.7) {
-			color = '0x00ff4c';
+		if (this.healthBar || this.health === 0) {
+			this.healthBar.destroy();
+			this.healthImage.destroy();
 		}
-		color = '0xe86363'
-		const width = 40;
-		const height = 6;
-		const x = Math.floor(this.body.left + this.body.width / 2 - width / 2)
-		const y = Math.floor(this.getTopCenter().y - 10);
-		// let radius = 0;
-		// if (this.health === this.maxHealth) radius = 4;
-		this.healthBar = this.scene.add.graphics();
-		this.healthBar.fillStyle(`0x333333`, 1);
-		this.healthBar.fillRect(x, y, width, height);
-		this.healthBar.fillStyle(`0xbd3b53`, 1);
-		this.healthBar.fillRect(x + 1, y + 1, width - 2, height - 2);
-		this.healthBar.fillStyle(color, 1);
-		//this.healthBar.fillStyle(`0x${r}${g}${b}`, 1);
-		this.healthBar.fillRect(x + 1, y + 1, (width - 2) * this.health / this.maxHealth, height - 2);
+		if (this.health === 0) return
+		const width = 43;
+		const x = Math.floor(this.x)
+		const y = Math.floor(this.y);
+		this.healthBar = this.scene.add.image(x, y - 50, 'enemy_health_bar');
+		this.healthImage = this.scene.add.image(x - 15, y - 50, 'health').setOrigin(0, 0.5);
+		this.healthImage.displayWidth = width * this.health / this.maxHealth;
 		this.healthBar.setDepth(25);
+		this.healthImage.setDepth(26);
 	}
 
 	setBodyProperties(direction) {

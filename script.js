@@ -24,6 +24,8 @@ class MainScene extends Phaser.Scene {
 		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 		this.load.image('health_bar', 'assets/health_bar.png');
 		this.load.image('life', 'assets/life.png');
+		this.load.image('enemy_health_bar', 'assets/enemy_health_bar.png');
+		this.load.image('health', 'assets/health.png');
 		this.load.spritesheet('run_particles', 'assets/run_particles.png', { frameWidth: 12, frameHeight: 10 });
 		this.load.spritesheet('jump_particles', 'assets/jump_particles.png', { frameWidth: 40, frameHeight: 28 });
 		this.load.spritesheet('land_particles', 'assets/land_particles.png', { frameWidth: 80, frameHeight: 10 });
@@ -87,6 +89,7 @@ class MainScene extends Phaser.Scene {
 		this.createEnemies();
 		this.createPushableDecorations();
 		this.createDecorations();
+		this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!')
 
 		if (this.hasLight) this.createLight();
 
@@ -121,33 +124,40 @@ class MainScene extends Phaser.Scene {
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
 		if (this.messageBox) {
-			this.messageBox.x = Math.floor(this.player.x - this.cameras.main.worldView.x) + 50;
-			this.messageBox.y = Math.floor(this.player.y - this.cameras.main.worldView.y) - 50;
+			this.messageBox.x = Math.floor(this.player.x - this.cameras.main.worldView.x);
+			this.messageBox.y = Math.floor(this.player.y - this.cameras.main.worldView.y) - 100;
 		}
 	}
 
 	showMessageBox(message) {
-		if (this.messageBox) this.messageBox.destroy();
+		//this.messageBox
+		if (this.messageBox) {
+			this.messageBox.destroy();
+		}
 		const textStyle = {
-			fontSize: '16px',
+			fontSize: '12px',
 			lineSpacing: 8,
+			align: 'center',
+			stroke: '#323443',
+			strokeThickness: 2,
+			backgroundColor: 'rgba(50, 52, 67, 0.5)',
 			fontFamily: 'PressStart2P',
 			fill: '#ffffff',
 			wordWrap: { width: 300, useAdvancedWrap: true }
 		};
 		const x = Math.floor(this.player.x - this.cameras.main.worldView.x);
-		const y = Math.floor(this.player.y - this.cameras.main.worldView.y);
-		this.messageBox = this.add.text(x, y, message, textStyle).setOrigin(0, 1).setScrollFactor(0, 0).setDepth(31).setShadow(1, 1, '#323443');
-		console.log(this.messageBox)
-		//this.box = this.add.rectangle();
-		this.box = this.add.rectangle(this.messageBox.x, this.messageBox.y, 300, 120, 0x323443, 1);
+		const y = Math.floor(this.player.y - this.cameras.main.worldView.y) - 100;
+		this.messageBox = this.add.text(x, y, message, textStyle).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(31).setShadow(1, 1, '#323443').setPadding(20, 20);
+		this.time.delayedCall(3000, () => {
+			this.messageBox.destroy();
+		});
 		// this.box.fillStyle('0x323443', 0.25);
 		// this.box.fillRect(this.messageBox.x, this.messageBox.y, 300, 120).setDepth(30).setScrollFactor(0, 0).setOrigin(0, 0);
 	}
 
 	changeLevel(door) {
-		if (door.id !== this.scene.currentLevel && door.id !== -1 && this.player.cursors.down.isDown && !this.player.hasKey) return this.showMessageBox('I need a key! Because I want to to save my parrot from pirate prison')
-		if (door.id === this.scene.currentLevel || door.id === -1 || !this.player.cursors.down.isDown || !this.player.hasKey) return
+		if (door.id !== this.scene.currentLevel && door.id !== -1 && Phaser.Input.Keyboard.JustDown(this.player.keyDown) && !this.player.hasKey && this.player.body.onFloor()) return this.showMessageBox('I need a key!')
+		if (door.id === this.scene.currentLevel || door.id === -1 || !this.player.cursors.down.isDown || !this.player.hasKey || !this.player.body.onFloor()) return
 		door.anims.play('opening');
 		door.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'opening', function (anims) {
 			this.scene.restart({ level: door.id });
@@ -339,6 +349,7 @@ class MainScene extends Phaser.Scene {
 	createCamera() {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 		this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
+		this.cameras.main.setRoundPixels(true);
 	}
 	createHealthBar() {
 		const textures = {
