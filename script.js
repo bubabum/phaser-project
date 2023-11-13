@@ -59,7 +59,7 @@ class MainScene extends Phaser.Scene {
 		this.load.image('skull', 'assets/decoration/skull.png');
 		this.load.image('spike', 'assets/spikes.png');
 
-		this.load.image('messagebox', 'assets/message_box.png');
+		this.load.bitmapFont('pixel', 'assets/font/pixel.png', 'assets/font/pixel.xml');
 
 		this.load.aseprite('falling_barrel', 'assets/falling_barrel.png', 'assets/falling_barrel.json');
 	}
@@ -123,36 +123,23 @@ class MainScene extends Phaser.Scene {
 		this.player.update();
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
-		if (this.messageBox) {
-			this.messageBox.x = Math.floor(this.player.x - this.cameras.main.worldView.x);
-			this.messageBox.y = Math.floor(this.player.y - this.cameras.main.worldView.y) - 100;
-		}
 	}
 
-	showMessageBox(message) {
-		//this.messageBox
+	showMessageBox(messageText) {
+		console.log(this.messageBox)
 		if (this.messageBox) {
 			this.messageBox.destroy();
+			this.box.destroy();
+			this.messageTimer.remove();
 		}
-		const textStyle = {
-			fontSize: '12px',
-			lineSpacing: 8,
-			align: 'center',
-			stroke: '#323443',
-			strokeThickness: 2,
-			backgroundColor: 'rgba(50, 52, 67, 0.5)',
-			fontFamily: 'PressStart2P',
-			fill: '#ffffff',
-			wordWrap: { width: 300, useAdvancedWrap: true }
-		};
-		const x = Math.floor(this.player.x - this.cameras.main.worldView.x);
-		const y = Math.floor(this.player.y - this.cameras.main.worldView.y) - 100;
-		this.messageBox = this.add.text(x, y, message, textStyle).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(31).setShadow(1, 1, '#323443').setPadding(20, 20);
-		this.time.delayedCall(3000, () => {
+		const { x, y, width, height } = this.cameras.main.worldView;
+		this.messageBox = this.add.bitmapText(x + width / 2, height - 40, 'pixel', messageText, 16, 1).setMaxWidth(600).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(31); //.setDropShadow(1, 1, '#323443');
+		const bounds = this.messageBox.getTextBounds(true).global;
+		this.box = this.add.rectangle(bounds.x - 20, bounds.y - 20, bounds.width + 40, bounds.height + 40, 0x323443, 1).setScrollFactor(0, 0).setDepth(30).setOrigin(0, 0);
+		this.messageTimer = this.time.delayedCall(3000, () => {
 			this.messageBox.destroy();
+			this.box.destroy();
 		});
-		// this.box.fillStyle('0x323443', 0.25);
-		// this.box.fillRect(this.messageBox.x, this.messageBox.y, 300, 120).setDepth(30).setScrollFactor(0, 0).setOrigin(0, 0);
 	}
 
 	changeLevel(door) {
