@@ -7,6 +7,7 @@ class Life extends Phaser.Physics.Arcade.Sprite {
 		this.scene = scene;
 		this.setPosition(this.getTileCenterX(x), y);
 		this.setDepth(25);
+		this.isActive = false;
 		this.createAnimations(textureKey);
 		this.anims.play('idle');
 	}
@@ -17,6 +18,7 @@ class Life extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	disappear() {
+		this.isActive = true;
 		this.anims.play('effect');
 		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'effect', function (anims) {
 			this.destroy();

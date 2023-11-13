@@ -21,11 +21,14 @@ class MainScene extends Phaser.Scene {
 
 		this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
 		this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
+		this.load.image('sword', 'assets/sword.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 		this.load.image('health_bar', 'assets/health_bar.png');
 		this.load.image('life', 'assets/life.png');
 		this.load.image('enemy_health_bar', 'assets/enemy_health_bar.png');
 		this.load.image('health', 'assets/health.png');
+
+		this.load.image('inventory', 'assets/inventory.png');
 		this.load.spritesheet('run_particles', 'assets/run_particles.png', { frameWidth: 12, frameHeight: 10 });
 		this.load.spritesheet('jump_particles', 'assets/jump_particles.png', { frameWidth: 40, frameHeight: 28 });
 		this.load.spritesheet('land_particles', 'assets/land_particles.png', { frameWidth: 80, frameHeight: 10 });
@@ -111,6 +114,13 @@ class MainScene extends Phaser.Scene {
 				enemy.takeDamage();
 			}
 		});
+		this.physics.add.overlap(this.player.swordGroup, this.enemyGroup, (sword, enemy) => {
+			if (!enemy.isInvulnerable) {
+				this.push(sword, enemy);
+				enemy.takeDamage();
+				sword.destroy()
+			}
+		});
 		this.physics.add.overlap(this.player.bombGroup, this.pushableDecorationGroup, (bomb, object) => {
 			if (bomb.exploded) this.push(bomb, object);
 		});
@@ -126,16 +136,15 @@ class MainScene extends Phaser.Scene {
 	}
 
 	showMessageBox(messageText) {
-		console.log(this.messageBox)
 		if (this.messageBox) {
 			this.messageBox.destroy();
 			this.box.destroy();
 			this.messageTimer.remove();
 		}
 		const { x, y, width, height } = this.cameras.main.worldView;
-		this.messageBox = this.add.bitmapText(x + width / 2, height - 40, 'pixel', messageText, 16, 1).setMaxWidth(600).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(31); //.setDropShadow(1, 1, '#323443');
+		this.messageBox = this.add.bitmapText(x + width / 2, height - 40, 'pixel', messageText, 20, 1).setMaxWidth(600).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(31); //.setDropShadow(1, 1, '#323443');
 		const bounds = this.messageBox.getTextBounds(true).global;
-		this.box = this.add.rectangle(bounds.x - 20, bounds.y - 20, bounds.width + 40, bounds.height + 40, 0x323443, 1).setScrollFactor(0, 0).setDepth(30).setOrigin(0, 0);
+		this.box = this.add.rectangle(bounds.x - 20, bounds.y - 20, bounds.width + 40, bounds.height + 40, 0x323443, 0.9).setScrollFactor(0, 0).setDepth(30).setOrigin(0, 0); //323443
 		this.messageTimer = this.time.delayedCall(3000, () => {
 			this.messageBox.destroy();
 			this.box.destroy();
@@ -277,7 +286,7 @@ class MainScene extends Phaser.Scene {
 		});
 		this.physics.add.collider(this.livesGroup, [this.groundLayer, this.platformsLayer]);
 		this.physics.add.overlap(this.player, this.livesGroup, (player, life) => {
-			if (player.addLife()) life.disappear();
+			if (!life.isActive && player.addLife()) life.disappear();
 		});
 		const layer = this.map.getObjectLayer('lives')?.objects;
 		if (!layer) return
@@ -327,11 +336,11 @@ class MainScene extends Phaser.Scene {
 			if (!player.isInvulnerable) this.push(barrel, player);
 			player.takeDamage();
 		});
-		console.log(this.spikesGroup)
 		this.physics.add.overlap(this.player, this.spikesGroup, (player, spike) => {
 			if (!player.isInvulnerable) this.push(spike, player);
 			player.takeDamage();
 		});
+		this.physics.add.collider(this.player.swordGroup, this.groundLayer, (sword) => sword.destroy());
 	}
 	createCamera() {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);

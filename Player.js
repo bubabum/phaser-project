@@ -26,6 +26,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			gravityY: 0,
 		});
 
+		this.swordGroup = scene.physics.add.group({
+			defaultKey: 'sword',
+			classType: Sword,
+			maxSize: 1,
+			allowGravity: false,
+		});
+
 		this.cursors = scene.input.keyboard.createCursorKeys();
 		this.keyUp = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 		this.keyDown = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
@@ -86,7 +93,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		// this.stateName.x -= this.stateName.width * 0.5
 
 		const { currentState, cursors, keyUp } = this;
-		this.handleBombListener()
+		this.handleSwordListener()
+		//this.handleBombListener()
 		if (this.touchingPlatform && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
 			const platformVelocityY = this.touchingPlatform.body.velocity.y;
 			if (platformVelocityY > 0) {
@@ -118,6 +126,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		if (Phaser.Input.Keyboard.JustUp(keySpace)) this.throwBomb();
 	}
 
+	handleSwordListener() {
+		const { keySpace } = this;
+		if (Phaser.Input.Keyboard.JustUp(keySpace)) this.throwSword();
+	}
+
 	chargeBomb() {
 		if (this.bombGroup.getChildren().length === this.bombGroup.maxSize || this.isInvulnerable) return
 		this.bombBar.startCharging();
@@ -126,7 +139,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	throwBomb() {
 		if (!this.bombBar.isVisible()) return
 		const bomb = this.bombGroup.get();
-		if (bomb) bomb.throw(this.bombMaxVelocity * this.bombBar.stopCharging(), this)
+		if (bomb) bomb.throw(this.bombMaxVelocity * this.bombBar.stopCharging(), this);
+	}
+
+	throwSword() {
+		const sowrd = this.swordGroup.get();
+		if (sowrd) sowrd.throw(this);
 	}
 
 	takeDamage() {

@@ -190,7 +190,7 @@
   </object>
  </objectgroup>
  <objectgroup id="29" name="lives">
-  <object id="140" gid="49" x="128" y="320" width="20" height="18"/>
+  <object id="140" gid="49" x="85" y="1019" width="20" height="18"/>
  </objectgroup>
  <objectgroup id="28" name="windows">
   <object id="113" gid="47" x="896" y="1024" width="56" height="61"/>
