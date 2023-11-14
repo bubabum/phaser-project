@@ -10,8 +10,23 @@ class MainScene extends Phaser.Scene {
 	}
 
 	init(props) {
-		const { level = 0 } = props
+		const {
+			level = 0,
+			playerData = {
+				continue: 3,
+				health: 3,
+				inventory: {
+					bomb: '∞',
+					sword: 0,
+					rum: 0,
+				}
+			},
+		} = props
 		this.currentLevel = level;
+		this.playerData = playerData;
+	}
+	playerData = {
+
 	}
 
 	preload() {
