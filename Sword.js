@@ -17,20 +17,4 @@ class Sword extends Phaser.Physics.Arcade.Sprite {
 		this.setVelocityX((player.flipX ? -1 : 1) * 500);
 		this.setAngularVelocity((player.flipX ? -1 : 1) * 1000);
 	}
-
-	explode() {
-		if (this.isOff) return
-		this.anims.play('explosion');
-		this.exploded = true;
-		this.body.moves = false;
-		this.scene.cameras.main.shake(150, 0.005);
-		this.setCircle(48);
-		this.setOffset(0, 12);
-		this.setOrigin(0.5, 0.5);
-		this.scene.time.delayedCall(100, () => this.body.destroy());
-		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'explosion', function (anims) {
-			this.destroy();
-		}, this);
-	}
-
 }

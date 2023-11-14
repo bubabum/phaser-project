@@ -1,6 +1,6 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
 
-	constructor({ scene, x, y, textures }) {
+	constructor({ scene, x, y, textures, playerData }) {
 		super(scene, x, y - 25, textures.player);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
@@ -9,12 +9,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setOffset(20, 8);
 		this.setDepth(23);
 		this.maxHeath = 3;
-		this.health = this.maxHeath;
+		this.continue = playerData.continue;
+		this.health = playerData.health;
+		this.inventoryData = playerData.inventory;
+		this.activeItem = 0;
 		this.jumpVelocity = -250;
 		this.bombMaxVelocity = 300;
 		this.isInvulnerable = false;
 		this.hasKey = false;
 		this.bombBar = new BombBar({ scene: scene, player: this, textureKey: textures.bombBar });
+		this.inventory = new Inventory({ scene: scene, player: this, textures })
 		this.bombGroup = scene.physics.add.group({
 			defaultKey: 'bomb',
 			classType: Bomb,
@@ -37,6 +41,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.keyUp = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 		this.keyDown = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
 		this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+		this.keyShift = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
 
 		this.particles = new ParticlesGroup({ scene: this.scene, textures: textures.particles, emitter: this });
 
@@ -92,9 +97,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${Math.floor(this.body.velocity.y)}`, { font: '16px Courier', fill: '#ffffff' });
 		// this.stateName.x -= this.stateName.width * 0.5
 
-		const { currentState, cursors, keyUp } = this;
-		this.handleSwordListener()
-		//this.handleBombListener()
+		const { currentState, cursors, keyUp, keyShift } = this;
+		if (Phaser.Input.Keyboard.JustUp(keyShift)) this.inventory.changeActiveItem();
+
+		switch (Object.keys(this.inventoryData)[this.activeItem]) {
+			case 'bomb':
+				this.handleBombListener();
+				break;
+			case 'sword':
+				this.handleSwordListener();
+				break;
+			case 'rum':
+				this.handleRumListener();
+				break;
+		}
+
 		if (this.touchingPlatform && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
 			const platformVelocityY = this.touchingPlatform.body.velocity.y;
 			if (platformVelocityY > 0) {
@@ -103,10 +120,24 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			}
 		}
 		currentState.handleInput({ cursors, keyUp });
+		this.inventory.update();
+	}
+
+	getPLayerData() {
+		playerData = {
+			continue: 3,
+			health: 3,
+			inventory: {
+				bomb: 99,
+				sword: 0,
+				rum: 0,
+			}
+		}
 	}
 
 	setInvulnerability(status) {
 		this.isInvulnerable = status;
+		return this
 	}
 
 	addLife() {
@@ -131,6 +162,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		if (Phaser.Input.Keyboard.JustUp(keySpace)) this.throwSword();
 	}
 
+	handleRumListener() {
+		const { keySpace } = this;
+		if (Phaser.Input.Keyboard.JustUp(keySpace)) this.drinkRum();
+	}
+
 	chargeBomb() {
 		if (this.bombGroup.getChildren().length === this.bombGroup.maxSize || this.isInvulnerable) return
 		this.bombBar.startCharging();
@@ -143,8 +179,29 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	throwSword() {
+		if (this.inventoryData.sword === 0) return
 		const sowrd = this.swordGroup.get();
 		if (sowrd) sowrd.throw(this);
+		this.inventoryData.sword--;
+	}
+
+	drinkRum() {
+		// this.player.setAngle(-15);
+		// this.scene.tweens.add({
+		// 	targets: this,
+		// 	angle: '+=30',
+		// 	duration: 500,
+		// 	ease: 'Sine.inOut',
+		// 	yoyo: true,
+		// 	repeat: -1
+		// });
+		this.setAlpha(0.5).setInvulnerability(true);
+		this.jumpVelocity = -350;
+		this.scene.time.delayedCall(9200, () => this.setAlpha(0.6));
+		this.scene.time.delayedCall(9400, () => this.setAlpha(0.7));
+		this.scene.time.delayedCall(9600, () => this.setAlpha(0.8));
+		this.scene.time.delayedCall(9800, () => this.setAlpha(0.9));
+		this.scene.time.delayedCall(10000, () => this.setAlpha(1));
 	}
 
 	takeDamage() {

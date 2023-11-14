@@ -16,17 +16,14 @@ class MainScene extends Phaser.Scene {
 				continue: 3,
 				health: 3,
 				inventory: {
-					bomb: '∞',
-					sword: 0,
-					rum: 0,
+					bomb: 99,
+					sword: 10,
+					rum: 15,
 				}
 			},
 		} = props
 		this.currentLevel = level;
 		this.playerData = playerData;
-	}
-	playerData = {
-
 	}
 
 	preload() {
@@ -36,7 +33,10 @@ class MainScene extends Phaser.Scene {
 
 		this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
 		this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
-		this.load.image('sword', 'assets/sword.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.image('bomb_inventory', 'assets/bomb_inventory.png');
+		this.load.image('sword', 'assets/sword.png');
+		this.load.image('rum_inventory', 'assets/rum_inventory.png');
+		this.load.image('bomb_inventory', 'assets/bomb_inventory.png');
 		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 		this.load.image('health_bar', 'assets/health_bar.png');
 		this.load.image('life', 'assets/life.png');
@@ -107,7 +107,7 @@ class MainScene extends Phaser.Scene {
 		this.createEnemies();
 		this.createPushableDecorations();
 		this.createDecorations();
-		this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!')
+		//this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!')
 
 		if (this.hasLight) this.createLight();
 
@@ -127,13 +127,25 @@ class MainScene extends Phaser.Scene {
 			if (bomb.exploded) {
 				if (!enemy.isInvulnerable) this.push(bomb, enemy);
 				enemy.takeDamage();
+				if (enemy.health === 0) {
+					console.log('test')
+					const live = new Life({ scene: this, x: enemy.x, y: enemy.y, textureKey: 'life_idle' });
+					this.livesGroup.add(live);
+				}
 			}
 		});
 		this.physics.add.overlap(this.player.swordGroup, this.enemyGroup, (sword, enemy) => {
 			if (!enemy.isInvulnerable) {
 				this.push(sword, enemy);
 				enemy.takeDamage();
-				sword.destroy()
+				sword.destroy();
+				if (enemy.health === 0) {
+					console.log('test')
+					// let rnd = Math.random();
+					// if (rnd > 0.5) return
+					//const live = new Sword(this, enemy.x, enemy.y, 'sword');
+					//this.player.swordGroup.add(live);
+				}
 			}
 		});
 		this.physics.add.overlap(this.player.bombGroup, this.pushableDecorationGroup, (bomb, object) => {
@@ -337,8 +349,14 @@ class MainScene extends Phaser.Scene {
 				jump: 'jump_particles',
 				land: 'land_particles',
 			},
+			inventory: {
+				background: 'inventory',
+				bomb: 'bomb_inventory',
+				sword: 'sword',
+				rum: 'rum_inventory',
+			},
 		}
-		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures });
+		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures, playerData: this.playerData });
 		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);
 		this.physics.add.collider(this.player, this.movingYPlatformsGroup, (player, platform) => player.touchingPlatform = platform); // create player method
 		this.physics.add.collider(this.player, this.fadingPlatformsGroup, (player, platform) => {
