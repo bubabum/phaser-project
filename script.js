@@ -33,17 +33,16 @@ class MainScene extends Phaser.Scene {
 
 		this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
 		this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
-		this.load.image('bomb_inventory', 'assets/bomb_inventory.png');
 		this.load.image('sword', 'assets/sword.png');
-		this.load.image('rum_inventory', 'assets/rum_inventory.png');
 		this.load.image('bomb_inventory', 'assets/bomb_inventory.png');
+		this.load.image('sword_inventory', 'assets/sword_inventory.png');
+		this.load.image('rum_inventory', 'assets/rum_inventory.png');
 		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 		this.load.image('health_bar', 'assets/health_bar.png');
 		this.load.image('life', 'assets/life.png');
 		this.load.image('enemy_health_bar', 'assets/enemy_health_bar.png');
 		this.load.image('health', 'assets/health.png');
 
-		this.load.image('inventory', 'assets/inventory.png');
 		this.load.spritesheet('run_particles', 'assets/run_particles.png', { frameWidth: 12, frameHeight: 10 });
 		this.load.spritesheet('jump_particles', 'assets/jump_particles.png', { frameWidth: 40, frameHeight: 28 });
 		this.load.spritesheet('land_particles', 'assets/land_particles.png', { frameWidth: 80, frameHeight: 10 });
@@ -183,7 +182,7 @@ class MainScene extends Phaser.Scene {
 		if (door.id === this.scene.currentLevel || door.id === -1 || !this.player.cursors.down.isDown || !this.player.hasKey || !this.player.body.onFloor()) return
 		door.anims.play('opening');
 		door.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'opening', function (anims) {
-			this.scene.restart({ level: door.id });
+			this.scene.restart({ level: door.id, playerData: this.player.getPlayerData() });
 		}, this);
 
 	}
@@ -352,7 +351,7 @@ class MainScene extends Phaser.Scene {
 			inventory: {
 				background: 'inventory',
 				bomb: 'bomb_inventory',
-				sword: 'sword',
+				sword: 'sword_inventory',
 				rum: 'rum_inventory',
 			},
 		}

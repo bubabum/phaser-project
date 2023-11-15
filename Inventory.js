@@ -5,9 +5,8 @@ class Inventory extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 		this.player = player;
 		this.inventoryTextures = textures.inventory;
-		this.inventory = scene.add.image(10, this.scene.cameras.main.height - 10, textures.inventory.background).setOrigin(0, 1).setScrollFactor(0, 0).setDepth(29);
-		this.activeItem = scene.add.image(this.inventory.x + 32, this.inventory.y - 32, 'bomb_inventory').setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDepth(30);
-		this.activeItemQuantity = scene.add.bitmapText(this.inventory.x + 64 - 10, this.inventory.y - 13, 'pixel', '99', 8, 1).setOrigin(1, 1).setScrollFactor(0, 0).setDepth(31);
+		this.activeItem = scene.add.image(10, this.scene.cameras.main.height - 10, 'bomb_inventory').setOrigin(0, 1).setScrollFactor(0, 0).setDepth(30);
+		this.activeItemQuantity = scene.add.bitmapText(10, this.scene.cameras.main.height - 10, 'pixel', '99', 8, 1).setOrigin(1, 1).setScrollFactor(0, 0).setDepth(31);
 	}
 
 	changeActiveItem() {
@@ -22,8 +21,8 @@ class Inventory extends Phaser.Physics.Arcade.Sprite {
 		const quantity = Object.values(this.player.inventoryData)[this.player.activeItem];
 		this.activeItem.destroy();
 		this.activeItemQuantity.destroy();
-		this.activeItem = this.scene.add.image(this.inventory.x + 32, this.inventory.y - 32, texture).setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDepth(30);
-		this.activeItemQuantity = this.scene.add.bitmapText(this.inventory.x + 64 - 10, this.inventory.y - 13, 'pixel', quantity, 8, 1).setOrigin(1, 1).setScrollFactor(0, 0).setDepth(31);
+		this.activeItem = this.scene.add.image(10, this.scene.cameras.main.height - 10, texture).setOrigin(0, 1).setScrollFactor(0, 0).setDepth(30);
+		this.activeItemQuantity = this.scene.add.bitmapText(this.activeItem.x + 54, this.activeItem.y - 38, 'pixel', `${quantity}`, 16, 1).setOrigin(0, 0).setScrollFactor(0, 0).setDepth(31);
 	}
 
 }

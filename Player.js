@@ -123,15 +123,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.inventory.update();
 	}
 
-	getPLayerData() {
-		playerData = {
-			continue: 3,
-			health: 3,
-			inventory: {
-				bomb: 99,
-				sword: 0,
-				rum: 0,
-			}
+	getPlayerData() {
+		return {
+			continue: this.continue,
+			health: this.health,
+			inventory: this.inventoryData,
 		}
 	}
 
@@ -186,7 +182,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	drinkRum() {
-		// this.player.setAngle(-15);
+		// this.setAngle(-15);
 		// this.scene.tweens.add({
 		// 	targets: this,
 		// 	angle: '+=30',

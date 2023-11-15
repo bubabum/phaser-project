@@ -190,7 +190,7 @@
   </object>
  </objectgroup>
  <objectgroup id="29" name="lives">
-  <object id="140" gid="49" x="85" y="1019" width="20" height="18"/>
+  <object id="140" gid="49" x="512" y="960" width="20" height="18"/>
  </objectgroup>
  <objectgroup id="28" name="windows">
   <object id="113" gid="47" x="896" y="1024" width="56" height="61"/>
@@ -234,7 +234,7 @@
   <object id="176" gid="31" x="960" y="1216" width="63" height="67"/>
  </objectgroup>
  <objectgroup id="31" name="keys">
-  <object id="161" gid="50" x="965.333" y="571.333" width="24" height="24"/>
+  <object id="161" gid="50" x="64" y="1024" width="24" height="24"/>
  </objectgroup>
  <objectgroup id="30" name="moving_platforms">
   <object id="182" gid="30" x="640" y="640" width="64" height="64">
