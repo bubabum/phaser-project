@@ -129,7 +129,11 @@ class DeadGround extends State {
 	enter() {
 		const { player } = this;
 		player.setVelocityX(0);
-		player.scene.time.delayedCall(3000, () => player.scene.scene.restart());
+		player.scene.time.delayedCall(3000, () => {
+			player.continue--;
+			if (player.continue < 0) alert('GAME OVER')
+			player.scene.scene.restart({ level: player.scene.currentLevel, playerData: player.getPlayerData() })
+		});
 	}
 	handleInput() {
 	}

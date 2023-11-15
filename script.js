@@ -10,6 +10,7 @@ class MainScene extends Phaser.Scene {
 	}
 
 	init(props) {
+		console.log(props)
 		const {
 			level = 0,
 			playerData = {
@@ -37,6 +38,7 @@ class MainScene extends Phaser.Scene {
 		this.load.image('bomb_inventory', 'assets/bomb_inventory.png');
 		this.load.image('sword_inventory', 'assets/sword_inventory.png');
 		this.load.image('rum_inventory', 'assets/rum_inventory.png');
+		this.load.image('continue_inventory', 'assets/continue_inventory.png');
 		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 		this.load.image('health_bar', 'assets/health_bar.png');
 		this.load.image('life', 'assets/life.png');
@@ -182,7 +184,7 @@ class MainScene extends Phaser.Scene {
 		if (door.id === this.scene.currentLevel || door.id === -1 || !this.player.cursors.down.isDown || !this.player.hasKey || !this.player.body.onFloor()) return
 		door.anims.play('opening');
 		door.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'opening', function (anims) {
-			this.scene.restart({ level: door.id, playerData: this.player.getPlayerData() });
+			this.scene.restart({ level: door.id, playerData: this.player.getPlayerData(false) });
 		}, this);
 
 	}
@@ -354,6 +356,7 @@ class MainScene extends Phaser.Scene {
 				sword: 'sword_inventory',
 				rum: 'rum_inventory',
 			},
+			continue: 'continue_inventory',
 		}
 		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures, playerData: this.playerData });
 		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);

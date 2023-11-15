@@ -121,12 +121,31 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		}
 		currentState.handleInput({ cursors, keyUp });
 		this.inventory.update();
+		// if (this.currentState.name === 'RUN' && this.hasActiveRum && !this.drunk) {
+		// 	this.setAngle(-15);
+		// 	this.drunk = this.scene.tweens.add({
+		// 		targets: this,
+		// 		angle: '+=30',
+		// 		duration: 500,
+		// 		ease: 'Sine.inOut',
+		// 		yoyo: true,
+		// 		repeat: -1
+		// 	});
+		// }
+		// if (!this.hasActiveRum && this.drunk) {
+		// 	this.setAngle(0);
+		// 	this.scene.tweens.remove(this.drunk);
+		// }
+		// if (this.currentState.name !== 'RUN' && this.drunk) {
+		// 	this.setAngle(0);
+		// 	this.scene.tweens.remove(this.drunk)
+		// }
 	}
 
-	getPlayerData() {
+	getPlayerData(death = true) {
 		return {
 			continue: this.continue,
-			health: this.health,
+			health: death ? this.maxHeath : this.health,
 			inventory: this.inventoryData,
 		}
 	}
@@ -160,11 +179,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 	handleRumListener() {
 		const { keySpace } = this;
-		if (Phaser.Input.Keyboard.JustUp(keySpace)) this.drinkRum();
+		if (Phaser.Input.Keyboard.JustUp(keySpace)) this.activateRum();
 	}
 
 	chargeBomb() {
-		if (this.bombGroup.getChildren().length === this.bombGroup.maxSize || this.isInvulnerable) return
+		if (this.bombGroup.getChildren().length === this.bombGroup.maxSize || this.isInvulnerable && !this.hasActiveRum) return
 		this.bombBar.startCharging();
 	}
 
@@ -175,13 +194,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	throwSword() {
-		if (this.inventoryData.sword === 0) return
+		if (this.inventoryData.sword === 0 || this.swordGroup.getChildren().length === this.swordGroup.maxSize || this.isInvulnerable) return
 		const sowrd = this.swordGroup.get();
 		if (sowrd) sowrd.throw(this);
 		this.inventoryData.sword--;
 	}
 
-	drinkRum() {
+	activateRum() {
 		// this.setAngle(-15);
 		// this.scene.tweens.add({
 		// 	targets: this,
@@ -191,13 +210,33 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		// 	yoyo: true,
 		// 	repeat: -1
 		// });
+		if (this.inventoryData.rum === 0 || this.isInvulnerable) return
+		this.hasActiveRum = true;
 		this.setAlpha(0.5).setInvulnerability(true);
 		this.jumpVelocity = -350;
-		this.scene.time.delayedCall(9200, () => this.setAlpha(0.6));
-		this.scene.time.delayedCall(9400, () => this.setAlpha(0.7));
-		this.scene.time.delayedCall(9600, () => this.setAlpha(0.8));
-		this.scene.time.delayedCall(9800, () => this.setAlpha(0.9));
-		this.scene.time.delayedCall(10000, () => this.setAlpha(1));
+		this.inventoryData.rum--;
+		this.scene.time.delayedCall(5000, () => this.disactivateRum());
+		// this.scene.time.delayedCall(9200, () => this.setAlpha(0.6));
+		// this.scene.time.delayedCall(9400, () => this.setAlpha(0.7));
+		// this.scene.time.delayedCall(9600, () => this.setAlpha(0.8));
+		// this.scene.time.delayedCall(9800, () => this.setAlpha(0.9));
+		// this.scene.time.delayedCall(10000, () => this.setAlpha(1));
+	}
+
+	disactivateRum() {
+		this.hasActiveRum = false;
+		this.jumpVelocity = -250;
+		this.setInvulnerability();
+		this.scene.tweens.add({
+			targets: this,
+			duration: 500,
+			ease: 'Sine.easeInOut',
+			alpha: {
+				getStart: () => 0.5,
+				getEnd: () => 1
+			},
+			repeat: 0
+		});
 	}
 
 	takeDamage() {
