@@ -150,14 +150,40 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		}
 	}
 
-	setInvulnerability(status) {
+	setInvulnerability(status, effect = false) {
 		this.isInvulnerable = status;
+		if (effect === false) {
+			if (this.invulnerabilityEffect) this.invulnerabilityEffect.remove();
+			this.setAlpha(1);
+			return this
+		}
+		if (status === true) {
+			this.invulnerabilityEffect = this.scene.tweens.add({
+				targets: this,
+				duration: 100,
+				ease: 'Linear',
+				alpha: {
+					getStart: () => 0.2,
+					getEnd: () => 1,
+				},
+				repeat: -1,
+			});
+		} else {
+			this.invulnerabilityEffect.remove();
+			this.setAlpha(1);
+		}
 		return this
 	}
 
 	addLife() {
 		if (this.health === this.maxHeath) return
 		this.health++
+		return true
+	}
+
+	addPowerUp(type) {
+		if (this.inventoryData[type] === 99) return
+		this.inventoryData[type]++;
 		return true
 	}
 
@@ -194,7 +220,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	throwSword() {
-		if (this.inventoryData.sword === 0 || this.swordGroup.getChildren().length === this.swordGroup.maxSize || this.isInvulnerable) return
+		if (this.inventoryData.sword === 0 || this.swordGroup.getChildren().length === this.swordGroup.maxSize || this.isInvulnerable && !this.hasActiveRum) return
 		const sowrd = this.swordGroup.get();
 		if (sowrd) sowrd.throw(this);
 		this.inventoryData.sword--;
@@ -212,7 +238,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		// });
 		if (this.inventoryData.rum === 0 || this.isInvulnerable) return
 		this.hasActiveRum = true;
-		this.setAlpha(0.5).setInvulnerability(true);
+		this.setInvulnerability(true).setAlpha(0.5);
 		this.jumpVelocity = -350;
 		this.inventoryData.rum--;
 		this.scene.time.delayedCall(5000, () => this.disactivateRum());
@@ -226,7 +252,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	disactivateRum() {
 		this.hasActiveRum = false;
 		this.jumpVelocity = -250;
-		this.setInvulnerability();
+		this.setInvulnerability(false);
 		this.scene.tweens.add({
 			targets: this,
 			duration: 500,
@@ -243,11 +269,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		if (this.isInvulnerable) return
 		if (this.health === 1) {
 			this.setState('DEAD_HIT');
+			this.setInvulnerability(true);
 		} else {
 			this.setState('HIT');
+			this.setInvulnerability(true, true);
 		}
 		this.health--;
-		this.isInvulnerable = true;
 	}
 
 	createAnimations(textureKey) {

@@ -209,10 +209,45 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.setVelocityXByDirection(this.dashSpeedX);
 	}
 
+	setInvulnerability(status, effect = false) {
+		this.isInvulnerable = status;
+		if (effect === false) {
+			if (this.invulnerabilityEffect) this.invulnerabilityEffect.remove();
+			this.setAlpha(1);
+			return this
+		}
+		if (status === true) {
+			this.invulnerabilityEffect = this.scene.tweens.add({
+				targets: this,
+				duration: 100,
+				ease: 'Linear',
+				alpha: {
+					getStart: () => 0.2,
+					getEnd: () => 1,
+				},
+				repeat: -1,
+			});
+		} else {
+			this.invulnerabilityEffect.remove();
+			this.setAlpha(1);
+		}
+		return this
+	}
+
 	takeDamage() {
+		// if (this.isInvulnerable) return
+		// if (this.health === 1) return this.setState('DEAD_HIT');
+		// this.setState('HIT');
+
 		if (this.isInvulnerable) return
-		if (this.health === 1) return this.setState('DEAD_HIT');
-		this.setState('HIT');
+		if (this.health === 1) {
+			this.setState('DEAD_HIT');
+			this.setInvulnerability(true);
+		} else {
+			this.setState('HIT');
+			this.setInvulnerability(true, true);
+		}
+		this.health--;
 	}
 
 	createHurtbox() {

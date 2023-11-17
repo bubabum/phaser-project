@@ -10,7 +10,6 @@ class MainScene extends Phaser.Scene {
 	}
 
 	init(props) {
-		console.log(props)
 		const {
 			level = 0,
 			playerData = {
@@ -41,6 +40,8 @@ class MainScene extends Phaser.Scene {
 		this.load.image('continue_inventory', 'assets/continue_inventory.png');
 		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
 		this.load.image('health_bar', 'assets/health_bar.png');
+		this.load.spritesheet('rum', 'assets/rum.png', { frameWidth: 32, frameHeight: 32 });
+		this.load.spritesheet('sword_powerup', 'assets/sword_powerup.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.image('life', 'assets/life.png');
 		this.load.image('enemy_health_bar', 'assets/enemy_health_bar.png');
 		this.load.image('health', 'assets/health.png');
@@ -126,12 +127,10 @@ class MainScene extends Phaser.Scene {
 		});
 		this.physics.add.overlap(this.player.bombGroup, this.enemyGroup, (bomb, enemy) => {
 			if (bomb.exploded) {
-				if (!enemy.isInvulnerable) this.push(bomb, enemy);
-				enemy.takeDamage();
-				if (enemy.health === 0) {
-					console.log('test')
-					const live = new Life({ scene: this, x: enemy.x, y: enemy.y, textureKey: 'life_idle' });
-					this.livesGroup.add(live);
+				if (!enemy.isInvulnerable) {
+					this.push(bomb, enemy);
+					enemy.takeDamage();
+					if (enemy.health === 0) this.dropPowerUp(enemy);
 				}
 			}
 		});
@@ -140,19 +139,28 @@ class MainScene extends Phaser.Scene {
 				this.push(sword, enemy);
 				enemy.takeDamage();
 				sword.destroy();
-				if (enemy.health === 0) {
-					console.log('test')
-					// let rnd = Math.random();
-					// if (rnd > 0.5) return
-					//const live = new Sword(this, enemy.x, enemy.y, 'sword');
-					//this.player.swordGroup.add(live);
-				}
+				if (enemy.health === 0) this.dropPowerUp(enemy);
 			}
 		});
 		this.physics.add.overlap(this.player.bombGroup, this.pushableDecorationGroup, (bomb, object) => {
 			if (bomb.exploded) this.push(bomb, object);
 		});
+		this.powerUpGroup = this.physics.add.group({
+			immovable: true,
+			bounceX: 0.5,
+			bounceY: 0.5,
+			dragX: 80,
+			dragY: 100,
+		});
+		this.physics.add.overlap(this.player, this.powerUpGroup, (player, poweUp) => {
+			if (!poweUp.isActive && player.addPowerUp(poweUp.type)) {
+				poweUp.disappear();
+			}
+		});
 
+		this.physics.add.collider(this.powerUpGroup, [this.groundLayer, this.platformsLayer]);
+
+		this.cameras.main.fadeIn(1000);
 	}
 	update() {
 		this.movingXPlatformsGroup.getChildren().forEach(platform => platform.update());
@@ -179,12 +187,27 @@ class MainScene extends Phaser.Scene {
 		});
 	}
 
+	dropPowerUp(enemy) {
+		const { x, y } = enemy;
+		const rnd = Math.random();
+		let powerUp;
+		// change chances
+		if (rnd > 0.5) powerUp = new SwordPowerUp({ scene: this, x, y, textureKey: 'sword_powerup' });
+		if (rnd < 0.5) powerUp = new RumPowerUp({ scene: this, x, y, textureKey: 'rum' });
+		this.powerUpGroup.add(powerUp);
+		this.push(enemy, powerUp)
+	}
+
 	changeLevel(door) {
 		if (door.id !== this.scene.currentLevel && door.id !== -1 && Phaser.Input.Keyboard.JustDown(this.player.keyDown) && !this.player.hasKey && this.player.body.onFloor()) return this.showMessageBox('I need a key!')
 		if (door.id === this.scene.currentLevel || door.id === -1 || !this.player.cursors.down.isDown || !this.player.hasKey || !this.player.body.onFloor()) return
 		door.anims.play('opening');
+		this.player.setState('DOOR_IN');
 		door.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'opening', function (anims) {
-			this.scene.restart({ level: door.id, playerData: this.player.getPlayerData(false) });
+			this.cameras.main.fadeOut(500);
+			this.time.delayedCall(500, () => {
+				this.scene.restart({ level: door.id, playerData: this.player.getPlayerData(false) });
+			});
 		}, this);
 
 	}

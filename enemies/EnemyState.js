@@ -61,9 +61,7 @@ class EnemyHit extends State {
 		super({ name: 'HIT', enemy, animation: 'hit' });
 	}
 	enter() {
-		this.enemy.isInvulnerable = true;
-		this.enemy.health--;
-		this.enemy.scene.time.delayedCall(1000, () => this.enemy.isInvulnerable = false);
+		this.enemy.scene.time.delayedCall(1000, () => this.enemy.setInvulnerability(false));
 	}
 	handleState() {
 		if (this.enemy.body.velocity.y > 0) this.enemy.setState('FALL');
@@ -75,11 +73,8 @@ class EnemyDeadHit extends State {
 		super({ name: 'DEAD_HIT', enemy, animation: 'dead_hit' });
 	}
 	enter() {
-		this.enemy.isInvulnerable = true;
-		this.enemy.health--;
 		this.enemy.setDrag(100, 0);
 		this.enemy.hurtbox.destroy();
-		//this.enemy.scene.time.delayedCall(2000, () => this.enemy.destroy());
 	}
 	handleState() {
 		const { enemy } = this;

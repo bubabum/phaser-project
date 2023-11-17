@@ -27,8 +27,8 @@ class Door extends Phaser.Physics.Arcade.Sprite {
 		});
 		this.anims.create({
 			key: 'closing',
-			frames: this.anims.generateFrameNumbers(textureKey, { start: 3, end: 10 }),
-			frameRate: 20,
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 2, end: 10 }),
+			frameRate: 10,
 			repeat: 0,
 		});
 	}
