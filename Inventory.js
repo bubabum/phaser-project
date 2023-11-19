@@ -1,8 +1,7 @@
-class Inventory extends Phaser.Physics.Arcade.Sprite {
+class Inventory {
 
 	constructor({ scene, player, textures }) {
-		super(scene, 0, 0, textures);
-		scene.add.existing(this);
+		this.scene = scene;
 		this.player = player;
 		this.inventoryTextures = textures.inventory;
 		this.continueTexture = textures.continue;

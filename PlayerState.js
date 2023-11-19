@@ -64,7 +64,7 @@ class Fall extends State {
 		player.setVelocityY(0);
 		player.touchingPlatform = null;
 	}
-	handleInput({ cursors }) {
+	handleInput({ cursors, keyUp }) {
 		const { player } = this;
 		if (cursors.right.isDown) {
 			player.setVelocityX(160);
@@ -72,6 +72,10 @@ class Fall extends State {
 			player.setVelocityX(-160);
 		} else {
 			player.setVelocityX(0);
+		}
+		if (player.hasActiveRum && Phaser.Input.Keyboard.JustDown(keyUp) && !player.madeDoubleJump) {
+			player.setState('JUMP');
+			player.madeDoubleJump = true;
 		}
 		if (player.body.blocked.down) player.setState('LAND');
 	}
@@ -84,6 +88,7 @@ class Land extends State {
 	enter() {
 		const { player } = this;
 		player.setVelocityX(0);
+		player.madeDoubleJump = false;
 		player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'land', function (anims) {
 			player.setState('IDLE');
 		}, this);

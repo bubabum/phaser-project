@@ -8,8 +8,6 @@ class Door extends Phaser.Physics.Arcade.Sprite {
 		this.setOffset(35, 60);
 		this.id = Number(id);
 		this.createAnimations(textureKey);
-		if (this.id == scene.currentLevel - 1) this.anims.play('closing');
-
 	}
 
 	createAnimations(textureKey) {

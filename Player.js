@@ -8,15 +8,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setSize(25, 50);
 		this.setOffset(20, 8);
 		this.setDepth(23);
+		//this.setGravityY(400);
 		this.maxHeath = 3;
 		this.continue = playerData.continue;
 		this.health = playerData.health;
 		this.inventoryData = playerData.inventory;
+		this.keys = playerData.keys;
 		this.activeItem = 0;
 		this.jumpVelocity = -250;
 		this.bombMaxVelocity = 300;
+		this.madeDoubleJump = false;
 		this.isInvulnerable = false;
-		this.hasKey = false;
+		this.hasActiveRum = false;
 		this.bombBar = new BombBar({ scene: scene, player: this, textureKey: textures.bombBar });
 		this.inventory = new Inventory({ scene: scene, player: this, textures })
 		this.bombGroup = scene.physics.add.group({
@@ -72,8 +75,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.anims.play(this.currentState.animation);
 	}
 
-	preUpdate(time, delta) {
-		super.preUpdate(time, delta);
+	update() {
+
+		// if (this.lastState !== this.currentState.name) {
+		// 	this.lastState = this.currentState.name;
+		// 	console.log(this.lastState);
+		// }
+		// if (this.stateName) this.stateName.destroy();
+		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${Math.floor(this.body.velocity.y)}`, { font: '16px Courier', fill: '#ffffff' });
+		// this.stateName.x -= this.stateName.width * 0.5
+
 		if (this.light) {
 			this.light.x = this.x;
 			this.light.y = this.y;
@@ -86,16 +97,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			this.flipX = false;
 			this.setOffset(20, 8);
 		}
-	}
-
-	update() {
-		// if (this.lastState !== this.currentState.name) {
-		// 	this.lastState = this.currentState.name;
-		// 	console.log(this.lastState);
-		// }
-		// if (this.stateName) this.stateName.destroy();
-		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${Math.floor(this.body.velocity.y)}`, { font: '16px Courier', fill: '#ffffff' });
-		// this.stateName.x -= this.stateName.width * 0.5
 
 		const { currentState, cursors, keyUp, keyShift } = this;
 		if (Phaser.Input.Keyboard.JustUp(keyShift)) this.inventory.changeActiveItem();
@@ -115,31 +116,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		if (this.touchingPlatform && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
 			const platformVelocityY = this.touchingPlatform.body.velocity.y;
 			if (platformVelocityY > 0) {
-				//Phaser.Display.Bounds.SetBottom(this, this.touchingPlatform.body.top);
 				this.setVelocityY(platformVelocityY);
 			}
 		}
 		currentState.handleInput({ cursors, keyUp });
 		this.inventory.update();
-		// if (this.currentState.name === 'RUN' && this.hasActiveRum && !this.drunk) {
-		// 	this.setAngle(-15);
-		// 	this.drunk = this.scene.tweens.add({
-		// 		targets: this,
-		// 		angle: '+=30',
-		// 		duration: 500,
-		// 		ease: 'Sine.inOut',
-		// 		yoyo: true,
-		// 		repeat: -1
-		// 	});
-		// }
-		// if (!this.hasActiveRum && this.drunk) {
-		// 	this.setAngle(0);
-		// 	this.scene.tweens.remove(this.drunk);
-		// }
-		// if (this.currentState.name !== 'RUN' && this.drunk) {
-		// 	this.setAngle(0);
-		// 	this.scene.tweens.remove(this.drunk)
-		// }
+
 	}
 
 	getPlayerData(death = true) {
@@ -147,6 +129,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			continue: this.continue,
 			health: death ? this.maxHeath : this.health,
 			inventory: this.inventoryData,
+			keys: this.keys,
 		}
 	}
 
@@ -175,20 +158,27 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		return this
 	}
 
+
+	addContinue() {
+		if (this.isInvulnerable) return
+		this.continue++
+		return true
+	}
+
 	addLife() {
-		if (this.health === this.maxHeath) return
+		if (this.health === this.maxHeath || this.isInvulnerable) return
 		this.health++
 		return true
 	}
 
 	addPowerUp(type) {
-		if (this.inventoryData[type] === 99) return
+		if (this.inventoryData[type] === 99 || this.isInvulnerable) return
 		this.inventoryData[type]++;
 		return true
 	}
 
-	getKey() {
-		this.hasKey = true;
+	getKey(id) {
+		this.keys.add(id);
 	}
 
 	handleBombListener() {
@@ -230,16 +220,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		// this.setAngle(-15);
 		// this.scene.tweens.add({
 		// 	targets: this,
-		// 	angle: '+=30',
-		// 	duration: 500,
+		// 	x: '+=100',
+		// 	duration: 200,
 		// 	ease: 'Sine.inOut',
-		// 	yoyo: true,
-		// 	repeat: -1
+		// 	//	yoyo: true,
+		// 	repeat: 0
 		// });
 		if (this.inventoryData.rum === 0 || this.isInvulnerable) return
 		this.hasActiveRum = true;
 		this.setInvulnerability(true).setAlpha(0.5);
-		this.jumpVelocity = -350;
+		//this.jumpVelocity = -350;
 		this.inventoryData.rum--;
 		this.scene.time.delayedCall(5000, () => this.disactivateRum());
 		// this.scene.time.delayedCall(9200, () => this.setAlpha(0.6));
@@ -251,7 +241,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 	disactivateRum() {
 		this.hasActiveRum = false;
-		this.jumpVelocity = -250;
+		//this.jumpVelocity = -250;
 		this.setInvulnerability(false);
 		this.scene.tweens.add({
 			targets: this,

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="35" nextobjectid="188">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="37" nextobjectid="195">
  <editorsettings>
   <export target="demo_level.json" format="json"/>
  </editorsettings>
- <tileset firstgid="1" name="tileset" tilewidth="64" tileheight="64" tilecount="30" columns="6">
-  <image source="tileset.png" width="384" height="320"/>
- </tileset>
- <tileset firstgid="31" name="bald_pirate" tilewidth="63" tileheight="67" tilecount="1" columns="1">
+ <tileset firstgid="1" source="tiled/tileset.tsx"/>
+ <tileset firstgid="37" name="bald_pirate" tilewidth="63" tileheight="67" tilecount="1" columns="1">
   <image source="Objects/bald_pirate.png" width="63" height="67"/>
   <tile id="0" class="BaldPirate">
    <properties>
@@ -15,7 +13,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="32" name="barrel" tilewidth="42" tileheight="44" tilecount="1" columns="1">
+ <tileset firstgid="38" name="barrel" tilewidth="42" tileheight="44" tilecount="1" columns="1">
   <image source="Objects/barrel.png" width="42" height="44"/>
   <tile id="0">
    <properties>
@@ -23,10 +21,10 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="33" name="big_chain" tilewidth="9" tileheight="100" tilecount="1" columns="1">
+ <tileset firstgid="39" name="big_chain" tilewidth="9" tileheight="100" tilecount="1" columns="1">
   <image source="Objects/big_chain.png" width="9" height="100"/>
  </tileset>
- <tileset firstgid="34" name="big_guy" tilewidth="77" tileheight="74" tilecount="1" columns="1">
+ <tileset firstgid="40" name="big_guy" tilewidth="77" tileheight="74" tilecount="1" columns="1">
   <image source="Objects/big_guy.png" width="77" height="74"/>
   <tile id="0" class="BigGuy">
    <properties>
@@ -35,7 +33,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="35" name="blue_bottle" tilewidth="16" tileheight="21" tilecount="1" columns="1">
+ <tileset firstgid="41" name="blue_bottle" tilewidth="16" tileheight="21" tilecount="1" columns="1">
   <image source="Objects/blue_bottle.png" width="16" height="21"/>
   <tile id="0">
    <properties>
@@ -43,13 +41,13 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="36" name="bomb_guy" tilewidth="58" tileheight="58" tilecount="1" columns="1">
+ <tileset firstgid="42" name="bomb_guy" tilewidth="58" tileheight="58" tilecount="1" columns="1">
   <image source="Objects/bomb_guy.png" width="58" height="58"/>
  </tileset>
- <tileset firstgid="37" name="candle" tilewidth="14" tileheight="32" tilecount="1" columns="1">
+ <tileset firstgid="43" name="candle" tilewidth="14" tileheight="32" tilecount="1" columns="1">
   <image source="Objects/candle.png" width="14" height="32"/>
  </tileset>
- <tileset firstgid="38" name="canon" tilewidth="62" tileheight="46" tilecount="1" columns="1">
+ <tileset firstgid="44" name="canon" tilewidth="62" tileheight="46" tilecount="1" columns="1">
   <image source="Objects/canon.png" width="62" height="46"/>
   <tile id="0" class="Canon">
    <properties>
@@ -58,7 +56,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="39" name="capitan" class="Capitan" tilewidth="80" tileheight="72" tilecount="1" columns="1">
+ <tileset firstgid="45" name="capitan" class="Capitan" tilewidth="80" tileheight="72" tilecount="1" columns="1">
   <image source="Objects/capitan.png" width="80" height="72"/>
   <tile id="0" class="Capitan">
    <properties>
@@ -67,7 +65,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="40" name="chair" tilewidth="32" tileheight="56" tilecount="1" columns="1">
+ <tileset firstgid="46" name="chair" tilewidth="32" tileheight="56" tilecount="1" columns="1">
   <image source="Objects/chair.png" width="32" height="56"/>
   <tile id="0">
    <properties>
@@ -75,7 +73,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="41" name="cucumber" tilewidth="64" tileheight="68" tilecount="1" columns="1">
+ <tileset firstgid="47" name="cucumber" tilewidth="64" tileheight="68" tilecount="1" columns="1">
   <image source="Objects/cucumber.png" width="64" height="68"/>
   <tile id="0" class="Cucumber">
    <properties>
@@ -84,7 +82,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="42" name="green_bottle" tilewidth="14" tileheight="24" tilecount="1" columns="1">
+ <tileset firstgid="48" name="green_bottle" tilewidth="14" tileheight="24" tilecount="1" columns="1">
   <image source="Objects/green_bottle.png" width="14" height="24"/>
   <tile id="0">
    <properties>
@@ -92,7 +90,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="43" name="red_bottle" tilewidth="16" tileheight="31" tilecount="1" columns="1">
+ <tileset firstgid="49" name="red_bottle" tilewidth="16" tileheight="31" tilecount="1" columns="1">
   <image source="Objects/red_bottle.png" width="16" height="31"/>
   <tile id="0">
    <properties>
@@ -100,7 +98,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="44" name="skull" tilewidth="19" tileheight="14" tilecount="1" columns="1">
+ <tileset firstgid="50" name="skull" tilewidth="19" tileheight="14" tilecount="1" columns="1">
   <image source="Objects/skull.png" width="19" height="14"/>
   <tile id="0">
    <properties>
@@ -108,10 +106,10 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="45" name="small_chain" tilewidth="9" tileheight="52" tilecount="1" columns="1">
+ <tileset firstgid="51" name="small_chain" tilewidth="9" tileheight="52" tilecount="1" columns="1">
   <image source="Objects/small_chain.png" width="9" height="52"/>
  </tileset>
- <tileset firstgid="46" name="table" tilewidth="80" tileheight="32" tilecount="1" columns="1">
+ <tileset firstgid="52" name="table" tilewidth="80" tileheight="32" tilecount="1" columns="1">
   <image source="Objects/table.png" width="80" height="32"/>
   <tile id="0">
    <properties>
@@ -119,16 +117,41 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="47" name="window" tilewidth="56" tileheight="61" tilecount="1" columns="1">
+ <tileset firstgid="53" name="window" tilewidth="56" tileheight="61" tilecount="1" columns="1">
   <image source="Objects/window.png" width="58" height="61"/>
  </tileset>
- <tileset firstgid="48" name="door" tilewidth="78" tileheight="96" tilecount="1" columns="1">
+ <tileset firstgid="54" name="door" tilewidth="78" tileheight="96" tilecount="1" columns="1">
   <image source="../src/tiled/Objects/door.png" width="78" height="96"/>
  </tileset>
- <tileset firstgid="49" source="life.tsx"/>
- <tileset firstgid="50" source="key.tsx"/>
- <tileset firstgid="51" source="Objects/tiled/falling_barrel.tsx"/>
- <tileset firstgid="52" source="Objects/tiled/spikes.tsx"/>
+ <tileset firstgid="55" source="life.tsx"/>
+ <tileset firstgid="56" source="key.tsx"/>
+ <tileset firstgid="57" source="Objects/tiled/falling_barrel.tsx"/>
+ <tileset firstgid="58" source="Objects/tiled/spikes.tsx"/>
+ <tileset firstgid="59" source="tiled/one_up.tsx"/>
+ <layer id="35" name="hidden_passage" width="20" height="20">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,31,32,32,33,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,56,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
  <layer id="1" name="ground" width="20" height="20">
   <data encoding="csv">
 19,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,20,
@@ -137,10 +160,10 @@
 9,10,11,11,11,11,11,11,11,11,11,11,17,17,17,17,17,11,12,7,
 9,10,11,11,11,11,11,11,11,11,11,12,1,2,2,2,3,10,12,7,
 25,2,2,2,2,2,2,2,3,11,11,12,7,8,8,8,9,10,12,7,
-8,8,8,8,8,8,8,8,9,11,11,12,7,8,19,14,15,10,12,7,
-8,8,8,8,8,8,8,8,9,11,11,11,13,20,9,5,5,11,12,7,
-8,8,8,8,8,8,8,8,9,11,11,11,11,7,9,11,11,11,12,7,
-8,8,8,8,8,8,8,8,9,11,11,11,11,7,25,2,2,2,2,7,
+8,19,14,14,14,20,8,8,9,11,11,12,7,8,19,14,15,10,12,7,
+8,9,4,5,6,7,8,8,9,11,11,11,13,20,9,5,5,11,12,7,
+8,9,16,17,18,0,0,0,0,11,11,11,11,7,9,11,11,11,12,7,
+8,25,2,2,2,26,8,8,9,11,11,11,11,7,25,2,2,2,2,7,
 19,14,14,14,14,14,14,14,15,11,11,11,11,13,14,14,14,14,14,7,
 9,10,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,12,7,
 9,10,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,12,7,
@@ -178,79 +201,83 @@
 </data>
  </layer>
  <objectgroup id="6" name="doors">
-  <object id="7" name="door_in" gid="48" x="128" y="1024" width="78" height="96">
+  <object id="7" name="door_in" gid="54" x="128" y="1024" width="78" height="96">
    <properties>
     <property name="id" value="-1"/>
    </properties>
   </object>
-  <object id="120" name="door_out" gid="48" x="320" y="1024" width="78" height="96">
+  <object id="120" name="door_out" gid="54" x="320" y="1024" width="78" height="96">
    <properties>
     <property name="id" value="1"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="29" name="lives">
-  <object id="140" gid="49" x="512" y="960" width="20" height="18"/>
+  <object id="140" gid="55" x="64" y="320" width="20" height="18"/>
+ </objectgroup>
+ <objectgroup id="36" name="one_ups">
+  <object id="188" gid="59" x="192" y="576" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="28" name="windows">
-  <object id="113" gid="47" x="896" y="1024" width="56" height="61"/>
-  <object id="114" gid="47" x="704" y="1024" width="56" height="61"/>
-  <object id="115" gid="47" x="384" y="192" width="56" height="61"/>
+  <object id="113" gid="53" x="896" y="1024" width="56" height="61"/>
+  <object id="114" gid="53" x="704" y="1024" width="56" height="61"/>
+  <object id="115" gid="53" x="384" y="192" width="56" height="61"/>
  </objectgroup>
  <objectgroup id="27" name="decorations">
-  <object id="99" gid="46" x="768" y="1216" width="80" height="32"/>
-  <object id="100" gid="40" x="727" y="1216" width="32" height="56"/>
-  <object id="101" gid="2147483688" x="857" y="1216" width="32" height="56"/>
-  <object id="102" gid="42" x="776.875" y="1183.88" width="14" height="24"/>
-  <object id="103" gid="43" x="792.375" y="1183.88" width="16" height="31"/>
-  <object id="104" gid="43" x="808.875" y="1183.75" width="16" height="31"/>
-  <object id="105" gid="44" x="894.091" y="1215.18" width="19" height="14"/>
-  <object id="106" gid="44" x="828.091" y="1183.55" width="19" height="14"/>
-  <object id="107" gid="35" x="704" y="1216" width="16" height="21"/>
-  <object id="108" gid="35" x="685.609" y="1215.7" width="16" height="21"/>
+  <object id="99" gid="52" x="768" y="1216" width="80" height="32"/>
+  <object id="100" gid="46" x="727" y="1216" width="32" height="56"/>
+  <object id="101" gid="2147483694" x="857" y="1216" width="32" height="56"/>
+  <object id="102" gid="48" x="776.875" y="1183.88" width="14" height="24"/>
+  <object id="103" gid="49" x="792.375" y="1183.88" width="16" height="31"/>
+  <object id="104" gid="49" x="808.875" y="1183.75" width="16" height="31"/>
+  <object id="105" gid="50" x="894.091" y="1215.18" width="19" height="14"/>
+  <object id="106" gid="50" x="828.091" y="1183.55" width="19" height="14"/>
+  <object id="107" gid="41" x="704" y="1216" width="16" height="21"/>
+  <object id="108" gid="41" x="685.609" y="1215.7" width="16" height="21"/>
  </objectgroup>
  <objectgroup id="10" name="candles">
-  <object id="11" name="candle1" gid="37" x="384" y="896" width="14" height="32"/>
-  <object id="12" name="candle2" gid="37" x="896" y="832" width="14" height="32"/>
-  <object id="13" name="candle3" gid="37" x="768" y="576" width="14" height="32"/>
-  <object id="14" name="candle4" gid="37" x="512" y="192" width="14" height="32"/>
+  <object id="11" name="candle1" gid="43" x="384" y="896" width="14" height="32"/>
+  <object id="12" name="candle2" gid="43" x="896" y="832" width="14" height="32"/>
+  <object id="13" name="candle3" gid="43" x="768" y="576" width="14" height="32"/>
+  <object id="14" name="candle4" gid="43" x="512" y="192" width="14" height="32"/>
  </objectgroup>
  <objectgroup id="11" name="small_chains">
-  <object id="15" gid="45" x="215.667" y="755.667" width="9" height="52"/>
-  <object id="16" gid="45" x="565" y="755.75" width="9" height="52"/>
-  <object id="17" gid="45" x="804" y="563.75" width="9" height="52"/>
+  <object id="15" gid="51" x="215.667" y="755.667" width="9" height="52"/>
+  <object id="16" gid="51" x="565" y="755.75" width="9" height="52"/>
+  <object id="17" gid="51" x="804" y="563.75" width="9" height="52"/>
  </objectgroup>
  <objectgroup id="12" name="big_chains">
-  <object id="18" gid="33" x="448.667" y="804" width="9" height="100"/>
-  <object id="19" gid="33" x="774.909" y="164.182" width="9" height="100"/>
+  <object id="18" gid="39" x="448.667" y="804" width="9" height="100"/>
+  <object id="19" gid="39" x="774.909" y="164.182" width="9" height="100"/>
  </objectgroup>
  <objectgroup id="26" name="enemies">
-  <object id="157" gid="2147483686" x="511.667" y="834" width="62" height="46"/>
-  <object id="163" gid="38" x="1023.67" y="255" width="62" height="46"/>
-  <object id="164" gid="41" x="845" y="253" width="64" height="68"/>
-  <object id="165" gid="34" x="440" y="319" width="77" height="74"/>
-  <object id="168" gid="39" x="640" y="576" width="80" height="72"/>
-  <object id="170" gid="34" x="850" y="895" width="77" height="74"/>
-  <object id="176" gid="31" x="960" y="1216" width="63" height="67"/>
+  <object id="157" gid="2147483692" x="511.667" y="834" width="62" height="46"/>
+  <object id="163" gid="44" x="1023.67" y="255" width="62" height="46"/>
+  <object id="164" gid="47" x="845" y="253" width="64" height="68"/>
+  <object id="165" gid="40" x="440" y="319" width="77" height="74"/>
+  <object id="168" gid="45" x="1152" y="1152" width="80" height="72"/>
+  <object id="170" gid="40" x="850" y="895" width="77" height="74"/>
+  <object id="176" gid="37" x="960" y="1216" width="63" height="67"/>
  </objectgroup>
  <objectgroup id="31" name="keys">
-  <object id="161" gid="50" x="64" y="1024" width="24" height="24"/>
+  <object id="161" gid="56" x="64" y="1024" width="24" height="24"/>
  </objectgroup>
  <objectgroup id="30" name="moving_platforms">
-  <object id="182" gid="30" x="640" y="640" width="64" height="64">
+  <object id="189" gid="30" x="192" y="1024" width="64" height="64">
    <properties>
-    <property name="type" value="VERTICAL"/>
+    <property name="distance" type="int" value="-2"/>
+    <property name="type" value="horizontal"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="32" name="falling_barrels">
-  <object id="177" gid="51" x="896" y="768" width="64" height="64"/>
-  <object id="184" gid="51" x="256" y="768" width="64" height="64"/>
+  <object id="177" gid="57" x="896" y="768" width="64" height="64"/>
+  <object id="184" gid="57" x="256" y="768" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="34" name="fading_platforms">
   <object id="180" gid="30" x="640" y="1024" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="33" name="spikes">
-  <object id="187" gid="52" x="448" y="1152" width="64" height="64"/>
+  <object id="187" gid="58" x="448" y="1152" width="64" height="64"/>
  </objectgroup>
 </map>
