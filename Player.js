@@ -8,18 +8,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setSize(25, 50);
 		this.setOffset(20, 8);
 		this.setDepth(23);
-		this.setGravityY(200);
+		this.setGravityY(400);
+		this.setMass(2.5);
 		this.maxHeath = 3;
 		this.continue = playerData.continue;
 		this.health = playerData.health;
 		this.inventoryData = playerData.inventory;
 		this.collected = playerData.collected;
 		this.activeItem = 0;
-		this.jumpVelocity = -310;
+		this.jumpVelocity = -350;
 		this.bombMaxVelocity = 300;
 		this.madeDoubleJump = false;
 		this.isInvulnerable = false;
 		this.hasActiveRum = false;
+		this.jumpGap = false;
+		this.activeBomb = null;
 		this.bombBar = new BombBar({ scene: scene, player: this, textureKey: textures.bombBar });
 		this.inventory = new Inventory({ scene: scene, player: this, textures })
 		this.bombGroup = scene.physics.add.group({
@@ -75,8 +78,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.anims.play(this.currentState.animation);
 	}
 
-	update() {
-
+	update(dt) {
 		// if (this.lastState !== this.currentState.name) {
 		// 	this.lastState = this.currentState.name;
 		// 	console.log(this.lastState);
@@ -97,7 +99,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			this.flipX = false;
 			this.setOffset(20, 8);
 		}
-
 		const { currentState, cursors, keyUp, keyShift } = this;
 		if (Phaser.Input.Keyboard.JustUp(keyShift)) this.inventory.changeActiveItem();
 
@@ -119,8 +120,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 				this.setVelocityY(platformVelocityY);
 			}
 		}
-		currentState.handleInput({ cursors, keyUp });
+		currentState.handleInput({ cursors, keyUp, dt });
 		this.inventory.update();
+		this.activeBomb && this.activeBomb.update(this);
 
 	}
 
@@ -166,9 +168,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		return true
 	}
 
-	addLife() {
+	addLife(id) {
 		if (this.health === this.maxHeath || this.isInvulnerable) return
 		this.health++
+		this.collected.lives.add(id);
 		return true
 	}
 
@@ -202,12 +205,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	chargeBomb() {
 		if (this.bombGroup.getChildren().length === this.bombGroup.maxSize || this.isInvulnerable && !this.hasActiveRum) return
 		this.bombBar.startCharging();
+		const bomb = this.bombGroup.get();
+		bomb.prepare(this);
+		this.activeBomb = bomb;
 	}
 
 	throwBomb() {
 		if (!this.bombBar.isVisible()) return
-		const bomb = this.bombGroup.get();
-		if (bomb) bomb.throw(this.bombMaxVelocity * this.bombBar.stopCharging(), this);
+		//const bomb = this.bombGroup.get();
+		if (this.activeBomb) this.activeBomb.throw(this.bombMaxVelocity * this.bombBar.stopCharging(), this);
+		this.activeBomb = null;
 	}
 
 	throwSword() {

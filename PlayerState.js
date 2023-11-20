@@ -28,7 +28,11 @@ class Run extends State {
 			player.setState('IDLE');
 		}
 		if (Phaser.Input.Keyboard.JustDown(keyUp)) player.setState('JUMP');
-		if (player.body.velocity.y > 0 && !player.touchingPlatform || !player.body.onFloor()) player.setState('FALL');
+		if (player.body.velocity.y > 0 && !player.touchingPlatform || !player.body.onFloor()) {
+			player.setState('FALL');
+			player.jumpGap = true;
+			player.scene.time.delayedCall(100, () => player.jumpGap = false);
+		}
 	}
 }
 
@@ -63,8 +67,6 @@ class Fall extends State {
 		const { player } = this;
 		player.setVelocityY(0);
 		player.touchingPlatform = null;
-		player.jumpGap = true; //get from run
-		player.scene.time.delayedCall(100, () => player.jumpGap = false);
 	}
 	handleInput({ cursors, keyUp }) {
 		const { player } = this;
@@ -78,12 +80,14 @@ class Fall extends State {
 		if (player.hasActiveRum && Phaser.Input.Keyboard.JustDown(keyUp) && !player.madeDoubleJump) {
 			player.setState('JUMP');
 			player.madeDoubleJump = true;
+			return
 		}
 		if (player.jumpGap && Phaser.Input.Keyboard.JustDown(keyUp)) {
 			player.setState('JUMP');
-			player.jumpGap = false; // change
+			player.jumpGap = false;
+			return
 		}
-		if (player.body.blocked.down) player.setState('LAND');
+		if (player.body.blocked.down) return player.setState('LAND');
 	}
 }
 
@@ -101,7 +105,8 @@ class Land extends State {
 	}
 	handleInput({ cursors, keyUp }) {
 		const { player } = this;
-		if (cursors.right.isDown || cursors.left.isDown) player.setState('RUN');
+		if (Phaser.Input.Keyboard.JustDown(keyUp)) return player.setState('JUMP');
+		if (cursors.right.isDown || cursors.left.isDown) return player.setState('RUN');
 	}
 }
 
@@ -143,6 +148,8 @@ class DeadGround extends State {
 		player.scene.time.delayedCall(3000, () => {
 			player.continue--;
 			if (player.continue < 0) alert('GAME OVER')
+			const lives = [...player.collected.lives].map(id => id.charAt(0) !== player.scene.currentLevel);
+			player.collected.lives = new Set([...lives]);
 			player.scene.scene.restart({ level: player.scene.currentLevel, playerData: player.getPlayerData() })
 		});
 	}

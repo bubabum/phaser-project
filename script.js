@@ -159,11 +159,11 @@ class MainScene extends Phaser.Scene {
 
 		this.cameras.main.fadeIn(1000);
 	}
-	update() {
+	update(t, dt) {
 		this.movingXPlatformsGroup.getChildren().forEach(platform => platform.update());
 		this.movingYPlatformsGroup.getChildren().forEach(platform => platform.update());
 		this.fallenBarrelsGroup.getChildren().forEach(barrel => barrel.update());
-		this.player.update();
+		this.player.update(dt);
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
 	}
@@ -370,6 +370,8 @@ class MainScene extends Phaser.Scene {
 		const layer = this.map.getObjectLayer('lives')?.objects;
 		if (!layer) return
 		layer.forEach(object => {
+			const id = `${this.currentLevel}${object.x}${object.y}`;
+			if (this.player.collected.lives.has(id)) return
 			const live = new Life({ scene: this, x: object.x, y: object.y, textureKey: 'life_idle' });
 			this.livesGroup.add(live);
 		});
@@ -433,7 +435,7 @@ class MainScene extends Phaser.Scene {
 		this.physics.add.collider(this.player, this.fadingPlatformsGroup, (player, platform) => {
 			if (player.body.onFloor()) platform.fade();
 		});
-		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup]); // more colissions?
+		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup, this.player]); // more colissions?
 		this.physics.add.overlap(this.player, this.doorGroup, (player, door) => this.changeLevel(door));
 		this.physics.add.overlap(this.player, this.fallenBarrelCollidersGroup, (player, collider) => collider.barrel.fall());
 		this.physics.add.overlap(this.player, this.fallenBarrelsGroup, (player, barrel) => {

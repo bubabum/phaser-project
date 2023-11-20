@@ -4,22 +4,30 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y, textureKey);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
-		this.scene = scene;
 		this.setCircle(15);
 		this.setOffset(34, 58);
 		this.setOrigin(0.51, 0.67);
 		this.setDepth(25);
 		this.createAnimations(textureKey);
+		this.setMass(1);
 		this.isOff = false;
 		this.exploded = false;
 		this.body.gameObject = this;
 		if (scene.hasLight) this.setPipeline('Light2D')
 	}
 
-	throw(velocity, player) {
+	update(player) {
+		this.setPosition(player.x + (player.flipX ? -20 : 20), player.y);
+	}
+
+	prepare(player) {
 		this.anims.play('on');
 		this.exploded = false;
-		this.setPosition(player.x + (player.flipX ? -10 : 10), player.y);
+		this.body.setAllowGravity(false)
+	}
+
+	throw(velocity, player) {
+		this.body.setAllowGravity(true)
 		this.setVelocity((player.flipX ? -1 : 1) * velocity, -velocity);
 		this.scene.time.delayedCall(2000, () => this.explode());
 	}
