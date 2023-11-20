@@ -4,7 +4,7 @@ class MainScene extends Phaser.Scene {
 	constructor() {
 		super({ key: 'MainScene' })
 		this.levels = [
-			{ tilemapKey: 'map', hasLight: true },
+			{ tilemapKey: 'map', hasLight: false },
 			{ tilemapKey: 'map2', hasLight: true },
 		];
 	}
@@ -20,8 +20,11 @@ class MainScene extends Phaser.Scene {
 					sword: 10,
 					rum: 15,
 				},
-				keys: new Set(),
-				collectedLives: new Set(),
+				collected: {
+					keys: new Set(),
+					continues: new Set(),
+					lives: new Set(),
+				}
 			},
 			movingToNextDoor = true,
 		} = props
@@ -202,7 +205,7 @@ class MainScene extends Phaser.Scene {
 		// 	!this.player.hasKey &&
 		// 	this.player.body.onFloor()) return this.showMessageBox('I need a key!')
 		const keyDown = Phaser.Input.Keyboard.JustDown(this.player.keyDown);
-		const hasKey = this.player.keys.has(door.id - 1) || door.id < this.currentLevel && door.id !== -1;
+		const hasKey = this.player.collected.keys.has(door.id - 1) || door.id < this.currentLevel && door.id !== -1;
 		const onFloor = this.player.body.onFloor();
 		if (!keyDown || !hasKey || !onFloor) return
 		const movingToNextDoor = door.id > this.currentLevel;
@@ -300,26 +303,6 @@ class MainScene extends Phaser.Scene {
 			} else {
 				this.movingYPlatformsGroup.add(movingPlatform);
 			}
-			if (distance < 0) movingPlatform.toogleDirection();
-
-			// this.tweens.add({
-			// 	targets: movingPlatform,
-			// 	// x: {
-			// 	// 	getStart: () => movingPlatform.x,
-			// 	// 	getEnd: () => ,
-			// 	// },
-			// 	//x: 128,
-			// 	duration: 1000,
-			// 	ease: 'Sine.easeInOut',
-			// 	yoyo: true,
-			// 	repeat: -1,
-			// 	onUpdate: (tween, target) => {
-			// 		const x = this.startX + 128
-			// 		const dx = x - this.x
-			// 		this.x = x
-			// 		this.setVelocityX(dx)
-			// 	}
-			// });
 		});
 	}
 	createFadingPlatforms() {
@@ -382,7 +365,7 @@ class MainScene extends Phaser.Scene {
 		});
 		this.physics.add.collider(this.livesGroup, [this.groundLayer, this.platformsLayer]);
 		this.physics.add.overlap(this.player, this.livesGroup, (player, life) => {
-			if (player.addLife()) life.disappear();
+			if (player.addLife(life.id)) life.disappear();
 		});
 		const layer = this.map.getObjectLayer('lives')?.objects;
 		if (!layer) return
@@ -392,18 +375,20 @@ class MainScene extends Phaser.Scene {
 		});
 	}
 	createContinues() {
-		this.oneUpsGroup = this.physics.add.group({
+		this.continues = this.physics.add.group({
 			immovable: true,
 		});
-		this.physics.add.collider(this.oneUpsGroup, [this.groundLayer, this.platformsLayer]);
-		this.physics.add.overlap(this.player, this.oneUpsGroup, (player, oneUp) => {
-			if (player.addContinue()) oneUp.disappear();
+		this.physics.add.collider(this.continues, [this.groundLayer, this.platformsLayer]);
+		this.physics.add.overlap(this.player, this.continues, (player, obj) => {
+			if (player.addContinue(obj.id)) obj.disappear();
 		});
 		const layer = this.map.getObjectLayer('one_ups')?.objects;
 		if (!layer) return
-		layer.forEach(object => {
-			const oneUp = new OneUp({ scene: this, x: object.x, y: object.y, textureKey: 'one_up' });
-			this.oneUpsGroup.add(oneUp);
+		layer.forEach((object) => {
+			const id = `${this.currentLevel}${object.x}${object.y}`;
+			if (this.player.collected.continues.has(id)) return
+			const newContinue = new Continue({ scene: this, x: object.x, y: object.y, textureKey: 'one_up' });
+			this.continues.add(newContinue);
 		});
 	}
 	createKeys() {
@@ -416,7 +401,7 @@ class MainScene extends Phaser.Scene {
 			key.disappear();
 		});
 		const layer = this.map.getObjectLayer('keys')?.objects;
-		if (!layer || this.player.keys.has(this.currentLevel)) return
+		if (!layer || this.player.collected.keys.has(this.currentLevel)) return
 		layer.forEach(object => {
 			const key = new Key({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'key', id: this.currentLevel });
 			this.keysGroup.add(key);

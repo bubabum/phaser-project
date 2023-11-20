@@ -4,6 +4,7 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y, textureKey);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
+		this.id = `${scene.currentLevel}${x}${y}`;
 		this.setPosition(x, y);
 		this.setDepth(25);
 		this.createAnimations(textureKey);

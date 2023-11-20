@@ -1,4 +1,4 @@
-class OneUp extends PowerUp {
+class Continue extends PowerUp {
 
 	constructor({ scene, x, y, textureKey }) {
 		super({ scene, x, y, textureKey });

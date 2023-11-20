@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="37" nextobjectid="195">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="64" tileheight="64" infinite="0" nextlayerid="37" nextobjectid="196">
  <editorsettings>
   <export target="demo_level.json" format="json"/>
  </editorsettings>
@@ -213,7 +213,8 @@
   </object>
  </objectgroup>
  <objectgroup id="29" name="lives">
-  <object id="140" gid="55" x="64" y="320" width="20" height="18"/>
+  <object id="140" gid="55" x="128" y="1024" width="20" height="18"/>
+  <object id="195" gid="55" x="256" y="1024" width="20" height="18"/>
  </objectgroup>
  <objectgroup id="36" name="one_ups">
   <object id="188" gid="59" x="192" y="576" width="64" height="64"/>

@@ -63,6 +63,8 @@ class Fall extends State {
 		const { player } = this;
 		player.setVelocityY(0);
 		player.touchingPlatform = null;
+		player.jumpGap = true; //get from run
+		player.scene.time.delayedCall(100, () => player.jumpGap = false);
 	}
 	handleInput({ cursors, keyUp }) {
 		const { player } = this;
@@ -76,6 +78,10 @@ class Fall extends State {
 		if (player.hasActiveRum && Phaser.Input.Keyboard.JustDown(keyUp) && !player.madeDoubleJump) {
 			player.setState('JUMP');
 			player.madeDoubleJump = true;
+		}
+		if (player.jumpGap && Phaser.Input.Keyboard.JustDown(keyUp)) {
+			player.setState('JUMP');
+			player.jumpGap = false; // change
 		}
 		if (player.body.blocked.down) player.setState('LAND');
 	}
@@ -107,7 +113,7 @@ class Hit extends State {
 		const { player } = this;
 		player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hit', function (anims) {
 			player.setState('FALL');
-			player.setInvulnerability(false)
+			player.scene.time.delayedCall(2000, () => player.setInvulnerability(false));
 		}, this);
 	}
 	handleInput() {

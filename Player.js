@@ -8,14 +8,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setSize(25, 50);
 		this.setOffset(20, 8);
 		this.setDepth(23);
-		//this.setGravityY(400);
+		this.setGravityY(200);
 		this.maxHeath = 3;
 		this.continue = playerData.continue;
 		this.health = playerData.health;
 		this.inventoryData = playerData.inventory;
-		this.keys = playerData.keys;
+		this.collected = playerData.collected;
 		this.activeItem = 0;
-		this.jumpVelocity = -250;
+		this.jumpVelocity = -310;
 		this.bombMaxVelocity = 300;
 		this.madeDoubleJump = false;
 		this.isInvulnerable = false;
@@ -129,7 +129,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			continue: this.continue,
 			health: death ? this.maxHeath : this.health,
 			inventory: this.inventoryData,
-			keys: this.keys,
+			collected: this.collected,
 		}
 	}
 
@@ -159,9 +159,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 
-	addContinue() {
+	addContinue(id) {
 		if (this.isInvulnerable) return
 		this.continue++
+		this.collected.continues.add(id);
 		return true
 	}
 
@@ -178,7 +179,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	getKey(id) {
-		this.keys.add(id);
+		this.collected.keys.add(id);
 	}
 
 	handleBombListener() {
@@ -232,16 +233,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		//this.jumpVelocity = -350;
 		this.inventoryData.rum--;
 		this.scene.time.delayedCall(5000, () => this.disactivateRum());
-		// this.scene.time.delayedCall(9200, () => this.setAlpha(0.6));
-		// this.scene.time.delayedCall(9400, () => this.setAlpha(0.7));
-		// this.scene.time.delayedCall(9600, () => this.setAlpha(0.8));
-		// this.scene.time.delayedCall(9800, () => this.setAlpha(0.9));
-		// this.scene.time.delayedCall(10000, () => this.setAlpha(1));
 	}
 
 	disactivateRum() {
 		this.hasActiveRum = false;
-		//this.jumpVelocity = -250;
 		this.setInvulnerability(false);
 		this.scene.tweens.add({
 			targets: this,
