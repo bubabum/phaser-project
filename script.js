@@ -226,20 +226,20 @@ class MainScene extends Phaser.Scene {
 			y: object.getCenter().y + 200,
 		}
 		const angle = Phaser.Math.Angle.BetweenPoints(point, object.getCenter());
-		this.physics.velocityFromRotation(angle, 150, object.body.velocity);
+		this.physics.velocityFromRotation(angle, 200, object.body.velocity);
 	}
-	getObjectCoordinateX(gameObject) {
-		return gameObject.x + gameObject.width * 0.5
+	getObjectCoordinateX(obj) {
+		return obj.x + obj.width * 0.5
 	}
 
-	getObjectCoordinateY(gameObject) {
-		return gameObject.y - gameObject.height * 0.5
+	getObjectCoordinateY(obj) {
+		return obj.y - obj.height * 0.5
 	}
-	normalaizeCoordinateX(gameObject) {
-		return Math.floor(gameObject.x / this.tileset.tileHeight) * this.tileset.tileHeight
+	normalaizeCoordinateX(obj) {
+		return Math.floor(obj.x / this.tileset.tileHeight) * this.tileset.tileHeight
 	}
-	normalaizeCoordinateY(gameObject) {
-		return Math.floor(gameObject.y / this.tileset.tileHeight) * this.tileset.tileHeight - gameObject.height
+	normalaizeCoordinateY(obj) {
+		return Math.floor(obj.y / this.tileset.tileHeight) * this.tileset.tileHeight - obj.height
 	}
 	createDoors() {
 		this.doorGroup = this.physics.add.group({
@@ -350,11 +350,13 @@ class MainScene extends Phaser.Scene {
 		const layer = this.map.getObjectLayer('spikes')?.objects;
 		if (!layer) return
 		layer.forEach(object => {
+			const type = object.properties.find(item => item.name === 'type').value;
 			const spike = new Spike({
 				scene: this,
-				x: this.normalaizeCoordinateX(object),
-				y: this.normalaizeCoordinateY(object),
+				x: this.getObjectCoordinateX(object),
+				y: this.getObjectCoordinateY(object),
 				textureKey: 'spike',
+				type,
 			})
 			this.spikesGroup.add(spike);
 		});
@@ -435,7 +437,7 @@ class MainScene extends Phaser.Scene {
 		this.physics.add.collider(this.player, this.fadingPlatformsGroup, (player, platform) => {
 			if (player.body.onFloor()) platform.fade();
 		});
-		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup, this.player]); // more colissions?
+		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup]);
 		this.physics.add.overlap(this.player, this.doorGroup, (player, door) => this.changeLevel(door));
 		this.physics.add.overlap(this.player, this.fallenBarrelCollidersGroup, (player, collider) => collider.barrel.fall());
 		this.physics.add.overlap(this.player, this.fallenBarrelsGroup, (player, barrel) => {
@@ -450,9 +452,9 @@ class MainScene extends Phaser.Scene {
 		door.anims.play('closing');
 	}
 	createCamera() {
-		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels).setRoundPixels(true);
 		this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
-		this.cameras.main.setRoundPixels(true);
+		//this.cameras.main.setRoundPixels(true);
 	}
 	createHealthBar() {
 		const textures = {
@@ -560,7 +562,8 @@ class MainScene extends Phaser.Scene {
 	createLight() {
 		this.children.list.forEach(item => {
 			if (!item.lifeTexture) item.setPipeline('Light2D');
-			if (item.light) this.lights.addLight(item.x, item.y, 900, 0xffffff, 0.7);
+			if (item.light) this.lights.addLight(item.x, item.y, 900, 0xffffff, 0.9);
+			if (item.light) console.log('test');
 		})
 		this.lights.enable().setAmbientColor(0x000000);
 	}

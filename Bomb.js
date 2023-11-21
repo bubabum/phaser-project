@@ -17,17 +17,18 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	update(player) {
-		this.setPosition(player.x + (player.flipX ? -20 : 20), player.y);
+		this.setPosition(player.x + (player.flipX ? -30 : 30), player.y);
 	}
 
 	prepare(player) {
 		this.anims.play('on');
 		this.exploded = false;
-		this.body.setAllowGravity(false)
+		this.body.setAllowGravity(false);
 	}
 
 	throw(velocity, player) {
-		this.body.setAllowGravity(true)
+		this.scene.physics.add.collider(player, this);
+		this.body.setAllowGravity(true);
 		this.setVelocity((player.flipX ? -1 : 1) * velocity, -velocity);
 		this.scene.time.delayedCall(2000, () => this.explode());
 	}

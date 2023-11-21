@@ -10,6 +10,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setDepth(23);
 		this.setGravityY(400);
 		this.setMass(2.5);
+		this.setFriction(1, 1)
 		this.maxHeath = 3;
 		this.continue = playerData.continue;
 		this.health = playerData.health;
@@ -79,6 +80,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	update(dt) {
+		this.activeBomb && this.activeBomb.update(this);
 		// if (this.lastState !== this.currentState.name) {
 		// 	this.lastState = this.currentState.name;
 		// 	console.log(this.lastState);
@@ -120,9 +122,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 				this.setVelocityY(platformVelocityY);
 			}
 		}
+
 		currentState.handleInput({ cursors, keyUp, dt });
 		this.inventory.update();
-		this.activeBomb && this.activeBomb.update(this);
 
 	}
 
