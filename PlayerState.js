@@ -55,7 +55,8 @@ class Jump extends State {
 			player.setVelocityX(0);
 		}
 		if (player.body.velocity.y > 0) player.setState('FALL');
-		if (player.body.onFloor() && player.touchingPlatform) player.setState('LAND');
+		if (player.body.onFloor()) player.setState('LAND');
+		//if (player.body.onFloor() && player.touchingPlatform) player.setState('LAND');
 	}
 }
 
