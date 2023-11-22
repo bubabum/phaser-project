@@ -35,7 +35,7 @@ class MainScene extends Phaser.Scene {
 
 	preload() {
 		this.load.image('tiles', './assets/tileset.png');
-		this.load.tilemapTiledJSON('map', './assets/demo_level.json');
+		this.load.tilemapTiledJSON('map', './assets/level2.json');
 		this.load.tilemapTiledJSON('map2', './assets/demo_level2.json');
 
 		this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
@@ -87,6 +87,11 @@ class MainScene extends Phaser.Scene {
 		this.load.image('skull', 'assets/decoration/skull.png');
 		this.load.image('spike', 'assets/spikes.png');
 
+		this.load.image('decoration_tile0', 'assets/decoration_tile0.png');
+		this.load.image('decoration_tile1', 'assets/decoration_tile1.png');
+		this.load.image('decoration_tile2', 'assets/decoration_tile2.png');
+		this.load.image('decoration_tile3', 'assets/decoration_tile3.png');
+
 		this.load.bitmapFont('pixel', 'assets/font/pixel.png', 'assets/font/pixel.xml');
 
 		this.load.aseprite('falling_barrel', 'assets/falling_barrel.png', 'assets/falling_barrel.json');
@@ -98,10 +103,31 @@ class MainScene extends Phaser.Scene {
 		this.tileset = this.map.addTilesetImage('tileset', 'tiles');
 		this.groundLayer = this.map.createLayer('ground', this.tileset);
 		this.groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26]);
+
+		this.groundLayer.filterTiles(tile => tile.index === 11).forEach(tile => {
+			let rnd = Math.random() * 100;
+			if (rnd < 5) this.add.image(tile.pixelX + 15, tile.pixelY, this.getRandomTexture('decoration_tile'));
+			if (rnd >= 5 && rnd < 10) this.add.image(tile.pixelX - 15, tile.pixelY + 16, this.getRandomTexture('decoration_tile'));
+			if (rnd >= 10 && rnd < 15) this.add.image(tile.pixelX + 15, tile.pixelY + 32, this.getRandomTexture('decoration_tile'));
+
+		});
+		this.groundLayer.filterTiles(tile => [4, 10, 16].includes(tile.index)).forEach(tile => {
+			let rnd = Math.random() * 100;
+			if (rnd < 5) this.add.image(tile.pixelX + 49, tile.pixelY + 16, this.getRandomTexture('decoration_tile'));
+			if (rnd >= 5 && rnd < 10) this.add.image(tile.pixelX + 49, tile.pixelY + 48, this.getRandomTexture('decoration_tile'));
+		});
+		this.groundLayer.filterTiles(tile => [6, 12, 18].includes(tile.index)).forEach(tile => {
+			let rnd = Math.random() * 100;
+			if (rnd < 5) this.add.image(tile.pixelX + 15, tile.pixelY, this.getRandomTexture('decoration_tile'));
+			if (rnd >= 5 && rnd < 10) this.add.image(tile.pixelX + 15, tile.pixelY + 32, this.getRandomTexture('decoration_tile'));
+
+		});
 		this.platformsLayer = this.map.createLayer('platforms', this.tileset);
 		this.platformsLayer.filterTiles(tile => tile.index > 0).forEach(tile => tile.setCollision(false, false, true, false, false));
 		this.hiddenPassageLayer = this.map.createLayer('hidden_passage', this.tileset);
 		this.hiddenPassageLayer.setDepth(26);
+
+
 
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
@@ -166,6 +192,13 @@ class MainScene extends Phaser.Scene {
 		this.player.update(dt);
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
+	}
+
+	getRandomTexture(key) {
+		const rnd = Math.floor(Math.random() * 8);
+		let index = rnd;
+		if (index > 3) index = 0;
+		return `${key}${index}`;
 	}
 
 	showMessageBox(messageText) {
@@ -386,7 +419,7 @@ class MainScene extends Phaser.Scene {
 		this.physics.add.overlap(this.player, this.continues, (player, obj) => {
 			if (player.addContinue(obj.id)) obj.disappear();
 		});
-		const layer = this.map.getObjectLayer('one_ups')?.objects;
+		const layer = this.map.getObjectLayer('continues')?.objects;
 		if (!layer) return
 		layer.forEach((object) => {
 			const id = `${this.currentLevel}${object.x}${object.y}`;

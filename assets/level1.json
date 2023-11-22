@@ -283,53 +283,7 @@
          "draworder":"topdown",
          "id":26,
          "name":"enemies",
-         "objects":[
-                {
-                 "class":"BigGuy",
-                 "gid":40,
-                 "height":74,
-                 "id":241,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"className",
-                         "type":"string",
-                         "value":"BigGuy"
-                        }, 
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"big_guy"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":77,
-                 "x":960,
-                 "y":832
-                }, 
-                {
-                 "class":"Cucumber",
-                 "gid":47,
-                 "height":68,
-                 "id":242,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"className",
-                         "type":"string",
-                         "value":"Cucumber"
-                        }, 
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"cucumber"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":1536,
-                 "y":1664
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -406,7 +360,7 @@
                  "name":"",
                  "properties":[
                         {
-                         "name":"distance",
+                         "name":" distance",
                          "type":"string",
                          "value":"-4"
                         }, 
@@ -477,55 +431,7 @@
          "draworder":"topdown",
          "id":32,
          "name":"falling_barrels",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":57,
-                 "height":64,
-                 "id":237,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":576,
-                 "y":832
-                }, 
-                {
-                 "class":"",
-                 "gid":57,
-                 "height":64,
-                 "id":238,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":1024,
-                 "y":576
-                }, 
-                {
-                 "class":"",
-                 "gid":57,
-                 "height":64,
-                 "id":239,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":1472,
-                 "y":576
-                }, 
-                {
-                 "class":"",
-                 "gid":57,
-                 "height":64,
-                 "id":240,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":1920,
-                 "y":1088
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -596,18 +502,6 @@
                  "width":64,
                  "x":960,
                  "y":1792
-                }, 
-                {
-                 "class":"",
-                 "gid":30,
-                 "height":64,
-                 "id":243,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":1984,
-                 "y":1536
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1131,7 +1025,7 @@
          "y":0
         }],
  "nextlayerid":37,
- "nextobjectid":244,
+ "nextobjectid":237,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

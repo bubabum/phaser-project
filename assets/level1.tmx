@@ -273,7 +273,7 @@
   </object>
  </objectgroup>
  <objectgroup id="29" name="lives"/>
- <objectgroup id="36" name="one_ups"/>
+ <objectgroup id="36" name="continue"/>
  <objectgroup id="28" name="windows"/>
  <objectgroup id="27" name="decorations"/>
  <objectgroup id="10" name="candles"/>

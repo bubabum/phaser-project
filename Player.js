@@ -9,7 +9,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setOffset(20, 8);
 		this.setDepth(23);
 		this.setGravityY(400);
-		this.setMass(2);
+		this.setMass(1);
 		this.setFriction(1, 1)
 		this.maxHeath = 3;
 		this.continue = playerData.continue;

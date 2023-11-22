@@ -216,7 +216,7 @@
   <object id="140" gid="55" x="128" y="1024" width="20" height="18"/>
   <object id="195" gid="55" x="256" y="1024" width="20" height="18"/>
  </objectgroup>
- <objectgroup id="36" name="one_ups">
+ <objectgroup id="36" name="continue">
   <object id="188" gid="62" x="192" y="576" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="28" name="windows">

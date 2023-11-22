@@ -6,7 +6,7 @@ class Cucumber extends Enemy {
 		this.maxHealth = 1;
 		this.health = this.maxHealth;
 		this.speedX = 120;
-		this.dashSpeedX = 230;
+		this.dashSpeedX = 330;
 		//this.moveToBombSpeedX = 180;
 		this.visionRange = 200;
 		this.atackRange = 20;
