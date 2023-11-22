@@ -127,7 +127,7 @@
  <tileset firstgid="56" source="key.tsx"/>
  <tileset firstgid="57" source="Objects/tiled/falling_barrel.tsx"/>
  <tileset firstgid="58" source="Objects/tiled/spikes.tsx"/>
- <tileset firstgid="59" source="tiled/one_up.tsx"/>
+ <tileset firstgid="62" source="tiled/one_up.tsx"/>
  <layer id="35" name="hidden_passage" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -217,7 +217,7 @@
   <object id="195" gid="55" x="256" y="1024" width="20" height="18"/>
  </objectgroup>
  <objectgroup id="36" name="one_ups">
-  <object id="188" gid="59" x="192" y="576" width="64" height="64"/>
+  <object id="188" gid="62" x="192" y="576" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="28" name="windows">
   <object id="113" gid="53" x="896" y="1024" width="56" height="61"/>
@@ -264,7 +264,7 @@
   <object id="161" gid="56" x="64" y="1024" width="24" height="24"/>
  </objectgroup>
  <objectgroup id="30" name="moving_platforms">
-  <object id="189" gid="30" x="192" y="1024" width="64" height="64">
+  <object id="189" gid="30" x="192" y="896" width="64" height="64">
    <properties>
     <property name="distance" type="int" value="-2"/>
     <property name="type" value="horizontal"/>
@@ -276,7 +276,7 @@
   <object id="184" gid="57" x="256" y="768" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="34" name="fading_platforms">
-  <object id="180" gid="30" x="640" y="1024" width="64" height="64"/>
+  <object id="180" gid="30" x="256" y="1024" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="33" name="spikes">
   <object id="187" gid="58" x="448" y="1152" width="64" height="64"/>

@@ -5,7 +5,6 @@ class FadingPlatform extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 		this.scene = scene;
-		//this.player = null;
 		this.setOrigin(0, 0);
 		this.setSize(64, 1);
 		this.setOffset(0, 0);
@@ -16,10 +15,10 @@ class FadingPlatform extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	fade() {
-		this.scene.time.delayedCall(500, () => {
+		this.scene.time.delayedCall(300, () => {
 			this.disableBody(false, true);
 		});
-		this.scene.time.delayedCall(2000, () => {
+		this.scene.time.delayedCall(1500, () => {
 			this.enableBody(false, this.x, this.y, true, true);
 		});
 	}

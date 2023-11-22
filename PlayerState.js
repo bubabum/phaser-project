@@ -44,6 +44,7 @@ class Jump extends State {
 		const { player } = this;
 		player.setVelocityY(player.jumpVelocity);
 		player.touchingPlatform = null;
+		player.scene.time.delayedCall(100, () => player.landGap = true);
 	}
 	handleInput({ cursors }) {
 		const { player } = this;
@@ -55,7 +56,7 @@ class Jump extends State {
 			player.setVelocityX(0);
 		}
 		if (player.body.velocity.y > 0) player.setState('FALL');
-		if (player.body.onFloor()) player.setState('LAND');
+		if (player.body.onFloor() && player.landGap) player.setState('LAND');
 		//if (player.body.onFloor() && player.touchingPlatform) player.setState('LAND');
 	}
 }
@@ -100,6 +101,7 @@ class Land extends State {
 		const { player } = this;
 		player.setVelocityX(0);
 		player.madeDoubleJump = false;
+		player.landGap = false;
 		player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'land', function (anims) {
 			player.setState('IDLE');
 		}, this);

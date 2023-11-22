@@ -9,7 +9,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.setOffset(20, 8);
 		this.setDepth(23);
 		this.setGravityY(400);
-		this.setMass(2.5);
+		this.setMass(2);
 		this.setFriction(1, 1)
 		this.maxHeath = 3;
 		this.continue = playerData.continue;
@@ -17,7 +17,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.inventoryData = playerData.inventory;
 		this.collected = playerData.collected;
 		this.activeItem = 0;
-		this.jumpVelocity = -350;
+		this.jumpVelocity = -400;
 		this.bombMaxVelocity = 300;
 		this.madeDoubleJump = false;
 		this.isInvulnerable = false;
@@ -81,6 +81,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 	update(dt) {
 		this.activeBomb && this.activeBomb.update(this);
+		if (this.body.velocity.y > 300) this.setVelocityY(300);
 		// if (this.lastState !== this.currentState.name) {
 		// 	this.lastState = this.currentState.name;
 		// 	console.log(this.lastState);

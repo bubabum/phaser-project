@@ -35,7 +35,7 @@ class MainScene extends Phaser.Scene {
 
 	preload() {
 		this.load.image('tiles', './assets/tileset.png');
-		this.load.tilemapTiledJSON('map', './assets/level1.json');
+		this.load.tilemapTiledJSON('map', './assets/demo_level.json');
 		this.load.tilemapTiledJSON('map2', './assets/demo_level2.json');
 
 		this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
@@ -563,7 +563,6 @@ class MainScene extends Phaser.Scene {
 		this.children.list.forEach(item => {
 			if (!item.lifeTexture) item.setPipeline('Light2D');
 			if (item.light) this.lights.addLight(item.x, item.y, 900, 0xffffff, 0.9);
-			if (item.light) console.log('test');
 		})
 		this.lights.enable().setAmbientColor(0x000000);
 	}
