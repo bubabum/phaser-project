@@ -35,8 +35,8 @@ class MainScene extends Phaser.Scene {
 
 	preload() {
 		this.load.image('tiles', './assets/tileset.png');
-		this.load.tilemapTiledJSON('map', './assets/demo_level.json');
-		this.load.tilemapTiledJSON('map2', './assets/demo_level2.json');
+		this.load.tilemapTiledJSON('map', './assets/level1.json');
+		this.load.tilemapTiledJSON('map2', './assets/level2.json');
 
 		this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
 		this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
@@ -85,7 +85,7 @@ class MainScene extends Phaser.Scene {
 		this.load.image('red_bottle', 'assets/decoration/red_bottle.png');
 		this.load.image('table', 'assets/decoration/table.png');
 		this.load.image('skull', 'assets/decoration/skull.png');
-		this.load.image('spike', 'assets/spikes.png');
+		this.load.image('spike', 'assets/spikes2.png');
 
 
 		this.load.image('background_tile0', 'assets/background_tile0.png');

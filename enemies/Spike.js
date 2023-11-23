@@ -12,23 +12,23 @@ class Spike extends Phaser.Physics.Arcade.Sprite {
 	setPropertiesByType(type) {
 		switch (type) {
 			case 'bottom':
-				this.setSize(60, 4);
-				this.setOffset(2, 60);
+				this.setSize(58, 10);
+				this.setOffset(6, 54);
 				break;
 			case 'left':
 				this.setAngle(90)
-				this.setSize(4, 60);
-				this.setOffset(0, 2);
+				this.setSize(10, 58);
+				this.setOffset(0, 6);
 				break;
 			case 'top':
 				this.setAngle(180)
-				this.setSize(60, 4);
-				this.setOffset(2, 0);
+				this.setSize(58, 10);
+				this.setOffset(6, 0);
 				break;
 			case 'right':
 				this.setAngle(270);
-				this.setSize(4, 60);
-				this.setOffset(60, 2);
+				this.setSize(10, 58);
+				this.setOffset(54, 6);
 				break;
 		}
 	}

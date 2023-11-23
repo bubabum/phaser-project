@@ -21,9 +21,9 @@ class Run extends State {
 	handleInput({ cursors, keyUp }) {
 		const { player } = this;
 		if (cursors.right.isDown) {
-			player.setVelocityX(player.velocity);
+			player.setVelocityX(player.runVelocity);
 		} else if (cursors.left.isDown) {
-			player.setVelocityX(-player.velocity);
+			player.setVelocityX(-player.runVelocity);
 		} else {
 			player.setVelocityX(0);
 			player.setState('IDLE');
@@ -42,7 +42,7 @@ class Dash extends State {
 	}
 	enter() {
 		const { player } = this;
-		player.setVelocity(player.velocity * 2.5, 0);
+		player.setVelocity(player.runVelocity * 2.5, 0);
 		player.body.setAllowGravity(false);
 		player.scene.time.delayedCall(200, () => {
 			player.body.setAllowGravity(true);
@@ -68,9 +68,9 @@ class Jump extends State {
 	handleInput({ cursors, keyM }) {
 		const { player } = this;
 		if (cursors.right.isDown) {
-			player.setVelocityX(player.velocity);
+			player.setVelocityX(player.runVelocity);
 		} else if (cursors.left.isDown) {
-			player.setVelocityX(-player.velocity);
+			player.setVelocityX(-player.runVelocity);
 		} else {
 			player.setVelocityX(0);
 		}
@@ -92,9 +92,9 @@ class Fall extends State {
 	handleInput({ cursors, keyUp }) {
 		const { player } = this;
 		if (cursors.right.isDown) {
-			player.setVelocityX(player.velocity);
+			player.setVelocityX(player.runVelocity);
 		} else if (cursors.left.isDown) {
-			player.setVelocityX(-player.velocity);
+			player.setVelocityX(-player.runVelocity);
 		} else {
 			player.setVelocityX(0);
 		}

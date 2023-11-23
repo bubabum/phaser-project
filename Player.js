@@ -17,7 +17,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.inventoryData = playerData.inventory;
 		this.collected = playerData.collected;
 		this.activeItem = 0;
-		this.velocity = 160;
+		this.runVelocity = 175;
 		this.jumpVelocity = -400;
 		this.bombMaxVelocity = 300;
 		this.madeDoubleJump = false;
