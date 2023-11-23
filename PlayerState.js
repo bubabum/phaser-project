@@ -4,10 +4,11 @@ class Idle extends State {
 	}
 	enter() {
 	}
-	handleInput({ cursors, keyUp }) {
+	handleInput({ cursors, keyUp, keyM }) {
 		const { player } = this;
 		if (cursors.right.isDown || cursors.left.isDown) player.setState('RUN');
 		if (Phaser.Input.Keyboard.JustDown(keyUp)) player.setState('JUMP');
+		if (Phaser.Input.Keyboard.JustDown(keyM)) player.setState('DASH');
 	}
 }
 
@@ -20,9 +21,9 @@ class Run extends State {
 	handleInput({ cursors, keyUp }) {
 		const { player } = this;
 		if (cursors.right.isDown) {
-			player.setVelocityX(160);
+			player.setVelocityX(player.velocity);
 		} else if (cursors.left.isDown) {
-			player.setVelocityX(-160);
+			player.setVelocityX(-player.velocity);
 		} else {
 			player.setVelocityX(0);
 			player.setState('IDLE');
@@ -33,6 +34,24 @@ class Run extends State {
 			player.jumpGap = true;
 			player.scene.time.delayedCall(100, () => player.jumpGap = false);
 		}
+	}
+}
+class Dash extends State {
+	constructor(player) {
+		super({ name: 'DASH', player, animation: 'run' });
+	}
+	enter() {
+		const { player } = this;
+		player.setVelocity(player.velocity * 2.5, 0);
+		player.body.setAllowGravity(false);
+		player.scene.time.delayedCall(200, () => {
+			player.body.setAllowGravity(true);
+			player.setVelocityX(0);
+			player.setState('IDLE');
+		});
+	}
+	handleInput({ cursors, keyM }) {
+
 	}
 }
 
@@ -46,18 +65,18 @@ class Jump extends State {
 		player.touchingPlatform = null;
 		player.scene.time.delayedCall(100, () => player.landGap = true);
 	}
-	handleInput({ cursors }) {
+	handleInput({ cursors, keyM }) {
 		const { player } = this;
 		if (cursors.right.isDown) {
-			player.setVelocityX(160);
+			player.setVelocityX(player.velocity);
 		} else if (cursors.left.isDown) {
-			player.setVelocityX(-160);
+			player.setVelocityX(-player.velocity);
 		} else {
 			player.setVelocityX(0);
 		}
 		if (player.body.velocity.y > 0) player.setState('FALL');
 		if (player.body.onFloor() && player.landGap) player.setState('LAND');
-		//if (player.body.onFloor() && player.touchingPlatform) player.setState('LAND');
+		if (Phaser.Input.Keyboard.JustDown(keyM)) player.setState('DASH');
 	}
 }
 
@@ -73,9 +92,9 @@ class Fall extends State {
 	handleInput({ cursors, keyUp }) {
 		const { player } = this;
 		if (cursors.right.isDown) {
-			player.setVelocityX(160);
+			player.setVelocityX(player.velocity);
 		} else if (cursors.left.isDown) {
-			player.setVelocityX(-160);
+			player.setVelocityX(-player.velocity);
 		} else {
 			player.setVelocityX(0);
 		}

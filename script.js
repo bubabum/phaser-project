@@ -35,7 +35,7 @@ class MainScene extends Phaser.Scene {
 
 	preload() {
 		this.load.image('tiles', './assets/tileset.png');
-		this.load.tilemapTiledJSON('map', './assets/level2.json');
+		this.load.tilemapTiledJSON('map', './assets/demo_level.json');
 		this.load.tilemapTiledJSON('map2', './assets/demo_level2.json');
 
 		this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
@@ -87,6 +87,11 @@ class MainScene extends Phaser.Scene {
 		this.load.image('skull', 'assets/decoration/skull.png');
 		this.load.image('spike', 'assets/spikes.png');
 
+
+		this.load.image('background_tile0', 'assets/background_tile0.png');
+		this.load.image('background_tile1', 'assets/background_tile1.png');
+		this.load.image('background_tile2', 'assets/background_tile2.png');
+		this.load.image('background_tile3', 'assets/background_tile3.png');
 		this.load.image('decoration_tile0', 'assets/decoration_tile0.png');
 		this.load.image('decoration_tile1', 'assets/decoration_tile1.png');
 		this.load.image('decoration_tile2', 'assets/decoration_tile2.png');
@@ -103,31 +108,11 @@ class MainScene extends Phaser.Scene {
 		this.tileset = this.map.addTilesetImage('tileset', 'tiles');
 		this.groundLayer = this.map.createLayer('ground', this.tileset);
 		this.groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26]);
-
-		this.groundLayer.filterTiles(tile => tile.index === 11).forEach(tile => {
-			let rnd = Math.random() * 100;
-			if (rnd < 5) this.add.image(tile.pixelX + 15, tile.pixelY, this.getRandomTexture('decoration_tile'));
-			if (rnd >= 5 && rnd < 10) this.add.image(tile.pixelX - 15, tile.pixelY + 16, this.getRandomTexture('decoration_tile'));
-			if (rnd >= 10 && rnd < 15) this.add.image(tile.pixelX + 15, tile.pixelY + 32, this.getRandomTexture('decoration_tile'));
-
-		});
-		this.groundLayer.filterTiles(tile => [4, 10, 16].includes(tile.index)).forEach(tile => {
-			let rnd = Math.random() * 100;
-			if (rnd < 5) this.add.image(tile.pixelX + 49, tile.pixelY + 16, this.getRandomTexture('decoration_tile'));
-			if (rnd >= 5 && rnd < 10) this.add.image(tile.pixelX + 49, tile.pixelY + 48, this.getRandomTexture('decoration_tile'));
-		});
-		this.groundLayer.filterTiles(tile => [6, 12, 18].includes(tile.index)).forEach(tile => {
-			let rnd = Math.random() * 100;
-			if (rnd < 5) this.add.image(tile.pixelX + 15, tile.pixelY, this.getRandomTexture('decoration_tile'));
-			if (rnd >= 5 && rnd < 10) this.add.image(tile.pixelX + 15, tile.pixelY + 32, this.getRandomTexture('decoration_tile'));
-
-		});
+		this.createDecorationTiles();
 		this.platformsLayer = this.map.createLayer('platforms', this.tileset);
 		this.platformsLayer.filterTiles(tile => tile.index > 0).forEach(tile => tile.setCollision(false, false, true, false, false));
 		this.hiddenPassageLayer = this.map.createLayer('hidden_passage', this.tileset);
 		this.hiddenPassageLayer.setDepth(26);
-
-
 
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
@@ -192,13 +177,6 @@ class MainScene extends Phaser.Scene {
 		this.player.update(dt);
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
-	}
-
-	getRandomTexture(key) {
-		const rnd = Math.floor(Math.random() * 8);
-		let index = rnd;
-		if (index > 3) index = 0;
-		return `${key}${index}`;
 	}
 
 	showMessageBox(messageText) {
@@ -273,6 +251,88 @@ class MainScene extends Phaser.Scene {
 	}
 	normalaizeCoordinateY(obj) {
 		return Math.floor(obj.y / this.tileset.tileHeight) * this.tileset.tileHeight - obj.height
+	}
+
+	createDecorationTiles() {
+		const chance = 25;
+		function* checkChance(chance) {
+			while (true) {
+				yield Math.floor(Math.random() * 99 + 1) <= chance
+			}
+		}
+		const getRandomTexture = (texturKey, textureIndexes) => {
+			return `${texturKey}${textureIndexes[Math.floor(Math.random() * textureIndexes.length)]}`;
+		}
+		const addRandomImage = (offsetX, offsetY, texturKey, textureIndexes, tile) => {
+			this.add.image(tile.pixelX + offsetX, tile.pixelY + offsetY, getRandomTexture(texturKey, textureIndexes)).setOrigin(0, 0).setFlipX(false);
+		}
+		const groundTilesMap = [
+			{
+				tiles: [2],
+				position: [{ x: 19, y: 11 }, { x: -15, y: 27 }, { x: 19, y: 43 }],
+				textureKey: 'decoration_tile',
+				textureIndexes: [0, 0, 1, 2, 3],
+			},
+			{
+				tiles: [14],
+				position: [{ x: 19, y: 11 }, { x: -15, y: 27 }],
+				textureKey: 'decoration_tile',
+				textureIndexes: [0, 0, 1, 2, 3],
+			},
+			{
+				tiles: [7],
+				position: [{ x: 19, y: 11 }, { x: 19, y: 43 }],
+				textureKey: 'decoration_tile',
+				textureIndexes: [1, 3],
+			},
+			{
+				tiles: [9],
+				position: [{ x: -15, y: -5 }, { x: -15, y: 27 }, { x: -15, y: 59 }],
+				textureKey: 'decoration_tile',
+				textureIndexes: [3],
+			},
+			{
+				tiles: [11],
+				position: [{ x: 17, y: 8 }, { x: 47, y: 24 }, { x: 17, y: 40 }],
+				textureKey: 'background_tile',
+				textureIndexes: [0, 0, 0, 1, 2, 3],
+			},
+			{
+				tiles: [4, 10, 16],
+				position: [{ x: 17, y: 8 }, { x: 47, y: 24 }, { x: 17, y: 40 }],
+				textureKey: 'background_tile',
+				textureIndexes: [0, 1, 2, 3],
+			},
+			{
+				tiles: [6, 18],
+				position: [{ x: -17, y: 24 }],
+				textureKey: 'background_tile',
+				textureIndexes: [0, 1, 2, 3],
+			},
+			{
+				tiles: [12],
+				position: [{ x: -17, y: -8 }, { x: -17, y: 24 }, { x: -17, y: 56 }],
+				textureKey: 'background_tile',
+				textureIndexes: [0, 1, 2, 3],
+			},
+		]
+		groundTilesMap.forEach(tileOptions => {
+			this.groundLayer.filterTiles(tile => tileOptions.tiles.includes(tile.index)).forEach(tile => {
+				tileOptions.position.forEach(position => {
+					if (checkChance(chance).next().value) addRandomImage(position.x, position.y, tileOptions.textureKey, tileOptions.textureIndexes, tile);
+				})
+			})
+		})
+		// this.groundLayer.filterTiles(tile => [4, 10, 16].includes(tile.index)).forEach(tile => {
+		// 	let rnd = Math.random() * 50;
+		// 	if (rnd < 5) this.add.image(tile.pixelX + 49, tile.pixelY + 16, this.getRandomTexture('background_tile'));
+		// 	if (rnd >= 5 && rnd < 10) this.add.image(tile.pixelX + 49, tile.pixelY + 48, this.getRandomTexture('background_tile'));
+		// });
+		// this.groundLayer.filterTiles(tile => [6, 12, 18].includes(tile.index)).forEach(tile => {
+		// 	let rnd = Math.random() * 50;
+		// 	if (rnd < 5) this.add.image(tile.pixelX + 15, tile.pixelY, this.getRandomTexture('background_tile'));
+		// 	if (rnd >= 5 && rnd < 10) this.add.image(tile.pixelX + 15, tile.pixelY + 32, this.getRandomTexture('background_tile'));
+		// });
 	}
 	createDoors() {
 		this.doorGroup = this.physics.add.group({

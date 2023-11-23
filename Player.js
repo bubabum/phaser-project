@@ -17,6 +17,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.inventoryData = playerData.inventory;
 		this.collected = playerData.collected;
 		this.activeItem = 0;
+		this.velocity = 160;
 		this.jumpVelocity = -400;
 		this.bombMaxVelocity = 300;
 		this.madeDoubleJump = false;
@@ -49,6 +50,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.keyDown = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
 		this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 		this.keyShift = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
+		this.keyM = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
 
 		this.particles = new ParticlesGroup({ scene: this.scene, textures: textures.particles, emitter: this });
 
@@ -57,6 +59,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.states = [
 			new Idle(this),
 			new Run(this),
+			new Dash(this),
 			new Jump(this),
 			new Fall(this),
 			new Land(this),
@@ -102,7 +105,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			this.flipX = false;
 			this.setOffset(20, 8);
 		}
-		const { currentState, cursors, keyUp, keyShift } = this;
+		const { currentState, cursors, keyUp, keyShift, keyM } = this;
 		if (Phaser.Input.Keyboard.JustUp(keyShift)) this.inventory.changeActiveItem();
 
 		switch (Object.keys(this.inventoryData)[this.activeItem]) {
@@ -124,7 +127,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			}
 		}
 
-		currentState.handleInput({ cursors, keyUp, dt });
+		currentState.handleInput({ cursors, keyUp, keyM, dt });
 		this.inventory.update();
 
 	}

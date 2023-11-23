@@ -296,7 +296,7 @@
   </object>
   <object id="205" gid="30" x="384" y="1920" width="64" height="64">
    <properties>
-    <property name=" distance" value="-4"/>
+    <property name="distance" value="-4"/>
     <property name="type" value="vertical"/>
    </properties>
   </object>
