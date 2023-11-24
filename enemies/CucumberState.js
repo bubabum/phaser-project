@@ -56,12 +56,10 @@ class CucumberBlowTheWick extends State {
 	enter() {
 		const { enemy } = this;
 		enemy.setVelocity(0);
-		enemy.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'blow_the_wick', () => {
-			enemy.setState('IDLE');
-		}, enemy);
 	}
 	handleState() {
 		const { enemy } = this;
-		if (enemy.anims.getProgress() === 1 && enemy.bombToInteract) enemy.interactWithBomb();
+		if (enemy.anims.currentFrame.index > 4 && enemy.bombToInteract) enemy.interactWithBomb();
+		if (enemy.anims.getProgress() === 1 && enemy.health > 0) enemy.setState('IDLE');
 	}
 }

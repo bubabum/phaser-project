@@ -39,9 +39,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 			if (platformVelocityY > 0) this.setVelocityY(platformVelocityY);
 		}
 		this.currentState.handleState();
-		// if (this.stateName) this.stateName.destroy();
-		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name}`, { font: '16px Courier', fill: '#ffffff' });
-		// this.stateName.x -= this.stateName.width * 0.5;
+		if (this.stateName) this.stateName.destroy();
+		this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${this.health}`, { font: '16px Courier', fill: '#ffffff' });
+		this.stateName.x -= this.stateName.width * 0.5;
 		if (this?.hurtbox?.body) {
 			const posY = this.body.position.y + this.body.height * 0.5 + this.hurtboxOffsetY;
 			if (this.direction === 'right') return this.hurtbox.setPosition(this.body.position.x + this.body.width, posY);
@@ -64,6 +64,10 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.healthImage.displayWidth = width * this.health / this.maxHealth;
 		this.healthBar.setDepth(25);
 		this.healthImage.setDepth(26);
+	}
+
+	isDead() {
+		return this.health === 0;
 	}
 
 	setBodyProperties(direction) {
@@ -199,7 +203,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.bombToInteract = bomb;
 		this.scene.physics.moveTo(this, this.bombToInteract.x, this.y, this.speedX);
 		const collider = this.scene.physics.add.overlap(this, this.bombToInteract, () => {
-			if (this.canInteractWithBomb) this.setState('INTERACT_WITH_BOMB');
+			if (this.canInteractWithBomb && !this.isDead()) this.setState('INTERACT_WITH_BOMB');
 			this.scene.physics.world.removeCollider(collider);
 		});
 	}
@@ -235,19 +239,15 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	takeDamage() {
-		// if (this.isInvulnerable) return
-		// if (this.health === 1) return this.setState('DEAD_HIT');
-		// this.setState('HIT');
-
-		if (this.isInvulnerable) return
-		if (this.health === 1) {
+		if (this.isInvulnerable || this.isDead()) return
+		this.health--;
+		if (this.health === 0) {
 			this.setState('DEAD_HIT');
 			this.setInvulnerability(true);
 		} else {
 			this.setState('HIT');
 			this.setInvulnerability(true, true);
 		}
-		this.health--;
 	}
 
 	createHurtbox() {

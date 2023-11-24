@@ -75,6 +75,7 @@ class EnemyDeadHit extends State {
 	enter() {
 		this.enemy.setDrag(100, 0);
 		this.enemy.hurtbox.destroy();
+		if (this.bombToInteract) this.bombToInteract = null;
 	}
 	handleState() {
 		const { enemy } = this;

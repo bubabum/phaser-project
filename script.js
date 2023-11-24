@@ -107,7 +107,7 @@ class MainScene extends Phaser.Scene {
 		this.map = this.make.tilemap({ key: this.levels[this.currentLevel].tilemapKey, tileWidth: 64, tileHeight: 64 });
 		this.tileset = this.map.addTilesetImage('tileset', 'tiles');
 		this.groundLayer = this.map.createLayer('ground', this.tileset);
-		this.groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26]);
+		this.groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26, 35, 36]);
 		this.createDecorationTiles();
 		this.platformsLayer = this.map.createLayer('platforms', this.tileset);
 		this.platformsLayer.filterTiles(tile => tile.index > 0).forEach(tile => tile.setCollision(false, false, true, false, false));
@@ -148,12 +148,10 @@ class MainScene extends Phaser.Scene {
 			}
 		});
 		this.physics.add.overlap(this.player.bombGroup, this.enemyGroup, (bomb, enemy) => {
-			if (bomb.exploded) {
-				if (!enemy.isInvulnerable) {
-					this.push(bomb, enemy);
-					enemy.takeDamage();
-					if (enemy.health === 0) this.dropPowerUp(enemy);
-				}
+			if (!enemy.isInvulnerable && bomb.exploded) {
+				this.push(bomb, enemy);
+				enemy.takeDamage();
+				if (enemy.health === 0) this.dropPowerUp(enemy);
 			}
 		});
 		this.physics.add.overlap(this.player.swordGroup, this.enemyGroup, (sword, enemy) => {
@@ -229,7 +227,6 @@ class MainScene extends Phaser.Scene {
 				this.scene.restart({ level: door.id, playerData: this.player.getPlayerData(false), movingToNextDoor });
 			});
 		}, this);
-
 	}
 	push(pusher, object) {
 		const point = {
@@ -633,24 +630,32 @@ class MainScene extends Phaser.Scene {
 		this.physics.add.collider(this.pushableDecorationGroup, [this.groundLayer, this.platformsLayer, this.pushableDecorationGroup]);
 	}
 	createDecorations() {
-		const layers = {
-			'small_chains': { className: Chain, textureKey: 'small_chain' },
-			'big_chains': { className: Chain, textureKey: 'big_chain' },
-			'candles': { className: Candle, textureKey: 'candle' },
-			'windows': { className: Window, textureKey: 'window' },
+		const layer = this.map.getObjectLayer('animated_decorations')?.objects;
+		if (!layer) return
+
+		const classList = {
+			'Chain': Chain,
+			'candles': Candle,
+			'windows': Window,
 		}
-		for (let key in layers) {
-			const { className, textureKey } = layers[key];
-			const layer = this.map.getObjectLayer(key);
-			if (layer) layer.objects.forEach(object => {
-				const newObject = new className({
-					scene: this,
-					x: this.getObjectCoordinateX(object),
-					y: this.getObjectCoordinateY(object),
-					textureKey
-				});
-			})
-		}
+		layer.forEach((object) => {
+			console.log(object)
+			// const { className, textureKey } = layers[key];
+			// const newContinue = new Continue({ scene: this, x: object.x, y: object.y, textureKey: 'one_up' });
+			// this.continues.add(newContinue);
+		});
+		// for (let key in layers) {
+		// 	const { className, textureKey } = layers[key];
+		// 	const layer = this.map.getObjectLayer(key);
+		// 	if (layer) layer.objects.forEach(object => {
+		// 		const newObject = new className({
+		// 			scene: this,
+		// 			x: this.getObjectCoordinateX(object),
+		// 			y: this.getObjectCoordinateY(object),
+		// 			textureKey
+		// 		});
+		// 	})
+		// }
 	}
 	createLight() {
 		this.children.list.forEach(item => {

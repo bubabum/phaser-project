@@ -30,7 +30,7 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.scene.physics.add.collider(player, this);
 		this.body.setAllowGravity(true);
 		this.setVelocity((player.flipX ? -1 : 1) * velocity, -velocity);
-		this.scene.time.delayedCall(2000, () => this.explode());
+		this.explosionTimer = this.scene.time.delayedCall(2000, () => this.explode());
 	}
 
 	explode() {
@@ -49,6 +49,7 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	turnOff() {
+		this.scene.time.removeEvent(this.explosionTimer);
 		this.isOff = true;
 		this.setVelocityX(0);
 		this.anims.play('off');

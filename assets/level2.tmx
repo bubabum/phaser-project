@@ -107,6 +107,10 @@
   </tile>
  </tileset>
  <tileset firstgid="51" name="small_chain" tilewidth="9" tileheight="52" tilecount="1" columns="1">
+  <properties>
+   <property name="className" value="Chain"/>
+   <property name="textureKey" value="small_chain"/>
+  </properties>
   <image source="Objects/small_chain.png" width="9" height="52"/>
  </tileset>
  <tileset firstgid="52" name="table" tilewidth="80" tileheight="32" tilecount="1" columns="1">
@@ -117,8 +121,14 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="53" name="window" tilewidth="56" tileheight="61" tilecount="1" columns="1">
+ <tileset firstgid="53" name="window" tilewidth="58" tileheight="61" tilecount="1" columns="1">
   <image source="Objects/window.png" width="58" height="61"/>
+  <tile id="0">
+   <properties>
+    <property name="className" value="Window"/>
+    <property name="textureKey" value="window"/>
+   </properties>
+  </tile>
  </tileset>
  <tileset firstgid="54" name="door" tilewidth="78" tileheight="96" tilecount="1" columns="1">
   <image source="../src/tiled/Objects/door.png" width="78" height="96"/>
