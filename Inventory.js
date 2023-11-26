@@ -5,6 +5,14 @@ class Inventory {
 		this.player = player;
 		this.inventoryTextures = textures.inventory;
 		this.continueTexture = textures.continue;
+		this.bombUseTypes = ['THROW', 'ROLL'];
+		this.activeBombUseType = 0;
+		this.bombTimers = [
+			{ type: 'FAST', value: 700 },
+			{ type: 'MEDIUM', value: 1300 },
+			{ type: 'SLOW', value: 2000 },
+		]
+		this.activeBombTimer = 0;
 		this.drawInventory(false);
 	}
 
@@ -13,6 +21,18 @@ class Inventory {
 		if (this.player.activeItem > Object.keys(this.player.inventoryData).length - 1) this.player.activeItem = 0;
 		const activeItem = Object.keys(this.player.inventoryData)[this.player.activeItem];
 		this.scene.showMessageBox(activeItem.split('')[0].toUpperCase() + activeItem.slice(1, activeItem.length));
+	}
+
+	changeBombUseType() {
+		this.activeBombUseType++
+		if (this.activeBombUseType > this.bombUseTypes.length - 1) this.activeBombUseType = 0;
+		this.scene.showMessageBox(`Bomb use type:${this.bombUseTypes[this.activeBombUseType]}`)
+	}
+
+	changeBombTimer() {
+		this.activeBombTimer++
+		if (this.activeBombTimer > this.bombTimers.length - 1) this.activeBombTimer = 0;
+		this.scene.showMessageBox(`Bomb timer:${this.bombTimers[this.activeBombTimer].type}`)
 	}
 
 	drawInventory(destroy = true) {

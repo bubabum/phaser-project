@@ -17,28 +17,32 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	update(player) {
-		this.setPosition(player.x + (player.flipX ? -30 : 30), player.y);
+		this.setPosition(player.x + (player.flipX ? -10 : 10), player.y);
+		// this.setAngularVelocity(
+		// 	Phaser.Math.RadToDeg(this.body.velocity.x / this.body.halfWidth)
+		// );
 	}
 
 	prepare(player) {
 		this.anims.play('on');
-		this.exploded = false;
 		this.body.setAllowGravity(false);
 	}
 
 	throw(velocity, player) {
-		this.scene.physics.add.collider(player, this);
 		this.body.setAllowGravity(true);
-		this.setVelocity((player.flipX ? -1 : 1) * velocity, -velocity);
-		this.explosionTimer = this.scene.time.delayedCall(2000, () => this.explode());
+		const bombUseType = player.inventory.bombUseTypes[player.inventory.activeBombUseType];
+		const bombTimer = player.inventory.bombTimers[player.inventory.activeBombTimer].value;
+		this.setVelocity((player.flipX ? -1 : 1) * velocity, (bombUseType === 'THROW' ? -velocity : 0));
+		this.scene.time.delayedCall(bombTimer, () => this.explode());
 	}
 
 	explode() {
 		if (this.isOff) return
+		this.setAngle(0);
 		this.anims.play('explosion');
 		this.exploded = true;
 		this.body.moves = false;
-		this.scene.cameras.main.shake(150, 0.005);
+		this.scene.cameras.main.shake(150, 0.01);
 		this.setCircle(48);
 		this.setOffset(0, 12);
 		this.setOrigin(0.5, 0.5);

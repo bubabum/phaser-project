@@ -219,11 +219,6 @@
  <objectgroup id="36" name="continue">
   <object id="188" gid="62" x="192" y="576" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="28" name="windows">
-  <object id="113" gid="53" x="896" y="1024" width="56" height="61"/>
-  <object id="114" gid="53" x="704" y="1024" width="56" height="61"/>
-  <object id="115" gid="53" x="384" y="192" width="56" height="61"/>
- </objectgroup>
  <objectgroup id="27" name="decorations">
   <object id="99" gid="52" x="768" y="1216" width="80" height="32"/>
   <object id="100" gid="46" x="727" y="1216" width="32" height="56"/>
@@ -235,21 +230,6 @@
   <object id="106" gid="50" x="828.091" y="1183.55" width="19" height="14"/>
   <object id="107" gid="41" x="704" y="1216" width="16" height="21"/>
   <object id="108" gid="41" x="685.609" y="1215.7" width="16" height="21"/>
- </objectgroup>
- <objectgroup id="10" name="candles">
-  <object id="11" name="candle1" gid="43" x="384" y="896" width="14" height="32"/>
-  <object id="12" name="candle2" gid="43" x="896" y="832" width="14" height="32"/>
-  <object id="13" name="candle3" gid="43" x="768" y="576" width="14" height="32"/>
-  <object id="14" name="candle4" gid="43" x="512" y="192" width="14" height="32"/>
- </objectgroup>
- <objectgroup id="11" name="small_chains">
-  <object id="15" gid="51" x="215.667" y="755.667" width="9" height="52"/>
-  <object id="16" gid="51" x="565" y="755.75" width="9" height="52"/>
-  <object id="17" gid="51" x="804" y="563.75" width="9" height="52"/>
- </objectgroup>
- <objectgroup id="12" name="big_chains">
-  <object id="18" gid="39" x="448.667" y="804" width="9" height="100"/>
-  <object id="19" gid="39" x="774.909" y="164.182" width="9" height="100"/>
  </objectgroup>
  <objectgroup id="26" name="enemies">
   <object id="157" gid="2147483692" x="511.667" y="834" width="62" height="46"/>

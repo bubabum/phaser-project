@@ -230,7 +230,7 @@
                         {
                          "name":"id",
                          "type":"string",
-                         "value":"-1"
+                         "value":"0"
                         }],
                  "rotation":0,
                  "visible":true,
@@ -248,7 +248,7 @@
                         {
                          "name":"id",
                          "type":"string",
-                         "value":"1"
+                         "value":"2"
                         }],
                  "rotation":0,
                  "visible":true,
@@ -1097,6 +1097,17 @@
                  "height":64,
                  "id":237,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1109,6 +1120,17 @@
                  "height":64,
                  "id":249,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1121,6 +1143,17 @@
                  "height":64,
                  "id":256,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1133,6 +1166,17 @@
                  "height":64,
                  "id":257,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1145,6 +1189,17 @@
                  "height":64,
                  "id":258,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1157,6 +1212,17 @@
                  "height":64,
                  "id":280,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1169,6 +1235,17 @@
                  "height":64,
                  "id":281,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1181,6 +1258,17 @@
                  "height":64,
                  "id":282,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1193,6 +1281,17 @@
                  "height":64,
                  "id":292,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1205,6 +1304,17 @@
                  "height":64,
                  "id":293,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1217,6 +1327,17 @@
                  "height":64,
                  "id":294,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1229,6 +1350,17 @@
                  "height":64,
                  "id":333,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1241,6 +1373,17 @@
                  "height":64,
                  "id":334,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -1253,6 +1396,17 @@
                  "height":64,
                  "id":335,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -2338,6 +2492,21 @@
          "spacing":0,
          "tilecount":36,
          "tileheight":64,
+         "tiles":[
+                {
+                 "id":29,
+                 "properties":[
+                        {
+                         "name":"distance",
+                         "type":"int",
+                         "value":0
+                        }, 
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"horizontal"
+                        }]
+                }],
          "tilewidth":64
         }, 
         {
@@ -2671,6 +2840,17 @@
          "imagewidth":9,
          "margin":0,
          "name":"small_chain",
+         "properties":[
+                {
+                 "name":"className",
+                 "type":"string",
+                 "value":"Chain"
+                }, 
+                {
+                 "name":"textureKey",
+                 "type":"string",
+                 "value":"small_chain"
+                }],
          "spacing":0,
          "tilecount":1,
          "tileheight":52,
@@ -2710,7 +2890,22 @@
          "spacing":0,
          "tilecount":1,
          "tileheight":61,
-         "tilewidth":56
+         "tiles":[
+                {
+                 "id":0,
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"Window"
+                        }, 
+                        {
+                         "name":"textureKey",
+                         "type":"string",
+                         "value":"window"
+                        }]
+                }],
+         "tilewidth":58
         }, 
         {
          "columns":1,

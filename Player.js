@@ -49,8 +49,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.keyUp = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 		this.keyDown = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
 		this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-		this.keyShift = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
-		this.keyM = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+		this.keyI = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
+		this.keyShift = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+		this.keyCtrl = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.CTRL);
 
 		this.particles = new ParticlesGroup({ scene: this.scene, textures: textures.particles, emitter: this });
 
@@ -82,7 +83,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.anims.play(this.currentState.animation);
 	}
 
-	update(dt) {
+	update() {
 		this.activeBomb && this.activeBomb.update(this);
 		if (this.body.velocity.y > 300) this.setVelocityY(300);
 		// if (this.lastState !== this.currentState.name) {
@@ -105,8 +106,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			this.flipX = false;
 			this.setOffset(20, 8);
 		}
-		const { currentState, cursors, keyUp, keyShift, keyM } = this;
-		if (Phaser.Input.Keyboard.JustUp(keyShift)) this.inventory.changeActiveItem();
+		const { currentState, cursors, keyUp, keyI, keyShift, keyCtrl } = this;
+		if (Phaser.Input.Keyboard.JustUp(keyI)) this.inventory.changeActiveItem();
+		if (Phaser.Input.Keyboard.JustUp(keyShift)) this.inventory.changeBombUseType();
+		if (Phaser.Input.Keyboard.JustUp(keyCtrl)) this.inventory.changeBombTimer();
 
 		switch (Object.keys(this.inventoryData)[this.activeItem]) {
 			case 'bomb':
@@ -127,9 +130,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			}
 		}
 
-		currentState.handleInput({ cursors, keyUp, keyM, dt });
+		currentState.handleInput({ cursors, keyUp });
 		this.inventory.update();
-
 	}
 
 	getPlayerData(death = true) {
@@ -139,6 +141,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			inventory: this.inventoryData,
 			collected: this.collected,
 		}
+	}
+
+	isDead() {
+		return this.health === 0
 	}
 
 	setInvulnerability(status, effect = false) {
@@ -168,21 +174,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 
 	addContinue(id) {
-		if (this.isInvulnerable) return
+		if (this.isDead()) return
 		this.continue++
 		this.collected.continues.add(id);
 		return true
 	}
 
 	addLife(id) {
-		if (this.health === this.maxHeath || this.isInvulnerable) return
+		if (this.health === this.maxHeath || this.isDead()) return
 		this.health++
 		this.collected.lives.add(id);
 		return true
 	}
 
 	addPowerUp(type) {
-		if (this.inventoryData[type] === 99 || this.isInvulnerable) return
+		if (this.inventoryData[type] === 99 || this.isDead()) return
 		this.inventoryData[type]++;
 		return true
 	}
@@ -209,7 +215,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	chargeBomb() {
-		if (this.bombGroup.getChildren().length === this.bombGroup.maxSize || this.isInvulnerable && !this.hasActiveRum) return
+		if (this.bombGroup.getChildren().length === this.bombGroup.maxSize || this.isDead()) return
 		this.bombBar.startCharging();
 		const bomb = this.bombGroup.get();
 		bomb.prepare(this);
@@ -224,27 +230,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	throwSword() {
-		if (this.inventoryData.sword === 0 || this.swordGroup.getChildren().length === this.swordGroup.maxSize || this.isInvulnerable && !this.hasActiveRum) return
+		if (this.inventoryData.sword === 0 || this.swordGroup.getChildren().length === this.swordGroup.maxSize || this.isDead()) return
 		const sowrd = this.swordGroup.get();
 		if (sowrd) sowrd.throw(this);
 		this.inventoryData.sword--;
 	}
 
 	activateRum() {
-		// this.setAngle(-15);
-		// this.scene.tweens.add({
-		// 	targets: this,
-		// 	x: '+=100',
-		// 	duration: 200,
-		// 	ease: 'Sine.inOut',
-		// 	//	yoyo: true,
-		// 	repeat: 0
-		// });
-		if (this.inventoryData.rum === 0 || this.isInvulnerable) return
+		if (this.inventoryData.rum === 0 || this.isDead() || this.hasActiveRum) return
 		this.hasActiveRum = true;
 		this.setInvulnerability(true).setAlpha(0.5);
-		//this.jumpVelocity = -350;
 		this.inventoryData.rum--;
+		this.activeItem = 0;
 		this.scene.time.delayedCall(5000, () => this.disactivateRum());
 	}
 
@@ -264,7 +261,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	takeDamage() {
-		if (this.isInvulnerable) return
+		if (this.isInvulnerable || this.isDead()) return
 		if (this.health === 1) {
 			this.setState('DEAD_HIT');
 			this.setInvulnerability(true);
@@ -273,6 +270,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			this.setInvulnerability(true, true);
 		}
 		this.health--;
+		return true
 	}
 
 	createAnimations(textureKey) {

@@ -4,11 +4,10 @@ class Idle extends State {
 	}
 	enter() {
 	}
-	handleInput({ cursors, keyUp, keyM }) {
+	handleInput({ cursors, keyUp }) {
 		const { player } = this;
 		if (cursors.right.isDown || cursors.left.isDown) player.setState('RUN');
 		if (Phaser.Input.Keyboard.JustDown(keyUp)) player.setState('JUMP');
-		if (Phaser.Input.Keyboard.JustDown(keyM)) player.setState('DASH');
 	}
 }
 
@@ -32,7 +31,7 @@ class Run extends State {
 		if (player.body.velocity.y > 0 && !player.touchingPlatform || !player.body.onFloor()) {
 			player.setState('FALL');
 			player.jumpGap = true;
-			player.scene.time.delayedCall(100, () => player.jumpGap = false);
+			player.scene.time.delayedCall(132, () => player.jumpGap = false);
 		}
 	}
 }
@@ -76,7 +75,6 @@ class Jump extends State {
 		}
 		if (player.body.velocity.y > 0) player.setState('FALL');
 		if (player.body.onFloor() && player.landGap) player.setState('LAND');
-		if (Phaser.Input.Keyboard.JustDown(keyM)) player.setState('DASH');
 	}
 }
 
@@ -168,10 +166,8 @@ class DeadGround extends State {
 		const { player } = this;
 		player.setVelocityX(0);
 		player.scene.time.delayedCall(3000, () => {
+			if (player.continue === 0) return player.scene.scene.restart({ level: 0 });
 			player.continue--;
-			if (player.continue < 0) alert('GAME OVER')
-			const lives = [...player.collected.lives].map(id => id.charAt(0) !== player.scene.currentLevel);
-			player.collected.lives = new Set([...lives]);
 			player.scene.scene.restart({ level: player.scene.currentLevel, playerData: player.getPlayerData() })
 		});
 	}

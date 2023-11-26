@@ -333,12 +333,12 @@
  <objectgroup id="6" name="doors">
   <object id="7" name="door_in" gid="54" x="1856" y="704" width="78" height="96">
    <properties>
-    <property name="id" value="-1"/>
+    <property name="id" value="0"/>
    </properties>
   </object>
   <object id="120" name="door_out" gid="54" x="2112" y="1472" width="78" height="96">
    <properties>
-    <property name="id" value="1"/>
+    <property name="id" value="2"/>
    </properties>
   </object>
  </objectgroup>
