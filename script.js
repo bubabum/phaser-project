@@ -10,11 +10,20 @@ class Game extends Phaser.Scene {
 	static getRandom(min, max) {
 		return Math.floor(Math.random() * (max - min) + min)
 	}
+	static checkGroupIntersection(groupArr, obj) {
+		let result = false;
+		groupArr.forEach(group => {
+			group.getChildren().forEach(item => {
+				if (Phaser.Geom.Intersects.RectangleToRectangle(obj.getBounds(), item.getBounds())) result = true;
+			});
+		})
+		return result
+	}
 
 	constructor() {
-		super({ key: 'MainScene' })
+		super({ key: 'Game' })
 		this.levels = [
-			{ tilemapKey: 'map', hasLight: false },
+			{ tilemapKey: 'map', hasLight: true },
 			{ tilemapKey: 'map2', hasLight: true },
 		];
 	}
@@ -39,82 +48,16 @@ class Game extends Phaser.Scene {
 			movingToNextLevel = true,
 		} = props;
 		this.currentLevel = level;
+		this.hasLight = this.levels[this.currentLevel].hasLight;
 		this.playerData = playerData;
 		this.movingToNextLevel = movingToNextLevel;
 	}
 
 	preload() {
-		this.load.image('tiles', './assets/tileset.png');
-		this.load.tilemapTiledJSON('map', './assets/level0.json');
-		this.load.tilemapTiledJSON('map2', './assets/level2.json');
 
-		this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
-		this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
-		this.load.image('sword', 'assets/sword.png');
-		this.load.image('bomb_inventory', 'assets/bomb_inventory.png');
-		this.load.image('sword_inventory', 'assets/sword_inventory.png');
-		this.load.image('rum_inventory', 'assets/rum_inventory.png');
-		this.load.image('continue_inventory', 'assets/continue_inventory.png');
-		this.load.spritesheet('bomb_bar', 'assets/bar.png', { frameWidth: 39, frameHeight: 9 });
-		this.load.image('health_bar', 'assets/health_bar.png');
-		this.load.spritesheet('rum', 'assets/rum.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.spritesheet('sword_powerup', 'assets/sword_powerup.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.image('life', 'assets/life.png');
-		this.load.image('enemy_health_bar', 'assets/enemy_health_bar.png');
-		this.load.image('health', 'assets/health.png');
-
-		this.load.spritesheet('run_particles', 'assets/run_particles.png', { frameWidth: 12, frameHeight: 10 });
-		this.load.spritesheet('jump_particles', 'assets/jump_particles.png', { frameWidth: 40, frameHeight: 28 });
-		this.load.spritesheet('land_particles', 'assets/land_particles.png', { frameWidth: 80, frameHeight: 10 });
-		this.load.spritesheet('life_idle', 'assets/life_idle.png', { frameWidth: 20, frameHeight: 18 });
-		this.load.spritesheet('continue', 'assets/continue.png', { frameWidth: 64, frameHeight: 64 });
-		this.load.spritesheet('key', 'assets/key.png', { frameWidth: 30, frameHeight: 30 });
-
-		this.load.spritesheet('canon', 'assets/canon.png', { frameWidth: 62, frameHeight: 46 });
-		this.load.image('canon_ball', 'assets/canon_ball.png');
-		this.load.spritesheet('bald_pirate', 'assets/bald_pirate.png', { frameWidth: 63, frameHeight: 67 });
-		this.load.spritesheet('capitan', 'assets/capitan.png', { frameWidth: 80, frameHeight: 72 });
-		this.load.spritesheet('cucumber', 'assets/cucumber.png', { frameWidth: 64, frameHeight: 68 });
-		this.load.spritesheet('big_guy', 'assets/big_guy.png', { frameWidth: 77, frameHeight: 74 });
-
-		this.load.spritesheet('door', 'assets/door.png', { frameWidth: 78, frameHeight: 96 });
-		this.load.image('platform', 'assets/platform.png');
-
-		this.load.spritesheet('candle', 'assets/lighting/candle.png', { frameWidth: 14, frameHeight: 32 });
-		this.load.spritesheet('candle_light', 'assets/lighting/candle_light.png', { frameWidth: 60, frameHeight: 58 });
-		this.load.image('window', 'assets/lighting/window.png');
-		this.load.spritesheet('window_light', 'assets/lighting/window_light.png', { frameWidth: 170, frameHeight: 139 });
-
-		this.load.spritesheet('small_chain', 'assets/small_chain.png', { frameWidth: 9, frameHeight: 52 });
-		this.load.spritesheet('big_chain', 'assets/big_chain.png', { frameWidth: 9, frameHeight: 100 });
-
-		this.load.image('barrel', 'assets/decoration/barrel.png');
-		this.load.image('blue_bottle', 'assets/decoration/blue_bottle.png');
-		this.load.image('chair', 'assets/decoration/chair.png');
-		this.load.image('green_bottle', 'assets/decoration/green_bottle.png');
-		this.load.image('red_bottle', 'assets/decoration/red_bottle.png');
-		this.load.image('table', 'assets/decoration/table.png');
-		this.load.image('skull', 'assets/decoration/skull.png');
-
-		this.load.image('spike', 'assets/spikes2.png');
-
-
-		this.load.image('background_tile0', 'assets/background_tile0.png');
-		this.load.image('background_tile1', 'assets/background_tile1.png');
-		this.load.image('background_tile2', 'assets/background_tile2.png');
-		this.load.image('background_tile3', 'assets/background_tile3.png');
-		this.load.image('decoration_tile0', 'assets/decoration_tile0.png');
-		this.load.image('decoration_tile1', 'assets/decoration_tile1.png');
-		this.load.image('decoration_tile2', 'assets/decoration_tile2.png');
-		this.load.image('decoration_tile3', 'assets/decoration_tile3.png');
-
-		this.load.bitmapFont('pixel', 'assets/font/pixel.png', 'assets/font/pixel.xml');
-
-		this.load.aseprite('falling_barrel', 'assets/falling_barrel.png', 'assets/falling_barrel.json');
 	}
 
 	create() {
-		this.hasLight = this.levels[this.currentLevel].hasLight;
 		this.map = this.make.tilemap({ key: this.levels[this.currentLevel].tilemapKey, tileWidth: 64, tileHeight: 64 });
 		this.tileset = this.map.addTilesetImage('tileset', 'tiles');
 		this.groundLayer = this.map.createLayer('ground', this.tileset);
@@ -133,7 +76,6 @@ class Game extends Phaser.Scene {
 		this.createFallingBarrels();
 		this.createSpikes();
 		this.createPlayer();
-		this.createCamera();
 		this.createPowerUps();
 		this.createLives();
 		this.createContinues();
@@ -142,6 +84,7 @@ class Game extends Phaser.Scene {
 		this.createEnemies();
 		this.createPushableDecorations();
 		this.createDecorations();
+		this.createCamera();
 		//this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!')
 
 		if (this.hasLight) this.createLight();
@@ -430,7 +373,7 @@ class Game extends Phaser.Scene {
 		this.physics.add.collider(this.fallenBarrelsGroup, [this.groundLayer, this.platformsLayer]);
 	}
 	createSpikes() {
-		this.spikesGroup = this.physics.add.group({
+		this.spikes = this.physics.add.group({
 			allowGravity: false,
 		});
 		const layer = this.map.getObjectLayer('spikes')?.objects;
@@ -444,7 +387,7 @@ class Game extends Phaser.Scene {
 				textureKey: 'spike',
 				type,
 			})
-			this.spikesGroup.add(spike);
+			this.spikes.add(spike);
 		});
 	}
 	createLives() {
@@ -529,7 +472,7 @@ class Game extends Phaser.Scene {
 		this.physics.add.overlap(this.player, this.fallenBarrelsGroup, (player, barrel) => {
 			if (player.takeDamage()) this.push(barrel, player);
 		});
-		this.physics.add.overlap(this.player, this.spikesGroup, (player, spike) => {
+		this.physics.add.overlap(this.player, this.spikes, (player, spike) => {
 			if (player.takeDamage()) this.push(spike, player);
 		});
 		this.physics.add.collider(this.player.swordGroup, this.groundLayer, (sword) => sword.destroy());
@@ -538,7 +481,7 @@ class Game extends Phaser.Scene {
 	createCamera() {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels).setRoundPixels(true);
 		this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
-		this.cameras.main.setRoundPixels(true);
+		this.cameras.main.setRoundPixels(true).setBackgroundColor(0xbababa);
 	}
 	createHealthBar() {
 		const textures = {
@@ -617,63 +560,43 @@ class Game extends Phaser.Scene {
 		const { tileWidth, tileHeight } = this.tileset;
 		textureKeys.forEach(item => {
 			this.groundLayer.filterTiles(tile => [1, 2, 3].includes(tile.index)).forEach(tile => {
-				if (Game.checkChance(90)) return
+				if (Game.checkChance(85) || Game.checkGroupIntersection([this.doorGroup, this.spikes], tile)) return
 				const { width, height } = this.textures.list[item].source[0];
 				const obj = new DecorationObject({
 					scene: this,
 					x: tile.pixelX + Game.getRandom(width * 0.5, tileWidth - width * 0.5),
 					y: tile.pixelY,
 					textureKey: item,
-					//flipX: false,
+					flipX: (Game.checkChance(50) ? true : false),
 				});
 				this.pushableDecorationGroup.add(obj);
-				this.doorGroup.getChildren().forEach(item => {
-					if (Phaser.Geom.Intersects.RectangleToRectangle(obj.getBounds(), item.getBounds())) obj.destroy();
-				});
-				this.spikesGroup.getChildren().forEach(item => {
-					if (Phaser.Geom.Intersects.RectangleToRectangle(obj.getBounds(), item.getBounds())) obj.destroy();
-				});
 			})
 		})
 		this.groundLayer.filterTiles(tile => tile.index === 2).forEach(tile => {
 			if (this.groundLayer.getTileAt(tile.x - 1, tile.y)?.index !== 2) return
 			if (this.groundLayer.getTileAt(tile.x + 1, tile.y)?.index !== 2) return
-			if (Game.checkChance(1)) return
+			if (Game.checkChance(90) || Game.checkGroupIntersection([this.doorGroup, this.spikes], tile)) return
 			const { width, height } = this.textures.list['table'].source[0];
-			const obj = new DecorationObject({
+			const table = new DecorationObject({
 				scene: this,
 				x: tile.pixelX + width * 0.5,
 				y: tile.pixelY,
 				textureKey: 'table',
-				//flipX: false,
 			});
-			if (Game.checkChance(40)) {
-				const chair = new DecorationObject({
-					scene: this,
-					x: tile.pixelX - tileWidth + width * 0.5,
-					y: tile.pixelY,
-					textureKey: 'chair',
-					//flipX: false,
-				});
-				this.pushableDecorationGroup.add(chair);
-			}
-			if (Game.checkChance(40)) {
-				const chair = new DecorationObject({
-					scene: this,
-					x: tile.pixelX + tileWidth + width * 0.5,
-					y: tile.pixelY,
-					textureKey: 'chair',
-					flipX: true,
-				});
-				this.pushableDecorationGroup.add(chair);
-			}
-			this.pushableDecorationGroup.add(obj);
-			// this.doorGroup.getChildren().forEach(item => {
-			// 	if (Phaser.Geom.Intersects.RectangleToRectangle(obj.getBounds(), item.getBounds())) obj.destroy();
-			// });
-			// this.spikesGroup.getChildren().forEach(item => {
-			// 	if (Phaser.Geom.Intersects.RectangleToRectangle(obj.getBounds(), item.getBounds())) obj.destroy();
-			// });
+			const chairLeft = new DecorationObject({
+				scene: this,
+				x: tile.pixelX - tileWidth + width * 0.5,
+				y: tile.pixelY,
+				textureKey: 'chair',
+			});
+			const chairRight = new DecorationObject({
+				scene: this,
+				x: tile.pixelX + tileWidth + width * 0.5,
+				y: tile.pixelY,
+				textureKey: 'chair',
+				flipX: true,
+			});
+			this.pushableDecorationGroup.addMultiple([table, chairLeft, chairRight]);
 		});
 		chainTextures.forEach(item => {
 			this.groundLayer.filterTiles(tile => [13, 14, 15].includes(tile.index)).forEach(tile => {
@@ -684,59 +607,77 @@ class Game extends Phaser.Scene {
 					x: tile.pixelX + Game.getRandom(width * 0.5, tileWidth - width * 0.5),
 					y: tile.pixelY + tileHeight,
 					textureKey: item,
-					//flipX: false,
 				});
 			})
 		});
+		// const windows = [];
+		// this.groundLayer.filterTiles(tile => tile.index === 11).forEach(tile => {
+		// 	if (this.groundLayer.getTileAt(tile.x - 1, tile.y + 1)?.index !== 11) return
+		// 	if (Game.checkChance(85) && this.hasLight) return
+		// 	for (let x = -1; x < 2; x++) {
+		// 		for (let y = -1; y < 2; y++) {
+		// 			if (windows.includes(`${tile.x + x}${tile.y + y}`)) return
+		// 		}
+		// 	}
+		// 	windows.push(`${tile.x}${tile.y}`)
+		// 	const obj = new Window({
+		// 		scene: this,
+		// 		x: tile.pixelX,
+		// 		y: tile.pixelY + tileHeight,
+		// 		textureKey: 'window',
+		// 	});
+		// });
+		const candles = [];
 		this.groundLayer.filterTiles(tile => tile.index === 11).forEach(tile => {
-			if (this.groundLayer.getTileAt(tile.x - 1, tile.y + 1)?.index !== 11) return
-			if (Game.checkChance(90)) return
-			const obj = new Window({
+			if (Game.checkChance(1) && !this.hasLight) return
+			for (let x = -5; x < 6; x++) {
+				for (let y = -5; y < 6; y++) {
+					if (candles.includes(`${tile.x + x}${tile.y + y}`)) return
+				}
+			}
+			candles.push(`${tile.x}${tile.y}`)
+
+			const obj = new Candle({
 				scene: this,
 				x: tile.pixelX,
 				y: tile.pixelY + tileHeight,
-				textureKey: 'window',
-				//flipX: false,
+				textureKey: 'candle',
 			});
-		})
+		});
 
-
-		// const layer = this.map.getObjectLayer('decorations')?.objects;
-		// if (!layer) return
-		// layer.forEach(object => {
-		// 	const textureKey = object.properties.find(item => item.name === 'texture').value;
-		// 	const newObject = new DecorationObject({
-		// 		scene: this,
-		// 		x: this.getObjectCoordinateX(object),
-		// 		y: this.getObjectCoordinateY(object),
-		// 		textureKey,
-		// 		flipX: object.flippedHorizontal,
-		// 	});
-		// 	this.pushableDecorationGroup.add(newObject);
-		// })
 		this.physics.add.collider(this.pushableDecorationGroup, [this.groundLayer, this.platformsLayer, this.pushableDecorationGroup]);
-		//this.physics.add.overlap(this.pushableDecorationGroup, this.spikesGroup, (item) => item.destroy());
 	}
 	createDecorations() {
-		const layer = this.map.getObjectLayer('animated_decorations')?.objects;
-		if (!layer) return
-		const classList = {
-			'Chain': Chain,
-			'Candle': Candle,
-			'Window': Window,
-		}
-		layer.forEach((object) => {
-			const className = classList[object.properties.find(item => item.name === 'className').value];
-			const textureKey = object.properties.find(item => item.name === 'textureKey').value;
-			const newDecoration = new className({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey })
-		});
+		// const candles = [];
+		// this.groundLayer.filterTiles(tile => tile.index === 11).forEach(tile => {
+		// 	if (Game.checkChance(1) && !this.hasLight) return
+		// 	for (let x = -3; x < 4; x++) {
+		// 		for (let y = -3; y < 4; y++) {
+		// 			if (candles.includes(`${tile.x + x}${tile.y + y}`)) return
+		// 		}
+		// 	}
+		// 	candles.push(`${tile.x}${tile.y}`)
+
+		// 	const obj = new Candle({
+		// 		scene: this,
+		// 		x: tile.pixelX,
+		// 		y: tile.pixelY + tileHeight,
+		// 		textureKey: 'candle',
+		// 	});
+		// })
+		// const layer = this.map.getObjectLayer('candles')?.objects;
+		// if (!layer) return
+		// layer.forEach((object) => {
+		// 	const candle = new Candle({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'candle' })
+		// });
 	}
 	createLight() {
-		this.children.list.forEach(item => {
-			if (!item.lifeTexture) item.setPipeline('Light2D');
-			if (item.light) this.lights.addLight(item.x, item.y, 900, 0xffffff, 0.9);
-		})
-		this.lights.enable().setAmbientColor(0x000000);
+		// this.children.list.forEach(item => {
+		// 	if (!item.lifeTexture) item.setPipeline('Light2D');
+		// 	//if (item.light) this.lights.addLight(item.x, item.y, 900, 0xffffff, 0.9);
+		// })
+		// this.lights.enable().setAmbientColor(0x555555);
+		this.add.pointlight(this.x, this.y, 0x000000, 900, 0.9, 0.05).setScrollFactor(0, 0);
 	}
 }
 

@@ -50,6 +50,7 @@
 	<script src="./HealthBar.js"></script>
 	<script src="./Inventory.js"></script>
 	<script src="./GlobalVariables.js"></script>
+	<script src="./Loader.js"></script>
 	<script src="./script.js"></script>
 	<title>Document</title>
 	<style>
@@ -87,7 +88,8 @@
 			},
 			antialias: false,
 			crisp: true,
-			scene: Game,
+			maxLights: 1,
+			scene: [Loader, Game]
 		};
 		const game = new Phaser.Game(config);
 	</script>

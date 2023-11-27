@@ -7,6 +7,8 @@ class Candle extends Phaser.Physics.Arcade.Sprite {
 		this.createAnimations(textureKey);
 		this.anims.play('idle');
 		this.light.anims.play('idle');
+		//scene.lights.addLight(this.x, this.y, 900, 0xaaaaaa, 0.9);
+		// scene.add.pointlight(this.x, this.y, 0xc5906f, 200, 0.2, 0.05);
 	}
 
 	createAnimations(textureKey) {
