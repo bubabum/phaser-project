@@ -86,9 +86,12 @@
 					//debug: true,
 				},
 			},
+			input: {
+				gamepad: true
+			},
 			antialias: false,
 			crisp: true,
-			maxLights: 1,
+			maxLights: 100,
 			scene: [Loader, Game]
 		};
 		const game = new Phaser.Game(config);

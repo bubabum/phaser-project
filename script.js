@@ -23,8 +23,9 @@ class Game extends Phaser.Scene {
 	constructor() {
 		super({ key: 'Game' })
 		this.levels = [
-			{ tilemapKey: 'map', hasLight: true },
-			{ tilemapKey: 'map2', hasLight: true },
+			{ tilemapKey: 'level2', hasLight: false },
+			{ tilemapKey: 'level1', hasLight: true },
+			{ tilemapKey: 'level2', hasLight: false },
 		];
 	}
 
@@ -70,6 +71,10 @@ class Game extends Phaser.Scene {
 
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
+		// this.input.gamepad.once('connected', function (pad) {
+		// 	this.pad = pad;
+		// });
+
 		this.createDoors();
 		this.createMovingPlatforms();
 		this.createFadingPlatforms();
@@ -82,8 +87,8 @@ class Game extends Phaser.Scene {
 		this.createKeys();
 		this.createHealthBar();
 		this.createEnemies();
-		this.createPushableDecorations();
 		this.createDecorations();
+		this.createLightObjects();
 		this.createCamera();
 		//this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!')
 
@@ -120,12 +125,17 @@ class Game extends Phaser.Scene {
 		this.cameras.main.fadeIn(1000);
 	}
 	update(t, dt) {
+		const pad = this.input.gamepad.getPad(0);
 		this.movingXPlatformsGroup.getChildren().forEach(platform => platform.update());
 		this.movingYPlatformsGroup.getChildren().forEach(platform => platform.update());
 		this.fallenBarrelsGroup.getChildren().forEach(barrel => barrel.update());
-		this.player.update();
+		this.player.update({ gamepad: pad });
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
+		if (this.fpsCounter) this.fpsCounter.destroy();
+		const { width } = this.cameras.main.worldView;
+		const fps = Math.floor(this.sys.game.loop.actualFps);
+		this.fpsCounter = this.add.bitmapText(width, 0, 'pixel', fps, 20, 1).setOrigin(1, 0).setScrollFactor(0, 0).setDepth(100);
 	}
 
 	showMessageBox(messageText) {
@@ -317,21 +327,18 @@ class Game extends Phaser.Scene {
 		const layer = this.map.getObjectLayer('moving_platforms')?.objects;
 		if (!layer) return
 		layer.forEach(object => {
-			const type = object.properties.find(item => item.name === 'type').value;
+			const axis = object.properties.find(item => item.name === 'axis').value;
 			const distance = object.properties.find(item => item.name === 'distance').value * this.tileset.tileWidth;;
 			const movingPlatform = new MovingPlatform({
 				scene: this,
 				x: this.normalaizeCoordinateX(object),
 				y: this.normalaizeCoordinateY(object),
 				textureKey: 'platform',
-				type,
+				axis,
 				distance,
 			})
-			if (type === 'horizontal') {
-				this.movingXPlatformsGroup.add(movingPlatform);
-			} else {
-				this.movingYPlatformsGroup.add(movingPlatform);
-			}
+			if (axis === 'x') return this.movingXPlatformsGroup.add(movingPlatform);
+			this.movingYPlatformsGroup.add(movingPlatform);
 		});
 	}
 	createFadingPlatforms() {
@@ -441,7 +448,7 @@ class Game extends Phaser.Scene {
 		});
 	}
 	createPlayer() {
-		let door = this.doorGroup.getChildren().find(item => item.id === this.currentLevel - 1);
+		let door = this.doorGroup.getChildren().find(item => item.id === this.currentLevel - 1) || this.doorGroup.getChildren().sort((a, b) => a.id - b.id)[0];
 		if (!this.movingToNextLevel) door = this.doorGroup.getChildren().find(item => item.id === this.currentLevel + 1);
 		const textures = {
 			player: 'bomb_guy',
@@ -548,7 +555,7 @@ class Game extends Phaser.Scene {
 			player.takeDamage();
 		});
 	}
-	createPushableDecorations() {
+	createDecorations() {
 		const textureKeys = ['barrel', 'blue_bottle', 'green_bottle', 'red_bottle', 'skull'];
 		const chainTextures = ['small_chain', 'big_chain'];
 		this.pushableDecorationGroup = this.physics.add.group({
@@ -610,74 +617,35 @@ class Game extends Phaser.Scene {
 				});
 			})
 		});
-		// const windows = [];
-		// this.groundLayer.filterTiles(tile => tile.index === 11).forEach(tile => {
-		// 	if (this.groundLayer.getTileAt(tile.x - 1, tile.y + 1)?.index !== 11) return
-		// 	if (Game.checkChance(85) && this.hasLight) return
-		// 	for (let x = -1; x < 2; x++) {
-		// 		for (let y = -1; y < 2; y++) {
-		// 			if (windows.includes(`${tile.x + x}${tile.y + y}`)) return
-		// 		}
-		// 	}
-		// 	windows.push(`${tile.x}${tile.y}`)
-		// 	const obj = new Window({
-		// 		scene: this,
-		// 		x: tile.pixelX,
-		// 		y: tile.pixelY + tileHeight,
-		// 		textureKey: 'window',
-		// 	});
-		// });
-		const candles = [];
-		this.groundLayer.filterTiles(tile => tile.index === 11).forEach(tile => {
-			if (Game.checkChance(1) && !this.hasLight) return
-			for (let x = -5; x < 6; x++) {
-				for (let y = -5; y < 6; y++) {
-					if (candles.includes(`${tile.x + x}${tile.y + y}`)) return
-				}
-			}
-			candles.push(`${tile.x}${tile.y}`)
-
-			const obj = new Candle({
-				scene: this,
-				x: tile.pixelX,
-				y: tile.pixelY + tileHeight,
-				textureKey: 'candle',
-			});
-		});
 
 		this.physics.add.collider(this.pushableDecorationGroup, [this.groundLayer, this.platformsLayer, this.pushableDecorationGroup]);
 	}
-	createDecorations() {
-		// const candles = [];
-		// this.groundLayer.filterTiles(tile => tile.index === 11).forEach(tile => {
-		// 	if (Game.checkChance(1) && !this.hasLight) return
-		// 	for (let x = -3; x < 4; x++) {
-		// 		for (let y = -3; y < 4; y++) {
-		// 			if (candles.includes(`${tile.x + x}${tile.y + y}`)) return
-		// 		}
-		// 	}
-		// 	candles.push(`${tile.x}${tile.y}`)
 
-		// 	const obj = new Candle({
-		// 		scene: this,
-		// 		x: tile.pixelX,
-		// 		y: tile.pixelY + tileHeight,
-		// 		textureKey: 'candle',
-		// 	});
-		// })
-		// const layer = this.map.getObjectLayer('candles')?.objects;
-		// if (!layer) return
-		// layer.forEach((object) => {
-		// 	const candle = new Candle({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'candle' })
-		// });
+	createLightObjects() {
+		const { tileWidth, tileHeight } = this.tileset;
+		const lightObjects = [];
+		this.groundLayer.filterTiles(tile => tile.index === 11).forEach(tile => {
+			if (this.groundLayer.getTileAt(tile.x - 1, tile.y + 1)?.index !== 11) return
+			for (let x = -4; x < 5; x++) {
+				for (let y = -4; y < 5; y++) {
+					if (lightObjects.includes(`${tile.x + x}${tile.y + y}`)) return
+				}
+			}
+			lightObjects.push(`${tile.x}${tile.y}`)
+			const obj = new (this.hasLight ? Candle : Window)({
+				scene: this,
+				x: tile.pixelX + tileWidth * 0.5,
+				y: tile.pixelY + tileHeight * 0.5,
+				textureKey: (this.hasLight ? 'candle' : 'window'),
+			});
+		});
 	}
+
 	createLight() {
-		// this.children.list.forEach(item => {
-		// 	if (!item.lifeTexture) item.setPipeline('Light2D');
-		// 	//if (item.light) this.lights.addLight(item.x, item.y, 900, 0xffffff, 0.9);
-		// })
-		// this.lights.enable().setAmbientColor(0x555555);
-		this.add.pointlight(this.x, this.y, 0x000000, 900, 0.9, 0.05).setScrollFactor(0, 0);
+		this.children.list.forEach(item => {
+			if (!item.lifeTexture) item.setPipeline('Light2D');
+		})
+		this.lights.enable().setAmbientColor(0x333333);
 	}
 }
 

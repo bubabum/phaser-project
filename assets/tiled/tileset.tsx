@@ -3,8 +3,8 @@
  <image source="tileset.png" width="384" height="384"/>
  <tile id="29">
   <properties>
+   <property name="axis" value="x"/>
    <property name="distance" type="int" value="0"/>
-   <property name="type" value="horizontal"/>
   </properties>
  </tile>
 </tileset>

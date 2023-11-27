@@ -72,10 +72,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		];
 		this.setState('DOOR_OUT');
 
-		//if (scene.hasLight) this.light = scene.lights.addLight(this.x, this.y, 700).setColor(0xaaaaaa).setIntensity(0.9);
-		scene.add.pointlight(this.x, this.y, 0xc5906f, 200, 0.2, 0.05);
-		// /this.add.pointlight(400, 300, 0, radius, intensity);
-		//this.light = scene.add.pointlight(this.x, this.y, 0xaaaaaa, 200, 0.2, 0.05);
+		if (scene.hasLight) this.light = scene.lights.addLight(this.x, this.y, 700).setColor(0xaaaaaa).setIntensity(0.9);
 
 	}
 
@@ -86,7 +83,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.anims.play(this.currentState.animation);
 	}
 
-	update() {
+	update({ gamepad }) {
 		this.activeBomb && this.activeBomb.update(this);
 		if (this.body.velocity.y > 300) this.setVelocityY(300);
 		// if (this.lastState !== this.currentState.name) {
@@ -133,7 +130,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			}
 		}
 
-		currentState.handleInput({ cursors, keyUp });
+		currentState.handleInput({ cursors, keyUp, gamepad });
 		this.inventory.update();
 	}
 

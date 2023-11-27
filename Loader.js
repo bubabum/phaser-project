@@ -43,7 +43,7 @@ class Loader extends Phaser.Scene {
 		});
 
 		const textures = {
-			image: ['sword', 'bomb_inventory', 'sword_inventory']
+			image: ['sword', 'bomb_inventory', 'sword_inventory'],
 		}
 
 		for (let key in textures) {
@@ -53,8 +53,9 @@ class Loader extends Phaser.Scene {
 		}
 
 		this.load.image('tiles', './assets/tileset.png');
-		this.load.tilemapTiledJSON('map', './assets/level0.json');
-		this.load.tilemapTiledJSON('map2', './assets/level2.json');
+		this.load.tilemapTiledJSON('level0', './assets/level0.json');
+		this.load.tilemapTiledJSON('level1', './assets/level1.json');
+		this.load.tilemapTiledJSON('level2', './assets/level2.json');
 
 		this.load.spritesheet('bomb_guy', './assets/bomb_guy.png', { frameWidth: 58, frameHeight: 58 });
 		this.load.spritesheet('bomb', 'assets/bomb.png', { frameWidth: 96, frameHeight: 108 });
