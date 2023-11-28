@@ -45,14 +45,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			allowGravity: false,
 		});
 
-		this.cursors = scene.input.keyboard.createCursorKeys();
-		this.keyUp = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-		this.keyDown = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-		this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-		this.keyI = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
-		this.keyShift = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
-		this.keyCtrl = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.CTRL);
-
 		this.particles = new ParticlesGroup({ scene: this.scene, textures: textures.particles, emitter: this });
 
 		this.createAnimations(textures.player);
@@ -83,7 +75,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.anims.play(this.currentState.animation);
 	}
 
-	update({ gamepad }) {
+	update({ controller }) {
 		this.activeBomb && this.activeBomb.update(this);
 		if (this.body.velocity.y > 300) this.setVelocityY(300);
 		// if (this.lastState !== this.currentState.name) {
@@ -106,22 +98,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			this.flipX = false;
 			this.setOffset(20, 8);
 		}
-		const { currentState, cursors, keyUp, keyI, keyShift, keyCtrl } = this;
-		if (Phaser.Input.Keyboard.JustUp(keyI)) this.inventory.changeActiveItem();
-		if (Phaser.Input.Keyboard.JustUp(keyShift)) this.inventory.changeBombUseType();
-		if (Phaser.Input.Keyboard.JustUp(keyCtrl)) this.inventory.changeBombTimer();
-
-		switch (Object.keys(this.inventoryData)[this.activeItem]) {
-			case 'bomb':
-				this.handleBombListener();
-				break;
-			case 'sword':
-				this.handleSwordListener();
-				break;
-			case 'rum':
-				this.handleRumListener();
-				break;
-		}
+		const { currentState } = this;
+		// if (Phaser.Input.Keyboard.JustUp(keyShift)) this.inventory.changeBombUseType();
+		// if (Phaser.Input.Keyboard.JustUp(keyCtrl)) this.inventory.changeBombTimer();
+		this.handleBombListener(controller.buttons.useBomb);
+		this.handleSwordListener(controller.buttons.useSword);
+		this.handleRumListener(controller.buttons.useRum);
 
 		if (this.touchingPlatform && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
 			const platformVelocityY = this.touchingPlatform.body.velocity.y;
@@ -130,7 +112,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			}
 		}
 
-		currentState.handleInput({ cursors, keyUp, gamepad });
+		currentState.handleInput({ controller });
 		this.inventory.update();
 	}
 
@@ -197,21 +179,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.collected.keys.add(id);
 	}
 
-	handleBombListener() {
-		const { bombBar, keySpace } = this;
+	handleBombListener(button) {
+		const { bombBar } = this;
 		bombBar.update();
-		if (Phaser.Input.Keyboard.JustDown(keySpace)) this.chargeBomb();
-		if (Phaser.Input.Keyboard.JustUp(keySpace)) this.throwBomb();
+		if (button.justDown) this.chargeBomb();
+		if (button.justUp) this.throwBomb();
 	}
 
-	handleSwordListener() {
-		const { keySpace } = this;
-		if (Phaser.Input.Keyboard.JustUp(keySpace)) this.throwSword();
+	handleSwordListener(button) {
+		if (button.justDown) this.throwSword();
 	}
 
-	handleRumListener() {
-		const { keySpace } = this;
-		if (Phaser.Input.Keyboard.JustUp(keySpace)) this.activateRum();
+	handleRumListener(button) {
+		if (button.justDown) this.activateRum();
 	}
 
 	chargeBomb() {
@@ -224,7 +204,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 	throwBomb() {
 		if (!this.bombBar.isVisible()) return
-		//const bomb = this.bombGroup.get();
 		if (this.activeBomb) this.activeBomb.throw(this.bombMaxVelocity * this.bombBar.stopCharging(), this);
 		this.activeBomb = null;
 	}

@@ -1,4 +1,5 @@
 class Game extends Phaser.Scene {
+
 	static checkChance(chance) {
 		return Math.floor(Math.random() * 99 + 1) <= chance
 	}
@@ -23,7 +24,7 @@ class Game extends Phaser.Scene {
 	constructor() {
 		super({ key: 'Game' })
 		this.levels = [
-			{ tilemapKey: 'level2', hasLight: false },
+			{ tilemapKey: 'level0', hasLight: false },
 			{ tilemapKey: 'level1', hasLight: true },
 			{ tilemapKey: 'level2', hasLight: false },
 		];
@@ -36,7 +37,7 @@ class Game extends Phaser.Scene {
 				continue: 3,
 				health: 3,
 				inventory: {
-					bomb: 99,
+					// bomb: 99,
 					sword: 10,
 					rum: 15,
 				},
@@ -71,8 +72,12 @@ class Game extends Phaser.Scene {
 
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
+		this.controller = new Controller(this);
+
 		// this.input.gamepad.once('connected', function (pad) {
-		// 	this.pad = pad;
+
+		// 	this.gamepad = pad;
+		// 	console.log(this.gamepad)
 		// });
 
 		this.createDoors();
@@ -125,11 +130,11 @@ class Game extends Phaser.Scene {
 		this.cameras.main.fadeIn(1000);
 	}
 	update(t, dt) {
-		const pad = this.input.gamepad.getPad(0);
+		this.controller.update();
 		this.movingXPlatformsGroup.getChildren().forEach(platform => platform.update());
 		this.movingYPlatformsGroup.getChildren().forEach(platform => platform.update());
 		this.fallenBarrelsGroup.getChildren().forEach(barrel => barrel.update());
-		this.player.update({ gamepad: pad });
+		this.player.update({ controller: this.controller });
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
 		if (this.fpsCounter) this.fpsCounter.destroy();
@@ -174,7 +179,7 @@ class Game extends Phaser.Scene {
 		// 	door.id !== -1 && Phaser.Input.Keyboard.JustDown(this.player.keyDown) &&
 		// 	!this.player.hasKey &&
 		// 	this.player.body.onFloor()) return this.showMessageBox('I need a key!')
-		const keyDown = Phaser.Input.Keyboard.JustDown(this.player.keyDown);
+		const keyDown = this.controller.buttons.openDoor.isPressed;
 		const hasKey = this.player.collected.keys.has(door.id - 1) || door.id < this.currentLevel && door.id !== -1;
 		const onFloor = this.player.body.onFloor();
 		if (!keyDown || !hasKey || !onFloor) return

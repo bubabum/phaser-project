@@ -4,14 +4,11 @@ class Idle extends State {
 	}
 	enter() {
 	}
-	handleInput({ cursors, keyUp, gamepad }) {
+	handleInput({ controller }) {
 		const { player } = this;
-		console.log(gamepad)
-		if (cursors.right.isDown || cursors.left.isDown || gamepad?.left || gamepad?.right) player.setState('RUN');
-		if (Phaser.Input.Keyboard.JustDown(keyUp)) player.setState('JUMP');
-		gamepad?.on('up', (index, button) => {
-			if (index === 0) player.setState('JUMP')
-		})
+		const { moveRight, moveLeft, jump } = controller.buttons
+		if (moveRight.isPressed || moveLeft.isPressed) player.setState('RUN');
+		if (jump.justDown) player.setState('JUMP');
 	}
 }
 
@@ -21,17 +18,18 @@ class Run extends State {
 	}
 	enter() {
 	}
-	handleInput({ cursors, keyUp, gamepad }) {
+	handleInput({ controller }) {
 		const { player } = this;
-		if (cursors.right.isDown || gamepad?.right) {
+		const { moveRight, moveLeft, jump } = controller.buttons
+		if (moveRight.isPressed) {
 			player.setVelocityX(player.runVelocity);
-		} else if (cursors.left.isDown || gamepad?.left) {
+		} else if (moveLeft.isPressed) {
 			player.setVelocityX(-player.runVelocity);
 		} else {
 			player.setVelocityX(0);
 			player.setState('IDLE');
 		}
-		if (Phaser.Input.Keyboard.JustDown(keyUp)) player.setState('JUMP');
+		if (jump.justDown) player.setState('JUMP');
 		if (player.body.velocity.y > 0 && !player.touchingPlatform || !player.body.onFloor()) {
 			player.setState('FALL');
 			player.jumpGap = true;
@@ -68,11 +66,12 @@ class Jump extends State {
 		player.touchingPlatform = null;
 		player.scene.time.delayedCall(100, () => player.landGap = true);
 	}
-	handleInput({ cursors, keyM, gamepad }) {
+	handleInput({ controller }) {
 		const { player } = this;
-		if (cursors.right.isDown || gamepad?.right) {
+		const { moveRight, moveLeft } = controller.buttons
+		if (moveRight.isPressed) {
 			player.setVelocityX(player.runVelocity);
-		} else if (cursors.left.isDown || gamepad?.left) {
+		} else if (moveLeft.isPressed) {
 			player.setVelocityX(-player.runVelocity);
 		} else {
 			player.setVelocityX(0);
@@ -91,26 +90,28 @@ class Fall extends State {
 		player.setVelocityY(0);
 		player.touchingPlatform = null;
 	}
-	handleInput({ cursors, keyUp, gamepad }) {
+	handleInput({ controller }) {
 		const { player } = this;
-		if (cursors.right.isDown || gamepad?.right) {
+		const { moveRight, moveLeft, jump } = controller.buttons
+		if (moveRight.isPressed) {
 			player.setVelocityX(player.runVelocity);
-		} else if (cursors.left.isDown || gamepad?.left) {
+		} else if (moveLeft.isPressed) {
 			player.setVelocityX(-player.runVelocity);
 		} else {
 			player.setVelocityX(0);
 		}
-		if (player.hasActiveRum && Phaser.Input.Keyboard.JustDown(keyUp) && !player.madeDoubleJump) {
+		if (jump.justDown && !player.madeDoubleJump && player.hasActiveRum) {
 			player.setState('JUMP');
 			player.madeDoubleJump = true;
 			return
 		}
-		if (player.jumpGap && Phaser.Input.Keyboard.JustDown(keyUp)) {
+		if (jump.justDown && player.jumpGap) {
 			player.setState('JUMP');
 			player.jumpGap = false;
 			return
 		}
-		if (player.body.blocked.down) return player.setState('LAND');
+		if (player.body.onFloor() && jump.isPressed) return player.setState('JUMP');
+		if (player.body.onFloor()) return player.setState('LAND');
 	}
 }
 
@@ -127,10 +128,11 @@ class Land extends State {
 			player.setState('IDLE');
 		}, this);
 	}
-	handleInput({ cursors, keyUp, gamepad }) {
+	handleInput({ controller }) {
 		const { player } = this;
-		if (Phaser.Input.Keyboard.JustDown(keyUp)) return player.setState('JUMP');
-		if (cursors.right.isDown || cursors.left.isDown || gamepad?.left || gamepad?.right) return player.setState('RUN');
+		const { moveRight, moveLeft, jump } = controller.buttons
+		if (jump.justDown) return player.setState('JUMP');
+		if (moveRight.isPressed || moveLeft.isPressed) return player.setState('RUN');
 	}
 }
 
