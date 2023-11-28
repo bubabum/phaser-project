@@ -22,7 +22,19 @@ class Game extends Phaser.Scene {
 	}
 
 	constructor() {
-		super({ key: 'Game' })
+		super({
+			key: 'Game',
+			physics: {
+				arcade: {
+					//debug: true,
+					gravity: { y: 400 }
+				},
+				// matter: {
+				// 	debug: true,
+				// 	gravity: { y: 400 }
+				// }
+			}
+		})
 		this.levels = [
 			{ tilemapKey: 'level0', hasLight: false },
 			{ tilemapKey: 'level1', hasLight: true },

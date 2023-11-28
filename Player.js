@@ -99,11 +99,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			this.setOffset(20, 8);
 		}
 		const { currentState } = this;
-		// if (Phaser.Input.Keyboard.JustUp(keyShift)) this.inventory.changeBombUseType();
-		// if (Phaser.Input.Keyboard.JustUp(keyCtrl)) this.inventory.changeBombTimer();
-		this.handleBombListener(controller.buttons.useBomb);
-		this.handleSwordListener(controller.buttons.useSword);
-		this.handleRumListener(controller.buttons.useRum);
+		const { useBomb, useSword, useRum } = controller.buttons;
+		this.bombBar.update();
+		if (useBomb.justDown) this.chargeBomb();
+		if (useBomb.justUp) this.throwBomb();
+		if (useSword.justDown) this.throwSword();
+		if (useRum.justDown) this.activateRum();
 
 		if (this.touchingPlatform && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
 			const platformVelocityY = this.touchingPlatform.body.velocity.y;
@@ -179,20 +180,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.collected.keys.add(id);
 	}
 
-	handleBombListener(button) {
-		const { bombBar } = this;
-		bombBar.update();
-		if (button.justDown) this.chargeBomb();
-		if (button.justUp) this.throwBomb();
-	}
+	// handleBombListener(button) {
+	// 	const { bombBar } = this;
+	// 	bombBar.update();
+	// 	if (button.justDown) this.chargeBomb();
+	// 	if (button.justUp) this.throwBomb();
+	// }
 
-	handleSwordListener(button) {
-		if (button.justDown) this.throwSword();
-	}
+	// handleSwordListener(button) {
+	// 	if (button.justDown) this.throwSword();
+	// }
 
-	handleRumListener(button) {
-		if (button.justDown) this.activateRum();
-	}
+	// handleRumListener(button) {
+	// 	if (button.justDown) this.activateRum();
+	// }
 
 	chargeBomb() {
 		if (this.bombGroup.getChildren().length === this.bombGroup.maxSize || this.isDead()) return

@@ -9,7 +9,7 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.setOrigin(0.51, 0.67);
 		this.setDepth(25);
 		this.createAnimations(textureKey);
-		this.setMass(1);
+		//this.setMass(1);
 		this.isOff = false;
 		this.exploded = false;
 		this.body.gameObject = this;
