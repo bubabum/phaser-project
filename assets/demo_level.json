@@ -96,6 +96,68 @@
          "y":0
         }, 
         {
+         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 41, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":20,
+         "id":37,
+         "name":"traps",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":20,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 46, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":20,
+         "id":39,
+         "name":"collectibles",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":20,
+         "x":0,
+         "y":0
+        }, 
+        {
          "draworder":"topdown",
          "id":6,
          "name":"doors",
@@ -156,20 +218,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":20,
-                 "x":128,
-                 "y":1024
-                }, 
-                {
-                 "class":"",
-                 "gid":55,
-                 "height":18,
-                 "id":195,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":20,
-                 "x":256,
-                 "y":1024
+                 "x":664,
+                 "y":880
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -184,7 +234,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":62,
+                 "gid":57,
                  "height":64,
                  "id":188,
                  "name":"",
@@ -202,203 +252,12 @@
         }, 
         {
          "draworder":"topdown",
-         "id":27,
-         "name":"decorations",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":52,
-                 "height":32,
-                 "id":99,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"table"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":80,
-                 "x":768,
-                 "y":1216
-                }, 
-                {
-                 "class":"",
-                 "gid":46,
-                 "height":56,
-                 "id":100,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"chair"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":727,
-                 "y":1216
-                }, 
-                {
-                 "class":"",
-                 "gid":2147483694,
-                 "height":56,
-                 "id":101,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"chair"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":857,
-                 "y":1216
-                }, 
-                {
-                 "class":"",
-                 "gid":48,
-                 "height":24,
-                 "id":102,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"green_bottle"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":14,
-                 "x":776.875,
-                 "y":1183.88
-                }, 
-                {
-                 "class":"",
-                 "gid":49,
-                 "height":31,
-                 "id":103,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"red_bottle"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":16,
-                 "x":792.375,
-                 "y":1183.88
-                }, 
-                {
-                 "class":"",
-                 "gid":49,
-                 "height":31,
-                 "id":104,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"red_bottle"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":16,
-                 "x":808.875,
-                 "y":1183.75
-                }, 
-                {
-                 "class":"",
-                 "gid":50,
-                 "height":14,
-                 "id":105,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"skull"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":19,
-                 "x":894.091,
-                 "y":1215.18
-                }, 
-                {
-                 "class":"",
-                 "gid":50,
-                 "height":14,
-                 "id":106,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"skull"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":19,
-                 "x":828.091,
-                 "y":1183.55
-                }, 
-                {
-                 "class":"",
-                 "gid":41,
-                 "height":21,
-                 "id":107,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"blue_bottle"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":16,
-                 "x":704,
-                 "y":1216
-                }, 
-                {
-                 "class":"",
-                 "gid":41,
-                 "height":21,
-                 "id":108,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"blue_bottle"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":16,
-                 "x":685.609,
-                 "y":1215.7
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
          "id":26,
          "name":"enemies",
          "objects":[
                 {
                  "class":"Canon",
-                 "gid":2147483692,
+                 "gid":2147483699,
                  "height":46,
                  "id":157,
                  "name":"",
@@ -421,7 +280,7 @@
                 }, 
                 {
                  "class":"Canon",
-                 "gid":44,
+                 "gid":51,
                  "height":46,
                  "id":163,
                  "name":"",
@@ -444,7 +303,7 @@
                 }, 
                 {
                  "class":"Cucumber",
-                 "gid":47,
+                 "gid":53,
                  "height":68,
                  "id":164,
                  "name":"",
@@ -467,7 +326,7 @@
                 }, 
                 {
                  "class":"BigGuy",
-                 "gid":40,
+                 "gid":50,
                  "height":74,
                  "id":165,
                  "name":"",
@@ -490,7 +349,7 @@
                 }, 
                 {
                  "class":"Capitan",
-                 "gid":45,
+                 "gid":52,
                  "height":72,
                  "id":168,
                  "name":"",
@@ -513,7 +372,7 @@
                 }, 
                 {
                  "class":"BigGuy",
-                 "gid":40,
+                 "gid":50,
                  "height":74,
                  "id":170,
                  "name":"",
@@ -536,7 +395,7 @@
                 }, 
                 {
                  "class":"BaldPirate",
-                 "gid":37,
+                 "gid":49,
                  "height":67,
                  "id":176,
                  "name":"",
@@ -577,8 +436,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":24,
-                 "x":64,
-                 "y":1024
+                 "x":601.333333333333,
+                 "y":881.333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -599,55 +458,20 @@
                  "name":"",
                  "properties":[
                         {
-                         "name":"distance",
-                         "type":"int",
-                         "value":-2
+                         "name":"axis",
+                         "type":"string",
+                         "value":"y"
                         }, 
                         {
-                         "name":"type",
-                         "type":"string",
-                         "value":"horizontal"
+                         "name":"distance",
+                         "type":"int",
+                         "value":1
                         }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":192,
-                 "y":896
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":32,
-         "name":"falling_barrels",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":57,
-                 "height":64,
-                 "id":177,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":896,
-                 "y":768
-                }, 
-                {
-                 "class":"",
-                 "gid":57,
-                 "height":64,
-                 "id":184,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":256,
-                 "y":768
+                 "x":128,
+                 "y":832
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -668,14 +492,14 @@
                  "name":"",
                  "properties":[
                         {
+                         "name":"axis",
+                         "type":"string",
+                         "value":"x"
+                        }, 
+                        {
                          "name":"distance",
                          "type":"int",
                          "value":0
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"horizontal"
                         }],
                  "rotation":0,
                  "visible":true,
@@ -688,37 +512,8 @@
          "visible":true,
          "x":0,
          "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":33,
-         "name":"spikes",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":58,
-                 "height":64,
-                 "id":187,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"bottom"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":448,
-                 "y":1152
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
         }],
- "nextlayerid":37,
+ "nextlayerid":40,
  "nextobjectid":196,
  "orientation":"orthogonal",
  "renderorder":"right-down",
@@ -728,34 +523,97 @@
         {
          "columns":6,
          "firstgid":1,
-         "image":"tiled\/tileset.png",
-         "imageheight":384,
+         "image":"tileset.png",
+         "imageheight":512,
          "imagewidth":384,
          "margin":0,
          "name":"tileset",
          "spacing":0,
-         "tilecount":36,
+         "tilecount":48,
          "tileheight":64,
          "tiles":[
                 {
                  "id":29,
                  "properties":[
                         {
+                         "name":"axis",
+                         "type":"string",
+                         "value":"x"
+                        }, 
+                        {
                          "name":"distance",
                          "type":"int",
                          "value":0
-                        }, 
+                        }]
+                }, 
+                {
+                 "id":38,
+                 "properties":[
                         {
                          "name":"type",
                          "type":"string",
-                         "value":"horizontal"
+                         "value":"life"
+                        }]
+                }, 
+                {
+                 "id":40,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"bottom"
+                        }]
+                }, 
+                {
+                 "id":41,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"left"
+                        }]
+                }, 
+                {
+                 "id":44,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"continue"
+                        }]
+                }, 
+                {
+                 "id":45,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"key"
+                        }]
+                }, 
+                {
+                 "id":46,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"top"
+                        }]
+                }, 
+                {
+                 "id":47,
+                 "properties":[
+                        {
+                         "name":"type",
+                         "type":"string",
+                         "value":"right"
                         }]
                 }],
          "tilewidth":64
         }, 
         {
          "columns":1,
-         "firstgid":37,
+         "firstgid":49,
          "image":"Objects\/bald_pirate.png",
          "imageheight":67,
          "imagewidth":63,
@@ -784,43 +642,7 @@
         }, 
         {
          "columns":1,
-         "firstgid":38,
-         "image":"Objects\/barrel.png",
-         "imageheight":44,
-         "imagewidth":42,
-         "margin":0,
-         "name":"barrel",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":44,
-         "tiles":[
-                {
-                 "id":0,
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"barrel"
-                        }]
-                }],
-         "tilewidth":42
-        }, 
-        {
-         "columns":1,
-         "firstgid":39,
-         "image":"Objects\/big_chain.png",
-         "imageheight":100,
-         "imagewidth":9,
-         "margin":0,
-         "name":"big_chain",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":100,
-         "tilewidth":9
-        }, 
-        {
-         "columns":1,
-         "firstgid":40,
+         "firstgid":50,
          "image":"Objects\/big_guy.png",
          "imageheight":74,
          "imagewidth":77,
@@ -849,56 +671,7 @@
         }, 
         {
          "columns":1,
-         "firstgid":41,
-         "image":"Objects\/blue_bottle.png",
-         "imageheight":21,
-         "imagewidth":16,
-         "margin":0,
-         "name":"blue_bottle",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":21,
-         "tiles":[
-                {
-                 "id":0,
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"blue_bottle"
-                        }]
-                }],
-         "tilewidth":16
-        }, 
-        {
-         "columns":1,
-         "firstgid":42,
-         "image":"Objects\/bomb_guy.png",
-         "imageheight":58,
-         "imagewidth":58,
-         "margin":0,
-         "name":"bomb_guy",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":58,
-         "tilewidth":58
-        }, 
-        {
-         "columns":1,
-         "firstgid":43,
-         "image":"Objects\/candle.png",
-         "imageheight":32,
-         "imagewidth":14,
-         "margin":0,
-         "name":"candle",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":32,
-         "tilewidth":14
-        }, 
-        {
-         "columns":1,
-         "firstgid":44,
+         "firstgid":51,
          "image":"Objects\/canon.png",
          "imageheight":46,
          "imagewidth":62,
@@ -928,7 +701,7 @@
         {
          "class":"Capitan",
          "columns":1,
-         "firstgid":45,
+         "firstgid":52,
          "image":"Objects\/capitan.png",
          "imageheight":72,
          "imagewidth":80,
@@ -957,30 +730,7 @@
         }, 
         {
          "columns":1,
-         "firstgid":46,
-         "image":"Objects\/chair.png",
-         "imageheight":56,
-         "imagewidth":32,
-         "margin":0,
-         "name":"chair",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":56,
-         "tiles":[
-                {
-                 "id":0,
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"chair"
-                        }]
-                }],
-         "tilewidth":32
-        }, 
-        {
-         "columns":1,
-         "firstgid":47,
+         "firstgid":53,
          "image":"Objects\/cucumber.png",
          "imageheight":68,
          "imagewidth":64,
@@ -1009,124 +759,6 @@
         }, 
         {
          "columns":1,
-         "firstgid":48,
-         "image":"Objects\/green_bottle.png",
-         "imageheight":24,
-         "imagewidth":14,
-         "margin":0,
-         "name":"green_bottle",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":24,
-         "tiles":[
-                {
-                 "id":0,
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"green_bottle"
-                        }]
-                }],
-         "tilewidth":14
-        }, 
-        {
-         "columns":1,
-         "firstgid":49,
-         "image":"Objects\/red_bottle.png",
-         "imageheight":31,
-         "imagewidth":16,
-         "margin":0,
-         "name":"red_bottle",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":31,
-         "tiles":[
-                {
-                 "id":0,
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"red_bottle"
-                        }]
-                }],
-         "tilewidth":16
-        }, 
-        {
-         "columns":1,
-         "firstgid":50,
-         "image":"Objects\/skull.png",
-         "imageheight":14,
-         "imagewidth":19,
-         "margin":0,
-         "name":"skull",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":14,
-         "tiles":[
-                {
-                 "id":0,
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"skull"
-                        }]
-                }],
-         "tilewidth":19
-        }, 
-        {
-         "columns":1,
-         "firstgid":51,
-         "image":"Objects\/small_chain.png",
-         "imageheight":52,
-         "imagewidth":9,
-         "margin":0,
-         "name":"small_chain",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":52,
-         "tilewidth":9
-        }, 
-        {
-         "columns":1,
-         "firstgid":52,
-         "image":"Objects\/table.png",
-         "imageheight":32,
-         "imagewidth":80,
-         "margin":0,
-         "name":"table",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":32,
-         "tiles":[
-                {
-                 "id":0,
-                 "properties":[
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"table"
-                        }]
-                }],
-         "tilewidth":80
-        }, 
-        {
-         "columns":1,
-         "firstgid":53,
-         "image":"Objects\/window.png",
-         "imageheight":61,
-         "imagewidth":58,
-         "margin":0,
-         "name":"window",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":61,
-         "tilewidth":56
-        }, 
-        {
-         "columns":1,
          "firstgid":54,
          "image":"..\/src\/tiled\/Objects\/door.png",
          "imageheight":96,
@@ -1150,8 +782,7 @@
          "tilecount":1,
          "tileheight":18,
          "tilewidth":20
-        },
-    
+        }, 
         {
          "columns":1,
          "firstgid":56,
@@ -1168,69 +799,6 @@
         {
          "columns":1,
          "firstgid":57,
-         "image":"Objects\/falling_barrel.png",
-         "imageheight":64,
-         "imagewidth":64,
-         "margin":0,
-         "name":"falling_barrel",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":64,
-         "tilewidth":64
-        }, 
-        {
-         "columns":2,
-         "firstgid":58,
-         "image":"Objects\/spikes.png",
-         "imageheight":128,
-         "imagewidth":128,
-         "margin":0,
-         "name":"spikes",
-         "spacing":0,
-         "tilecount":4,
-         "tileheight":64,
-         "tiles":[
-                {
-                 "id":0,
-                 "properties":[
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"bottom"
-                        }]
-                }, 
-                {
-                 "id":1,
-                 "properties":[
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"left"
-                        }]
-                }, 
-                {
-                 "id":2,
-                 "properties":[
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"top"
-                        }]
-                }, 
-                {
-                 "id":3,
-                 "properties":[
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"right"
-                        }]
-                }],
-         "tilewidth":64
-        }, 
-        {
-         "columns":1,
-         "firstgid":62,
          "image":"tiled\/one_up.png",
          "imageheight":64,
          "imagewidth":64,

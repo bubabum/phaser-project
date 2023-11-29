@@ -26,13 +26,9 @@ class Game extends Phaser.Scene {
 			key: 'Game',
 			physics: {
 				arcade: {
-					//debug: true,
+					debug: true,
 					gravity: { y: 400 }
 				},
-				// matter: {
-				// 	debug: true,
-				// 	gravity: { y: 400 }
-				// }
 			}
 		})
 		this.levels = [
@@ -53,11 +49,7 @@ class Game extends Phaser.Scene {
 					sword: 10,
 					rum: 15,
 				},
-				collected: {
-					keys: new Set(),
-					continues: new Set(),
-					lives: new Set(),
-				}
+				collected: new Set(),
 			},
 			movingToNextLevel = true,
 		} = props;
@@ -81,7 +73,6 @@ class Game extends Phaser.Scene {
 		this.platformsLayer.filterTiles(tile => tile.index > 0).forEach(tile => tile.setCollision(false, false, true, false, false));
 		this.hiddenPassageLayer = this.map.createLayer('hidden_passage', this.tileset);
 		this.hiddenPassageLayer.setDepth(26);
-
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
 		this.controller = new Controller(this);
@@ -95,9 +86,10 @@ class Game extends Phaser.Scene {
 		this.createDoors();
 		this.createMovingPlatforms();
 		this.createFadingPlatforms();
-		this.createFallingBarrels();
-		this.createSpikes();
+		//this.createFallingBarrels();
+		this.createTraps();
 		this.createPlayer();
+		this.createCollectibles();
 		this.createPowerUps();
 		this.createLives();
 		this.createContinues();
@@ -192,7 +184,7 @@ class Game extends Phaser.Scene {
 		// 	!this.player.hasKey &&
 		// 	this.player.body.onFloor()) return this.showMessageBox('I need a key!')
 		const keyDown = this.controller.buttons.openDoor.isPressed;
-		const hasKey = this.player.collected.keys.has(door.id - 1) || door.id < this.currentLevel && door.id !== -1;
+		const hasKey = this.player.collected.has(door.id - 1) || door.id < this.currentLevel && door.id !== -1;
 		const onFloor = this.player.body.onFloor();
 		if (!keyDown || !hasKey || !onFloor) return
 		const movingToNextLevel = door.id > this.currentLevel;
@@ -375,44 +367,99 @@ class Game extends Phaser.Scene {
 			this.fadingPlatformsGroup.add(fadingPlatform);
 		});
 	}
-	createFallingBarrels() {
+	// createFallingBarrels() {
+	// 	this.fallenBarrelsGroup = this.physics.add.group({
+	// 		allowGravity: false,
+	// 	});
+	// 	this.fallenBarrelCollidersGroup = this.physics.add.group({
+	// 		allowGravity: false,
+	// 	});
+	// 	const layer = this.map.getObjectLayer('falling_barrels')?.objects;
+	// 	if (!layer) return
+	// 	layer.forEach(object => {
+	// 		const fallingBarrel = new FallingBarrel({
+	// 			scene: this,
+	// 			x: this.normalaizeCoordinateX(object),
+	// 			y: this.normalaizeCoordinateY(object),
+	// 			textureKey: 'falling_barrel',
+	// 		})
+	// 		this.fallenBarrelsGroup.add(fallingBarrel);
+	// 		this.fallenBarrelCollidersGroup.add(fallingBarrel.checkCollider);
+	// 	});
+	// 	this.physics.add.collider(this.fallenBarrelsGroup, [this.groundLayer, this.platformsLayer]);
+	// }
+	createTraps() {
+		const layer = this.map.getLayer('traps');
+		if (!layer) return
+		this.spikes = this.physics.add.group({
+			allowGravity: false,
+		});
 		this.fallenBarrelsGroup = this.physics.add.group({
 			allowGravity: false,
 		});
 		this.fallenBarrelCollidersGroup = this.physics.add.group({
 			allowGravity: false,
 		});
-		const layer = this.map.getObjectLayer('falling_barrels')?.objects;
-		if (!layer) return
-		layer.forEach(object => {
-			const fallingBarrel = new FallingBarrel({
-				scene: this,
-				x: this.normalaizeCoordinateX(object),
-				y: this.normalaizeCoordinateY(object),
-				textureKey: 'falling_barrel',
+		layer.data.forEach(row => {
+			row.forEach(tile => {
+				const x = tile.pixelX + tile.width * 0.5;
+				const y = tile.pixelY + tile.height * 0.5;
+				if ([41, 42, 47, 48].includes(tile.index)) {
+					const spike = new Spike({
+						scene: this,
+						x,
+						y,
+						textureKey: 'spike',
+						type: tile.properties.type,
+					})
+					this.spikes.add(spike);
+				}
+				if ([40].includes(tile.index)) {
+					const fallingBarrel = new FallingBarrel({
+						scene: this,
+						x,
+						y,
+						textureKey: 'falling_barrel',
+					});
+					this.fallenBarrelsGroup.add(fallingBarrel);
+					this.fallenBarrelCollidersGroup.add(fallingBarrel.checkCollider);
+				}
 			})
-			this.fallenBarrelsGroup.add(fallingBarrel);
-			this.fallenBarrelCollidersGroup.add(fallingBarrel.checkCollider);
-		});
+		})
 		this.physics.add.collider(this.fallenBarrelsGroup, [this.groundLayer, this.platformsLayer]);
 	}
-	createSpikes() {
-		this.spikes = this.physics.add.group({
-			allowGravity: false,
-		});
-		const layer = this.map.getObjectLayer('spikes')?.objects;
+	createCollectibles() {
+		const layer = this.map.getLayer('collectibles');
 		if (!layer) return
-		layer.forEach(object => {
-			const type = object.properties.find(item => item.name === 'type').value;
-			const spike = new Spike({
-				scene: this,
-				x: this.getObjectCoordinateX(object),
-				y: this.getObjectCoordinateY(object),
-				textureKey: 'spike',
-				type,
-			})
-			this.spikes.add(spike);
+		const classes = {
+			life: Life,
+			continue: Continue,
+			key: Key,
+		}
+		this.collectibles = this.physics.add.group({
+			immovable: true,
 		});
+		this.physics.add.overlap(this.player, this.collectibles, (player, collectible) => {
+			if (player.addCollectible(collectible.id, collectible.type)) collectible.disappear();
+		});
+		layer.data.forEach(row => {
+			row.forEach(tile => {
+				const x = tile.pixelX + tile.width * 0.5;
+				const y = tile.pixelY + tile.height * 0.5;
+				if (tile.index > 0) {
+					const className = classes[tile.properties.type]
+					const collectible = new className({
+						scene: this,
+						x,
+						y,
+						textureKey: tile.properties.type,
+						type: tile.properties.type,
+					})
+					this.collectibles.add(collectible);
+				}
+				this.physics.add.collider(this.collectibles, [this.groundLayer, this.platformsLayer]);
+			})
+		})
 	}
 	createLives() {
 		this.livesGroup = this.physics.add.group({
@@ -426,8 +473,8 @@ class Game extends Phaser.Scene {
 		if (!layer) return
 		layer.forEach(object => {
 			const id = `${this.currentLevel}${object.x}${object.y}`;
-			if (this.player.collected.lives.has(id)) return
-			const live = new Life({ scene: this, x: object.x, y: object.y, textureKey: 'life_idle' });
+			//if (this.player.collected.lives.has(id)) return
+			const live = new Life({ scene: this, x: object.x, y: object.y, textureKey: 'life' });
 			this.livesGroup.add(live);
 		});
 	}
@@ -443,7 +490,7 @@ class Game extends Phaser.Scene {
 		if (!layer) return
 		layer.forEach((object) => {
 			const id = `${this.currentLevel}${object.x}${object.y}`;
-			if (this.player.collected.continues.has(id)) return
+			//if (this.player.collected.continues.has(id)) return
 			const newContinue = new Continue({ scene: this, x: object.x, y: object.y, textureKey: 'continue' });
 			this.continues.add(newContinue);
 		});
@@ -458,7 +505,7 @@ class Game extends Phaser.Scene {
 			key.disappear();
 		});
 		const layer = this.map.getObjectLayer('keys')?.objects;
-		if (!layer || this.player.collected.keys.has(this.currentLevel)) return
+		if (!layer) return
 		layer.forEach(object => {
 			const key = new Key({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'key', id: this.currentLevel });
 			this.keysGroup.add(key);
@@ -510,7 +557,7 @@ class Game extends Phaser.Scene {
 	createHealthBar() {
 		const textures = {
 			healthBar: 'health_bar',
-			life: 'life',
+			life: 'life_inventory',
 		}
 		this.healthBar = new HealthBar({ scene: this, player: this.player, textures });
 	}

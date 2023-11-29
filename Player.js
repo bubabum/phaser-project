@@ -52,7 +52,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.states = [
 			new Idle(this),
 			new Run(this),
-			new Dash(this),
 			new Jump(this),
 			new Fall(this),
 			new Land(this),
@@ -76,6 +75,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	update({ controller }) {
+		//console.log(this.currentState.name)
+		//console.log(this.touchingPlatform)
+		//console.log(this.body.onFloor())
 		this.activeBomb && this.activeBomb.update(this);
 		if (this.body.velocity.y > 300) this.setVelocityY(300);
 		// if (this.lastState !== this.currentState.name) {
@@ -155,6 +157,29 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		return this
 	}
 
+	addCollectible(id, type) {
+		if (this.isDead()) return
+		switch (type) {
+			case 'life':
+				if (this.health === this.maxHeath) return
+				this.health++
+				this.collected.add(id);
+				return true
+			case 'continue':
+				this.continue++
+				this.collected.add(id);
+				return true
+			case 'key':
+				this.collected.add(id);
+			case 'sword':
+				console.log("Cherries are $3.00 a pound.");
+				break;
+			case 'rum':
+				console.log("Mangoes and papayas are $2.79 a pound.");
+				break;
+		}
+		return false
+	}
 
 	addContinue(id) {
 		if (this.isDead()) return

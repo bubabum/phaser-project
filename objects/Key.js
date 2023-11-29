@@ -1,11 +1,17 @@
-class Key extends PowerUp {
+class Key extends Collectible {
 
-	constructor({ scene, x, y, textureKey, id }) {
-		super({ scene, x, y, textureKey });
+	constructor({ scene, x, y, textureKey, type }) {
+		super({ scene, x, y, textureKey, type });
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
-		this.id = id;
-		this.setPosition(...this.getTileCenter());
+		this.body.setAllowGravity(false);
+		//this.id = id;
+		//this.setPosition(...this.getTileCenter());
+	}
+
+	preUpdate(t, dt) {
+		super.preUpdate(t, dt)
+		this.body.setAllowGravity(false);
 	}
 
 	createAnimations(textureKey) {

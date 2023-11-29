@@ -53,7 +53,7 @@ class Loader extends Phaser.Scene {
 		}
 
 		this.load.image('tiles', './assets/tileset.png');
-		this.load.tilemapTiledJSON('level0', './assets/level0.json');
+		this.load.tilemapTiledJSON('level0', './assets/demo_level.json');
 		this.load.tilemapTiledJSON('level1', './assets/level1.json');
 		this.load.tilemapTiledJSON('level2', './assets/level2.json');
 
@@ -69,14 +69,14 @@ class Loader extends Phaser.Scene {
 		this.load.image('health_bar', 'assets/health_bar.png');
 		this.load.spritesheet('rum', 'assets/rum.png', { frameWidth: 32, frameHeight: 32 });
 		this.load.spritesheet('sword_powerup', 'assets/sword_powerup.png', { frameWidth: 32, frameHeight: 32 });
-		this.load.image('life', 'assets/life.png');
+		this.load.image('life_inventory', 'assets/life_inventory.png');
 		this.load.image('enemy_health_bar', 'assets/enemy_health_bar.png');
 		this.load.image('health', 'assets/health.png');
 
 		this.load.spritesheet('run_particles', 'assets/run_particles.png', { frameWidth: 12, frameHeight: 10 });
 		this.load.spritesheet('jump_particles', 'assets/jump_particles.png', { frameWidth: 40, frameHeight: 28 });
 		this.load.spritesheet('land_particles', 'assets/land_particles.png', { frameWidth: 80, frameHeight: 10 });
-		this.load.spritesheet('life_idle', 'assets/life_idle.png', { frameWidth: 20, frameHeight: 18 });
+		this.load.spritesheet('life', 'assets/life.png', { frameWidth: 20, frameHeight: 18 });
 		this.load.spritesheet('continue', 'assets/continue.png', { frameWidth: 64, frameHeight: 64 });
 		this.load.spritesheet('key', 'assets/key.png', { frameWidth: 30, frameHeight: 30 });
 

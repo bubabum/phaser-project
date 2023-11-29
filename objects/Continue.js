@@ -1,12 +1,12 @@
-class Continue extends PowerUp {
+class Continue extends Collectible {
 
-	constructor({ scene, x, y, textureKey }) {
-		super({ scene, x, y, textureKey });
+	constructor({ scene, x, y, textureKey, type }) {
+		super({ scene, x, y, textureKey, type });
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 		this.setSize(28, 28);
 		this.setOffset(19, 19)
-		this.setPosition(this.getTileCenterX(x), y);
+		//this.setPosition(this.getTileCenterX(x), y);
 	}
 
 	createAnimations(textureKey) {

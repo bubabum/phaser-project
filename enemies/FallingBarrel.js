@@ -7,7 +7,7 @@ class FallingBarrel extends Phaser.Physics.Arcade.Sprite {
 		this.scene = scene;
 		this.setSize(42, 44);
 		this.setOffset(11, 16);
-		this.setOrigin(0, 0);
+		//this.setOrigin(0, 0);
 		this.createCollider();
 		this.anims.createFromAseprite(textureKey);
 		this.anims.play({ key: 'Idle', repeat: -1 });
@@ -32,7 +32,7 @@ class FallingBarrel extends Phaser.Physics.Arcade.Sprite {
 			if (groundTile?.collideUp || platformTile?.collideUp) {
 				let tileY = groundTile.pixelY;
 				if (platformTile?.collideUp) tileY = platformTile.pixelY;
-				this.checkCollider = this.scene.add.rectangle(x, y + height, width, tileY - y - height, 0x646464);
+				this.checkCollider = this.scene.add.rectangle(x - width * 0.5, y + height, width, tileY - y - height, 0x646464);
 				this.checkCollider.setOrigin(0, 0);
 				this.checkCollider.setVisible(false);
 				this.scene.physics.add.existing(this.checkCollider);

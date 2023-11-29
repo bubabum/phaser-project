@@ -1,10 +1,10 @@
-class Life extends PowerUp {
+class Life extends Collectible {
 
-	constructor({ scene, x, y, textureKey }) {
-		super({ scene, x, y, textureKey });
+	constructor({ scene, x, y, textureKey, type }) {
+		super({ scene, x, y, textureKey, type });
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
-		this.setPosition(this.getTileCenterX(x), y);
+		//this.setPosition(this.getTileCenterX(x), y);
 	}
 
 	createAnimations(textureKey) {

@@ -4,6 +4,7 @@ class Spike extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y, textureKey);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
+		//this.setOrigin(1, 1)
 		this.setDepth(25);
 		this.setPropertiesByType(type);
 		if (scene.hasLight) this.setPipeline('Light2D');

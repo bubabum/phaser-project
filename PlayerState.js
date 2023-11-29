@@ -29,7 +29,7 @@ class Run extends State {
 			player.setVelocityX(0);
 			player.setState('IDLE');
 		}
-		if (jump.justDown) player.setState('JUMP');
+		if (jump.justDown) return player.setState('JUMP');
 		if (player.body.velocity.y > 0 && !player.touchingPlatform || !player.body.onFloor()) {
 			player.setState('FALL');
 			player.jumpGap = true;
@@ -37,24 +37,24 @@ class Run extends State {
 		}
 	}
 }
-class Dash extends State {
-	constructor(player) {
-		super({ name: 'DASH', player, animation: 'run' });
-	}
-	enter() {
-		const { player } = this;
-		player.setVelocity(player.runVelocity * 2.5, 0);
-		player.body.setAllowGravity(false);
-		player.scene.time.delayedCall(200, () => {
-			player.body.setAllowGravity(true);
-			player.setVelocityX(0);
-			player.setState('IDLE');
-		});
-	}
-	handleInput({ cursors, keyM }) {
+// class Dash extends State {
+// 	constructor(player) {
+// 		super({ name: 'DASH', player, animation: 'run' });
+// 	}
+// 	enter() {
+// 		const { player } = this;
+// 		player.setVelocity(player.runVelocity * 2.5, 0);
+// 		player.body.setAllowGravity(false);
+// 		player.scene.time.delayedCall(200, () => {
+// 			player.body.setAllowGravity(true);
+// 			player.setVelocityX(0);
+// 			player.setState('IDLE');
+// 		});
+// 	}
+// 	handleInput({ cursors, keyM }) {
 
-	}
-}
+// 	}
+// }
 
 class Jump extends State {
 	constructor(player) {
@@ -64,20 +64,21 @@ class Jump extends State {
 		const { player } = this;
 		player.setVelocityY(player.jumpVelocity);
 		player.touchingPlatform = null;
-		player.scene.time.delayedCall(100, () => player.landGap = true);
+		//player.scene.time.delayedCall(200, () => player.landGap = true);
 	}
 	handleInput({ controller }) {
+
 		const { player } = this;
 		const { moveRight, moveLeft } = controller.buttons
 		if (moveRight.isPressed) {
-			player.setVelocityX(player.runVelocity);
+			player.setVelocityX(player.runVelocity + 40);
 		} else if (moveLeft.isPressed) {
-			player.setVelocityX(-player.runVelocity);
+			player.setVelocityX(-player.runVelocity - 40);
 		} else {
 			player.setVelocityX(0);
 		}
-		if (player.body.velocity.y > 0) player.setState('FALL');
-		if (player.body.onFloor() && player.landGap) player.setState('LAND');
+		if (player.body.velocity.y > 0) return player.setState('FALL');
+		if (player.touchingPlatform && player.body.onFloor()) player.setState('LAND');
 	}
 }
 
@@ -94,9 +95,9 @@ class Fall extends State {
 		const { player } = this;
 		const { moveRight, moveLeft, jump } = controller.buttons
 		if (moveRight.isPressed) {
-			player.setVelocityX(player.runVelocity);
+			player.setVelocityX(player.runVelocity + 0);
 		} else if (moveLeft.isPressed) {
-			player.setVelocityX(-player.runVelocity);
+			player.setVelocityX(-player.runVelocity - 0);
 		} else {
 			player.setVelocityX(0);
 		}
@@ -123,7 +124,7 @@ class Land extends State {
 		const { player } = this;
 		player.setVelocityX(0);
 		player.madeDoubleJump = false;
-		player.landGap = false;
+		//player.landGap = false;
 		player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'land', function (anims) {
 			player.setState('IDLE');
 		}, this);
