@@ -18,7 +18,7 @@
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -206,52 +206,6 @@
         }, 
         {
          "draworder":"topdown",
-         "id":29,
-         "name":"lives",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":55,
-                 "height":18,
-                 "id":140,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":20,
-                 "x":664,
-                 "y":880
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":36,
-         "name":"continue",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":57,
-                 "height":64,
-                 "id":188,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":64,
-                 "x":192,
-                 "y":576
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
          "id":26,
          "name":"enemies",
          "objects":[
@@ -415,29 +369,6 @@
                  "width":63,
                  "x":960,
                  "y":1216
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":31,
-         "name":"keys",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":56,
-                 "height":24,
-                 "id":161,
-                 "name":"",
-                 "rotation":0,
-                 "visible":true,
-                 "width":24,
-                 "x":601.333333333333,
-                 "y":881.333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -769,45 +700,6 @@
          "tilecount":1,
          "tileheight":96,
          "tilewidth":78
-        }, 
-        {
-         "columns":1,
-         "firstgid":55,
-         "image":"Objects\/life.png",
-         "imageheight":18,
-         "imagewidth":20,
-         "margin":0,
-         "name":"life",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":18,
-         "tilewidth":20
-        }, 
-        {
-         "columns":1,
-         "firstgid":56,
-         "image":"Objects\/1.png",
-         "imageheight":24,
-         "imagewidth":24,
-         "margin":0,
-         "name":"key",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":24,
-         "tilewidth":24
-        }, 
-        {
-         "columns":1,
-         "firstgid":57,
-         "image":"tiled\/one_up.png",
-         "imageheight":64,
-         "imagewidth":64,
-         "margin":0,
-         "name":"one_up",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":64,
-         "tilewidth":64
         }],
  "tilewidth":64,
  "type":"map",

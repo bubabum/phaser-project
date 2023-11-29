@@ -64,21 +64,20 @@ class Jump extends State {
 		const { player } = this;
 		player.setVelocityY(player.jumpVelocity);
 		player.touchingPlatform = null;
-		//player.scene.time.delayedCall(200, () => player.landGap = true);
 	}
 	handleInput({ controller }) {
 
 		const { player } = this;
 		const { moveRight, moveLeft } = controller.buttons
 		if (moveRight.isPressed) {
-			player.setVelocityX(player.runVelocity + 40);
+			player.setVelocityX(player.runVelocity + 20);
 		} else if (moveLeft.isPressed) {
-			player.setVelocityX(-player.runVelocity - 40);
+			player.setVelocityX(-player.runVelocity - 20);
 		} else {
 			player.setVelocityX(0);
 		}
 		if (player.body.velocity.y > 0) return player.setState('FALL');
-		if (player.touchingPlatform && player.body.onFloor()) player.setState('LAND');
+		if (player.body.velocity.y === 0 && player.body.onFloor() || player.touchingPlatform && player.body.onFloor()) player.setState('LAND');
 	}
 }
 
@@ -90,14 +89,16 @@ class Fall extends State {
 		const { player } = this;
 		player.setVelocityY(0);
 		player.touchingPlatform = null;
+		this.nextJumpReady = false;
+		this.nextJumpBuffer = 0;
 	}
-	handleInput({ controller }) {
+	handleInput({ dt, controller }) {
 		const { player } = this;
-		const { moveRight, moveLeft, jump } = controller.buttons
+		const { moveRight, moveLeft, jump } = controller.buttons;
 		if (moveRight.isPressed) {
-			player.setVelocityX(player.runVelocity + 0);
+			player.setVelocityX(player.runVelocity + 20);
 		} else if (moveLeft.isPressed) {
-			player.setVelocityX(-player.runVelocity - 0);
+			player.setVelocityX(-player.runVelocity - 20);
 		} else {
 			player.setVelocityX(0);
 		}
@@ -111,8 +112,11 @@ class Fall extends State {
 			player.jumpGap = false;
 			return
 		}
-		if (player.body.onFloor() && jump.isPressed) return player.setState('JUMP');
-		if (player.body.onFloor()) return player.setState('LAND');
+		if (this.nextJumpReady) this.nextJumpBuffer += dt;
+		if (jump.justDown) this.nextJumpReady = true;
+		if (this.nextJumpBuffer > 116) [this.nextJumpReady, this.nextJumpBuffer] = [false, 0];
+		if (player.body.onFloor() && this.nextJumpReady) return player.setState('JUMP');
+		if (player.body.velocity.y === 0 && player.body.onFloor() || player.touchingPlatform && player.body.onFloor()) player.setState('LAND');
 	}
 }
 
@@ -124,7 +128,6 @@ class Land extends State {
 		const { player } = this;
 		player.setVelocityX(0);
 		player.madeDoubleJump = false;
-		//player.landGap = false;
 		player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'land', function (anims) {
 			player.setState('IDLE');
 		}, this);

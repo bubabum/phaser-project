@@ -1,10 +1,10 @@
 class RumPowerUp extends Collectible {
 
-	constructor({ scene, x, y, textureKey }) {
-		super({ scene, x, y, textureKey });
+	constructor({ scene, x, y, textureKey, type = 'rum' }) {
+		super({ scene, x, y, textureKey, type, });
 		this.setSize(14, 26);
 		this.setOffset(9, 2);
-		this.type = 'rum';
+		this.type = type;
 	}
 
 	createAnimations(textureKey) {

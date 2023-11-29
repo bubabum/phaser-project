@@ -53,7 +53,7 @@ class Loader extends Phaser.Scene {
 		}
 
 		this.load.image('tiles', './assets/tileset.png');
-		this.load.tilemapTiledJSON('level0', './assets/demo_level.json');
+		this.load.tilemapTiledJSON('level0', './assets/level0.json');
 		this.load.tilemapTiledJSON('level1', './assets/level1.json');
 		this.load.tilemapTiledJSON('level2', './assets/level2.json');
 

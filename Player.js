@@ -74,7 +74,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.anims.play(this.currentState.animation);
 	}
 
-	update({ controller }) {
+	update({ t, dt, controller }) {
 		//console.log(this.currentState.name)
 		//console.log(this.touchingPlatform)
 		//console.log(this.body.onFloor())
@@ -115,7 +115,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			}
 		}
 
-		currentState.handleInput({ controller });
+		currentState.handleInput({ dt, controller });
 		this.inventory.update();
 	}
 
@@ -130,6 +130,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 	isDead() {
 		return this.health === 0
+	}
+
+	addTouchingPlatform(platform) {
+		this.touchingPlatform = platform;
 	}
 
 	setInvulnerability(status, effect = false) {
@@ -161,7 +165,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		if (this.isDead()) return
 		switch (type) {
 			case 'life':
-				if (this.health === this.maxHeath) return
+				if (this.health === this.maxHeath) return false
 				this.health++
 				this.collected.add(id);
 				return true
@@ -171,54 +175,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 				return true
 			case 'key':
 				this.collected.add(id);
-			case 'sword':
-				console.log("Cherries are $3.00 a pound.");
-				break;
+				return true
 			case 'rum':
-				console.log("Mangoes and papayas are $2.79 a pound.");
-				break;
+			case 'sword':
+				if (this.inventoryData[type] === 9) return false
+				this.inventoryData[type]++;
+				return true
 		}
 		return false
 	}
-
-	addContinue(id) {
-		if (this.isDead()) return
-		this.continue++
-		this.collected.continues.add(id);
-		return true
-	}
-
-	addLife(id) {
-		if (this.health === this.maxHeath || this.isDead()) return
-		this.health++
-		this.collected.lives.add(id);
-		return true
-	}
-
-	addPowerUp(type) {
-		if (this.inventoryData[type] === 99 || this.isDead()) return
-		this.inventoryData[type]++;
-		return true
-	}
-
-	getKey(id) {
-		this.collected.keys.add(id);
-	}
-
-	// handleBombListener(button) {
-	// 	const { bombBar } = this;
-	// 	bombBar.update();
-	// 	if (button.justDown) this.chargeBomb();
-	// 	if (button.justUp) this.throwBomb();
-	// }
-
-	// handleSwordListener(button) {
-	// 	if (button.justDown) this.throwSword();
-	// }
-
-	// handleRumListener(button) {
-	// 	if (button.justDown) this.activateRum();
-	// }
 
 	chargeBomb() {
 		if (this.bombGroup.getChildren().length === this.bombGroup.maxSize || this.isDead()) return

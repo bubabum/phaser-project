@@ -1,10 +1,10 @@
 class SwordPowerUp extends Collectible {
 
-	constructor({ scene, x, y, textureKey }) {
-		super({ scene, x, y, textureKey });
+	constructor({ scene, x, y, textureKey, type = 'sword' }) {
+		super({ scene, x, y, textureKey, type });
 		this.setSize(17, 26);
 		this.setOffset(6, 3);
-		this.type = 'sword';
+		this.type = type;
 	}
 
 	createAnimations(textureKey) {

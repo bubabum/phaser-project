@@ -4,14 +4,7 @@ class Key extends Collectible {
 		super({ scene, x, y, textureKey, type });
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
-		this.body.setAllowGravity(false);
-		//this.id = id;
-		//this.setPosition(...this.getTileCenter());
-	}
-
-	preUpdate(t, dt) {
-		super.preUpdate(t, dt)
-		this.body.setAllowGravity(false);
+		this.id = `${scene.currentLevel}${type}`;
 	}
 
 	createAnimations(textureKey) {

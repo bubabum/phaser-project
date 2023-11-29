@@ -26,7 +26,7 @@ class Game extends Phaser.Scene {
 			key: 'Game',
 			physics: {
 				arcade: {
-					debug: true,
+					//debug: true,
 					gravity: { y: 400 }
 				},
 			}
@@ -46,8 +46,8 @@ class Game extends Phaser.Scene {
 				health: 3,
 				inventory: {
 					// bomb: 99,
-					sword: 10,
-					rum: 15,
+					sword: 0,
+					rum: 0,
 				},
 				collected: new Set(),
 			},
@@ -86,14 +86,9 @@ class Game extends Phaser.Scene {
 		this.createDoors();
 		this.createMovingPlatforms();
 		this.createFadingPlatforms();
-		//this.createFallingBarrels();
 		this.createTraps();
 		this.createPlayer();
 		this.createCollectibles();
-		this.createPowerUps();
-		this.createLives();
-		this.createContinues();
-		this.createKeys();
 		this.createHealthBar();
 		this.createEnemies();
 		this.createDecorations();
@@ -138,7 +133,7 @@ class Game extends Phaser.Scene {
 		this.movingXPlatformsGroup.getChildren().forEach(platform => platform.update());
 		this.movingYPlatformsGroup.getChildren().forEach(platform => platform.update());
 		this.fallenBarrelsGroup.getChildren().forEach(barrel => barrel.update());
-		this.player.update({ controller: this.controller });
+		this.player.update({ t, dt, controller: this.controller });
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
 		if (this.fpsCounter) this.fpsCounter.destroy();
@@ -166,16 +161,16 @@ class Game extends Phaser.Scene {
 	dropPowerUp(enemy) {
 		const { x, y } = enemy;
 		const rnd = Math.floor(Math.random() * 9) + 1;
-		let powerUp;
+		let collectible;
 		if (rnd === 1) {
-			powerUp = new RumPowerUp({ scene: this, x, y, textureKey: 'rum' });
+			collectible = new RumPowerUp({ scene: this, x, y, textureKey: 'rum' });
 		} else if (1 < rnd && rnd < 6) {
-			powerUp = new SwordPowerUp({ scene: this, x, y, textureKey: 'sword_powerup' });
+			collectible = new SwordPowerUp({ scene: this, x, y, textureKey: 'sword_powerup' });
 		} else {
 			return
 		}
-		this.powerUpGroup.add(powerUp);
-		this.push(enemy, powerUp)
+		this.collectibles.add(collectible);
+		this.push(enemy, collectible)
 	}
 
 	changeLevel(door) {
@@ -184,7 +179,7 @@ class Game extends Phaser.Scene {
 		// 	!this.player.hasKey &&
 		// 	this.player.body.onFloor()) return this.showMessageBox('I need a key!')
 		const keyDown = this.controller.buttons.openDoor.isPressed;
-		const hasKey = this.player.collected.has(door.id - 1) || door.id < this.currentLevel && door.id !== -1;
+		const hasKey = this.player.collected.has(`${door.id - 1}key`) || door.id < this.currentLevel && door.id !== -1;
 		const onFloor = this.player.body.onFloor();
 		if (!keyDown || !hasKey || !onFloor) return
 		const movingToNextLevel = door.id > this.currentLevel;
@@ -302,20 +297,6 @@ class Game extends Phaser.Scene {
 			this.doorGroup.add(door);
 		});
 	}
-	createPowerUps() {
-		this.powerUpGroup = this.physics.add.group({
-			immovable: true,
-			bounceX: 0.5,
-			bounceY: 0.5,
-			dragX: 1000,
-			dragY: 100,
-		});
-		this.physics.add.overlap(this.player, this.powerUpGroup, (player, poweUp) => {
-			if (player.addPowerUp(poweUp.type)) poweUp.disappear()
-		});
-
-		this.physics.add.collider(this.powerUpGroup, [this.groundLayer, this.platformsLayer]);
-	}
 	createMovingPlatforms() {
 		this.movingXPlatformsGroup = this.physics.add.group({
 			bounceX: 1,
@@ -367,27 +348,6 @@ class Game extends Phaser.Scene {
 			this.fadingPlatformsGroup.add(fadingPlatform);
 		});
 	}
-	// createFallingBarrels() {
-	// 	this.fallenBarrelsGroup = this.physics.add.group({
-	// 		allowGravity: false,
-	// 	});
-	// 	this.fallenBarrelCollidersGroup = this.physics.add.group({
-	// 		allowGravity: false,
-	// 	});
-	// 	const layer = this.map.getObjectLayer('falling_barrels')?.objects;
-	// 	if (!layer) return
-	// 	layer.forEach(object => {
-	// 		const fallingBarrel = new FallingBarrel({
-	// 			scene: this,
-	// 			x: this.normalaizeCoordinateX(object),
-	// 			y: this.normalaizeCoordinateY(object),
-	// 			textureKey: 'falling_barrel',
-	// 		})
-	// 		this.fallenBarrelsGroup.add(fallingBarrel);
-	// 		this.fallenBarrelCollidersGroup.add(fallingBarrel.checkCollider);
-	// 	});
-	// 	this.physics.add.collider(this.fallenBarrelsGroup, [this.groundLayer, this.platformsLayer]);
-	// }
 	createTraps() {
 		const layer = this.map.getLayer('traps');
 		if (!layer) return
@@ -400,8 +360,10 @@ class Game extends Phaser.Scene {
 		this.fallenBarrelCollidersGroup = this.physics.add.group({
 			allowGravity: false,
 		});
+		this.physics.add.collider(this.fallenBarrelsGroup, [this.groundLayer, this.platformsLayer]);
 		layer.data.forEach(row => {
 			row.forEach(tile => {
+				if (tile.index === -1) return
 				const x = tile.pixelX + tile.width * 0.5;
 				const y = tile.pixelY + tile.height * 0.5;
 				if ([41, 42, 47, 48].includes(tile.index)) {
@@ -426,7 +388,6 @@ class Game extends Phaser.Scene {
 				}
 			})
 		})
-		this.physics.add.collider(this.fallenBarrelsGroup, [this.groundLayer, this.platformsLayer]);
 	}
 	createCollectibles() {
 		const layer = this.map.getLayer('collectibles');
@@ -438,78 +399,34 @@ class Game extends Phaser.Scene {
 		}
 		this.collectibles = this.physics.add.group({
 			immovable: true,
+			bounceX: 0.5,
+			bounceY: 0.5,
+			dragX: 1000,
+			dragY: 100,
 		});
 		this.physics.add.overlap(this.player, this.collectibles, (player, collectible) => {
 			if (player.addCollectible(collectible.id, collectible.type)) collectible.disappear();
 		});
+		this.physics.add.collider(this.collectibles, [this.groundLayer, this.platformsLayer]);
 		layer.data.forEach(row => {
 			row.forEach(tile => {
+				if (tile.index === -1) return
 				const x = tile.pixelX + tile.width * 0.5;
 				const y = tile.pixelY + tile.height * 0.5;
-				if (tile.index > 0) {
-					const className = classes[tile.properties.type]
-					const collectible = new className({
-						scene: this,
-						x,
-						y,
-						textureKey: tile.properties.type,
-						type: tile.properties.type,
-					})
-					this.collectibles.add(collectible);
-				}
-				this.physics.add.collider(this.collectibles, [this.groundLayer, this.platformsLayer]);
+				const id = `${this.currentLevel}${x}${y}${tile.properties.type}`;
+				if (this.player.collected.has(id) || this.player.collected.has(`${this.currentLevel}key`) && tile.properties.type === 'key') return
+				const className = classes[tile.properties.type]
+				const collectible = new className({
+					scene: this,
+					x,
+					y,
+					textureKey: tile.properties.type,
+					type: tile.properties.type,
+				})
+				this.collectibles.add(collectible);
+				if (tile.properties.type === 'key') collectible.body.setAllowGravity(false)
 			})
 		})
-	}
-	createLives() {
-		this.livesGroup = this.physics.add.group({
-			immovable: true,
-		});
-		this.physics.add.collider(this.livesGroup, [this.groundLayer, this.platformsLayer]);
-		this.physics.add.overlap(this.player, this.livesGroup, (player, life) => {
-			if (player.addLife(life.id)) life.disappear();
-		});
-		const layer = this.map.getObjectLayer('lives')?.objects;
-		if (!layer) return
-		layer.forEach(object => {
-			const id = `${this.currentLevel}${object.x}${object.y}`;
-			//if (this.player.collected.lives.has(id)) return
-			const live = new Life({ scene: this, x: object.x, y: object.y, textureKey: 'life' });
-			this.livesGroup.add(live);
-		});
-	}
-	createContinues() {
-		this.continues = this.physics.add.group({
-			immovable: true,
-		});
-		this.physics.add.collider(this.continues, [this.groundLayer, this.platformsLayer]);
-		this.physics.add.overlap(this.player, this.continues, (player, obj) => {
-			if (player.addContinue(obj.id)) obj.disappear();
-		});
-		const layer = this.map.getObjectLayer('continues')?.objects;
-		if (!layer) return
-		layer.forEach((object) => {
-			const id = `${this.currentLevel}${object.x}${object.y}`;
-			//if (this.player.collected.continues.has(id)) return
-			const newContinue = new Continue({ scene: this, x: object.x, y: object.y, textureKey: 'continue' });
-			this.continues.add(newContinue);
-		});
-	}
-	createKeys() {
-		this.keysGroup = this.physics.add.group({
-			immovable: true,
-			allowGravity: false,
-		});
-		this.keyOverlap = this.physics.add.overlap(this.player, this.keysGroup, (player, key) => {
-			player.getKey(key.id);
-			key.disappear();
-		});
-		const layer = this.map.getObjectLayer('keys')?.objects;
-		if (!layer) return
-		layer.forEach(object => {
-			const key = new Key({ scene: this, x: this.getObjectCoordinateX(object), y: this.getObjectCoordinateY(object), textureKey: 'key', id: this.currentLevel });
-			this.keysGroup.add(key);
-		});
 	}
 	createPlayer() {
 		let door = this.doorGroup.getChildren().find(item => item.id === this.currentLevel - 1) || this.doorGroup.getChildren().sort((a, b) => a.id - b.id)[0];
@@ -533,9 +450,15 @@ class Game extends Phaser.Scene {
 		}
 		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures, playerData: this.playerData });
 		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);
-		this.physics.add.collider(this.player, this.movingYPlatformsGroup, (player, platform) => player.touchingPlatform = platform); // create player method
+		this.physics.add.collider(this.player, [this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup], (player, platform) => {
+			if (player.body.onFloor()) player.addTouchingPlatform(platform);
+		});
+		//this.physics.add.collider(this.player, this.movingYPlatformsGroup, (player, platform) => player.touchingPlatform = platform); // create player method
 		this.physics.add.collider(this.player, this.fadingPlatformsGroup, (player, platform) => {
-			if (player.body.onFloor()) platform.fade();
+			if (player.body.onFloor()) {
+				player.addTouchingPlatform(platform)
+				platform.fade();
+			}
 		});
 		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup]);
 		this.physics.add.overlap(this.player, this.doorGroup, (player, door) => this.changeLevel(door));

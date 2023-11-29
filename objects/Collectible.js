@@ -4,24 +4,12 @@ class Collectible extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y, textureKey);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
-		this.id = `${scene.currentLevel}${x}${y}${type}`;
+		this.id = `${scene.currentLevel}${Math.floor(x)}${Math.floor(y)}${type}`;
 		this.type = type;
 		this.setDepth(25);
 		this.createAnimations(textureKey);
 		this.anims.play('idle');
 	}
-
-	// getTileCenterX(x) {
-	// 	const { tileWidth } = this.scene.tileset;
-	// 	return Math.floor(x / tileWidth) * tileWidth + tileWidth / 2;
-	// }
-
-	// getTileCenter() {
-	// 	const { tileWidth, tileHeight } = this.scene.tileset;
-	// 	const x = Math.floor(this.x / tileWidth) * tileWidth + tileWidth / 2;
-	// 	const y = Math.floor(this.y / tileHeight) * tileHeight + tileHeight / 2;
-	// 	return [x, y]
-	// }
 
 	disappear() {
 		this.disableBody();
