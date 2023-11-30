@@ -12,7 +12,7 @@ class Inventory {
 			{ type: 'MEDIUM', value: 1300 },
 			{ type: 'SLOW', value: 2000 },
 		]
-		this.activeBombTimer = 0;
+		this.activeBombTimer = 2;
 		this.drawInventory(false);
 	}
 

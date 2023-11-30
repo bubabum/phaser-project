@@ -33,8 +33,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			maxSize: 3,
 			bounceX: 0.7,
 			bounceY: 0.7,
-			dragX: 80,
-			dragY: 80,
+			dragX: 0,
+			dragY: 0,
 			gravityY: 0,
 		});
 

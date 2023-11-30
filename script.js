@@ -46,7 +46,7 @@ class Game extends Phaser.Scene {
 				health: 3,
 				inventory: {
 					// bomb: 99,
-					sword: 0,
+					sword: 99,
 					rum: 0,
 				},
 				collected: new Set(),
@@ -94,7 +94,7 @@ class Game extends Phaser.Scene {
 		this.createDecorations();
 		this.createLightObjects();
 		this.createCamera();
-		//this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!')
+		this.time.delayedCall(1000, () => this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!'))
 
 		if (this.hasLight) this.createLight();
 
@@ -149,10 +149,10 @@ class Game extends Phaser.Scene {
 			this.messageTimer.remove();
 		}
 		const { width, height } = this.cameras.main.worldView;
-		this.messageBox = this.add.bitmapText(width / 2, height - 40, 'pixel', messageText, 20, 1).setMaxWidth(600).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(31); //.setDropShadow(1, 1, '#323443');
+		this.messageBox = this.add.bitmapText(width / 2, height - 40, 'pixel', messageText, 20, 1).setMaxWidth(600).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(32).setDropShadow(1, 1);
 		const bounds = this.messageBox.getTextBounds(true).global;
-		this.box = this.add.rectangle(bounds.x - 20, bounds.y - 20, bounds.width + 40, bounds.height + 40, 0x323443, 0.9).setScrollFactor(0, 0).setDepth(30).setOrigin(0, 0); //323443
-		this.messageTimer = this.time.delayedCall(3000, () => {
+		this.box = this.add.rectangle(bounds.x - 20, bounds.y - 20, bounds.width + 40, bounds.height + 40, 0x323443, 0.9).setScrollFactor(0, 0).setDepth(31).setOrigin(0, 0); //323443
+		this.messageTimer = this.time.delayedCall(5000, () => {
 			this.messageBox.destroy();
 			this.box.destroy();
 		});

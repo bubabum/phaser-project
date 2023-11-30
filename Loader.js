@@ -118,7 +118,7 @@ class Loader extends Phaser.Scene {
 		this.load.image('decoration_tile2', 'assets/decoration_tile2.png');
 		this.load.image('decoration_tile3', 'assets/decoration_tile3.png');
 
-		this.load.bitmapFont('pixel', 'assets/font/pixel.png', 'assets/font/pixel.xml');
+		this.load.bitmapFont('pixel', 'assets/font/ps2p.png', 'assets/font/ps2p.fnt');
 
 		this.load.aseprite('falling_barrel', 'assets/falling_barrel.png', 'assets/falling_barrel.json');
 	}
