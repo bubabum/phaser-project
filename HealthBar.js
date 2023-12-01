@@ -6,7 +6,7 @@ class HealthBar extends Phaser.Physics.Arcade.Sprite {
 		this.player = player;
 		this.lifeTexture = textures.life;
 		this.healthGroup = scene.add.group();
-		this.offsetX = 10;
+		this.offsetX = 100;
 		this.offsetY = 10;
 		this.setPosition(this.offsetX, this.offsetY).setOrigin(0, 0).setScrollFactor(0, 0).setDepth(28);
 	}

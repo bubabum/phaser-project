@@ -76,7 +76,6 @@ class Game extends Phaser.Scene {
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
 		this.controller = new Controller(this);
-
 		// this.input.gamepad.once('connected', function (pad) {
 
 		// 	this.gamepad = pad;
@@ -94,7 +93,7 @@ class Game extends Phaser.Scene {
 		this.createDecorations();
 		this.createLightObjects();
 		this.createCamera();
-		this.time.delayedCall(1000, () => this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!'))
+		//this.time.delayedCall(1000, () => this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!'))
 
 		if (this.hasLight) this.createLight();
 
@@ -125,6 +124,8 @@ class Game extends Phaser.Scene {
 		// 		Phaser.Math.RadToDeg(item.body.velocity.x / item.body.halfWidth)
 		// 	));
 		// });
+
+		this.registry.set('playerData', this.player.getPlayerData(false));
 
 		this.cameras.main.fadeIn(1000);
 	}

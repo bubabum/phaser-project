@@ -6,7 +6,6 @@ class Continue extends Collectible {
 		scene.physics.add.existing(this);
 		this.setSize(28, 28);
 		this.setOffset(19, 19)
-		//this.setPosition(this.getTileCenterX(x), y);
 	}
 
 	createAnimations(textureKey) {

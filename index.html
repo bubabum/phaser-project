@@ -50,6 +50,7 @@
 	<script src="./HealthBar.js"></script>
 	<script src="./Inventory.js"></script>
 	<script src="./Controller.js"></script>
+	<script src="./Hud.js"></script>
 	<script src="./Loader.js"></script>
 	<script src="./script.js"></script>
 	<title>Document</title>
@@ -82,10 +83,11 @@
 			input: {
 				gamepad: true
 			},
-			antialias: false,
+			render: { pixelArt: true, antialias: false },
+			//antialias: false,
 			crisp: true,
 			maxLights: 100,
-			scene: [Loader, Game]
+			scene: [Loader, Game, Hud]
 		};
 		const game = new Phaser.Game(config);
 	</script>

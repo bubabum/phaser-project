@@ -168,18 +168,22 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 				if (this.health === this.maxHeath) return false
 				this.health++
 				this.collected.add(id);
+				this.scene.registry.set('playerData', this.getPlayerData(false));
 				return true
 			case 'continue':
 				this.continue++
 				this.collected.add(id);
+				this.scene.registry.set('playerData', this.getPlayerData(false));
 				return true
 			case 'key':
 				this.collected.add(id);
+				this.scene.registry.set('playerData', this.getPlayerData(false));
 				return true
 			case 'rum':
 			case 'sword':
 				if (this.inventoryData[type] === 9) return false
 				this.inventoryData[type]++;
+				this.scene.registry.set('playerData', this.getPlayerData(false));
 				return true
 		}
 		return false
@@ -204,6 +208,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		const sowrd = this.swordGroup.get();
 		if (sowrd) sowrd.throw(this);
 		this.inventoryData.sword--;
+		this.scene.registry.set('playerData', this.getPlayerData(false));
 	}
 
 	activateRum() {
@@ -211,6 +216,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.hasActiveRum = true;
 		this.setInvulnerability(true).setAlpha(0.5);
 		this.inventoryData.rum--;
+		this.scene.registry.set('playerData', this.getPlayerData(false));
 		this.activeItem = 0;
 		this.scene.time.delayedCall(5000, () => this.disactivateRum());
 	}
@@ -240,6 +246,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 			this.setInvulnerability(true, true);
 		}
 		this.health--;
+		this.scene.registry.set('playerData', this.getPlayerData(false));
 		return true
 	}
 
