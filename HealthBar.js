@@ -8,7 +8,7 @@ class HealthBar extends Phaser.Physics.Arcade.Sprite {
 		this.healthGroup = scene.add.group();
 		this.offsetX = 100;
 		this.offsetY = 10;
-		this.setPosition(this.offsetX, this.offsetY).setOrigin(0, 0).setScrollFactor(0, 0).setDepth(28);
+		this.setPosition(this.offsetX, this.offsetY).setOrigin(0, 0).setScrollFactor(0, 0).setDepth(28).setVisible(false);
 	}
 
 	update() {
@@ -17,10 +17,10 @@ class HealthBar extends Phaser.Physics.Arcade.Sprite {
 		const { health } = this.player;
 		const y = 22 + this.offsetY;
 		const x = [40, 66, 92];
-		for (let i = 0; i < health; i++) {
-			const image = this.scene.add.image(x[i] + this.offsetX, y, this.lifeTexture).setOrigin(0, 0).setScrollFactor(0, 0).setDepth(29);
-			this.healthGroup.add(image);
-		}
+		// for (let i = 0; i < health; i++) {
+		// 	const image = this.scene.add.image(x[i] + this.offsetX, y, this.lifeTexture).setOrigin(0, 0).setScrollFactor(0, 0).setDepth(29);
+		// 	this.healthGroup.add(image);
+		// }
 	}
 
 }

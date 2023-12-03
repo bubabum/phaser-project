@@ -30,8 +30,10 @@ class Bomb extends Phaser.Physics.Arcade.Sprite {
 
 	throw(velocity, player) {
 		this.body.setAllowGravity(true);
-		const bombUseType = player.inventory.bombUseTypes[player.inventory.activeBombUseType];
-		const bombTimer = player.inventory.bombTimers[player.inventory.activeBombTimer].value;
+		// const bombUseType = player.inventory.bombUseTypes[player.inventory.activeBombUseType];
+		// const bombTimer = player.inventory.bombTimers[player.inventory.activeBombTimer].value;
+		const bombUseType = 'THROW';
+		const bombTimer = 700;
 		this.setVelocity((player.flipX ? -1 : 1) * velocity, (bombUseType === 'THROW' ? -velocity : 0));
 		this.scene.time.delayedCall(bombTimer, () => this.explode());
 	}

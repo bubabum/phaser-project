@@ -26,7 +26,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		this.jumpGap = false;
 		this.activeBomb = null;
 		this.bombBar = new BombBar({ scene: scene, player: this, textureKey: textures.bombBar });
-		this.inventory = new Inventory({ scene: scene, player: this, textures })
+		//this.inventory = new Inventory({ scene: scene, player: this, textures })
 		this.bombGroup = scene.physics.add.group({
 			defaultKey: 'bomb',
 			classType: Bomb,
@@ -116,7 +116,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 		}
 
 		currentState.handleInput({ dt, controller });
-		this.inventory.update();
 	}
 
 	getPlayerData(death = true) {

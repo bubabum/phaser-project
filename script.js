@@ -46,7 +46,7 @@ class Game extends Phaser.Scene {
 				health: 3,
 				inventory: {
 					// bomb: 99,
-					sword: 99,
+					sword: 9,
 					rum: 0,
 				},
 				collected: new Set(),
@@ -65,7 +65,7 @@ class Game extends Phaser.Scene {
 
 	create() {
 		this.map = this.make.tilemap({ key: this.levels[this.currentLevel].tilemapKey, tileWidth: 64, tileHeight: 64 });
-		this.tileset = this.map.addTilesetImage('tileset', 'tiles');
+		this.tileset = this.map.addTilesetImage('tileset', 'tileset');
 		this.groundLayer = this.map.createLayer('ground', this.tileset);
 		this.groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26, 35, 36]);
 		this.createDecorationTiles();
@@ -137,10 +137,6 @@ class Game extends Phaser.Scene {
 		this.player.update({ t, dt, controller: this.controller });
 		this.healthBar.update();
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
-		if (this.fpsCounter) this.fpsCounter.destroy();
-		const { width } = this.cameras.main.worldView;
-		const fps = Math.floor(this.sys.game.loop.actualFps);
-		this.fpsCounter = this.add.bitmapText(width, 0, 'pixel', fps, 20, 1).setOrigin(1, 0).setScrollFactor(0, 0).setDepth(100);
 	}
 
 	showMessageBox(messageText) {
@@ -150,7 +146,7 @@ class Game extends Phaser.Scene {
 			this.messageTimer.remove();
 		}
 		const { width, height } = this.cameras.main.worldView;
-		this.messageBox = this.add.bitmapText(width / 2, height - 40, 'pixel', messageText, 20, 1).setMaxWidth(600).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(32).setDropShadow(1, 1);
+		this.messageBox = this.add.bitmapText(width / 2, height - 40, 'font', messageText, 20, 1).setMaxWidth(600).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(32).setDropShadow(1, 1);
 		const bounds = this.messageBox.getTextBounds(true).global;
 		this.box = this.add.rectangle(bounds.x - 20, bounds.y - 20, bounds.width + 40, bounds.height + 40, 0x323443, 0.9).setScrollFactor(0, 0).setDepth(31).setOrigin(0, 0); //323443
 		this.messageTimer = this.time.delayedCall(5000, () => {
@@ -164,9 +160,9 @@ class Game extends Phaser.Scene {
 		const rnd = Math.floor(Math.random() * 9) + 1;
 		let collectible;
 		if (rnd === 1) {
-			collectible = new RumPowerUp({ scene: this, x, y, textureKey: 'rum' });
+			collectible = new RumPowerUp({ scene: this, x, y, textureKey: 'rum_drop' });
 		} else if (1 < rnd && rnd < 6) {
-			collectible = new SwordPowerUp({ scene: this, x, y, textureKey: 'sword_powerup' });
+			collectible = new SwordPowerUp({ scene: this, x, y, textureKey: 'sword_drop' });
 		} else {
 			return
 		}
@@ -372,7 +368,7 @@ class Game extends Phaser.Scene {
 						scene: this,
 						x,
 						y,
-						textureKey: 'spike',
+						textureKey: 'spikes',
 						type: tile.properties.type,
 					})
 					this.spikes.add(spike);

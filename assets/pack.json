@@ -1,0 +1,371 @@
+{
+	"preload": {
+		"files": [
+			{
+				"type": "bitmapFont",
+				"key": "font",
+				"textureURL": "./assets/font/ps2p.png",
+				"fontDataURL": "./assets/font/ps2p.fnt"
+			},
+			{
+				"type": "image",
+				"key": "tileset",
+				"url": "./assets/tiles/tileset.png"
+			},
+			{
+				"type": "image",
+				"key": "background_tile0",
+				"url": "./assets/tiles/background_tile0.png"
+			},
+			{
+				"type": "image",
+				"key": "background_tile1",
+				"url": "./assets/tiles/background_tile1.png"
+			},
+			{
+				"type": "image",
+				"key": "background_tile2",
+				"url": "./assets/tiles/background_tile2.png"
+			},
+			{
+				"type": "image",
+				"key": "background_tile3",
+				"url": "./assets/tiles/background_tile3.png"
+			},
+			{
+				"type": "image",
+				"key": "decoration_tile0",
+				"url": "./assets/tiles/decoration_tile0.png"
+			},
+			{
+				"type": "image",
+				"key": "decoration_tile1",
+				"url": "./assets/tiles/decoration_tile1.png"
+			},
+			{
+				"type": "image",
+				"key": "decoration_tile2",
+				"url": "./assets/tiles/decoration_tile2.png"
+			},
+			{
+				"type": "image",
+				"key": "decoration_tile3",
+				"url": "./assets/tiles/decoration_tile3.png"
+			},
+			{
+				"type": "tilemapTiledJSON",
+				"key": "level0",
+				"url": "./assets/levels/level0.json"
+			},
+			{
+				"type": "tilemapTiledJSON",
+				"key": "level1",
+				"url": "./assets/levels/level1.json"
+			},
+			{
+				"type": "tilemapTiledJSON",
+				"key": "level2",
+				"url": "./assets/levels/level2.json"
+			},
+			{
+				"type": "image",
+				"key": "continue_hud",
+				"url": "./assets/hud/continue.png"
+			},
+			{
+				"type": "image",
+				"key": "health_bar",
+				"url": "./assets/hud/health_bar.png"
+			},
+			{
+				"type": "image",
+				"key": "life_hud",
+				"url": "./assets/hud/life.png"
+			},
+			{
+				"type": "image",
+				"key": "sword_hud",
+				"url": "./assets/hud/sword.png"
+			},
+			{
+				"type": "image",
+				"key": "rum_hud",
+				"url": "./assets/hud/rum.png"
+			},
+			{
+				"type": "image",
+				"key": "enemy_health_bar",
+				"url": "./assets/images/enemy_health_bar.png"
+			},
+			{
+				"type": "image",
+				"key": "health",
+				"url": "./assets/images/health.png"
+			},
+			{
+				"type": "image",
+				"key": "sword",
+				"url": "./assets/images/sword.png"
+			},
+			{
+				"type": "image",
+				"key": "canon_ball",
+				"url": "./assets/images/canon_ball.png"
+			},
+			{
+				"type": "image",
+				"key": "platform",
+				"url": "./assets/images/platform.png"
+			},
+			{
+				"type": "image",
+				"key": "spikes",
+				"url": "./assets/images/spikes.png"
+			},
+			{
+				"type": "image",
+				"key": "window",
+				"url": "./assets/images/window.png"
+			},
+			{
+				"type": "image",
+				"key": "barrel",
+				"url": "./assets/images/barrel.png"
+			},
+			{
+				"type": "image",
+				"key": "blue_bottle",
+				"url": "./assets/images/blue_bottle.png"
+			},
+			{
+				"type": "image",
+				"key": "chair",
+				"url": "./assets/images/chair.png"
+			},
+			{
+				"type": "image",
+				"key": "green_bottle",
+				"url": "./assets/images/green_bottle.png"
+			},
+			{
+				"type": "image",
+				"key": "red_bottle",
+				"url": "./assets/images/red_bottle.png"
+			},
+			{
+				"type": "image",
+				"key": "table",
+				"url": "./assets/images/table.png"
+			},
+			{
+				"type": "image",
+				"key": "skull",
+				"url": "./assets/images/skull.png"
+			},
+			{
+				"type": "spritesheet",
+				"key": "bomb_guy",
+				"url": "./assets/sprites/bomb_guy.png",
+				"frameConfig": {
+					"frameWidth": 58,
+					"frameHeight": 58
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "bomb",
+				"url": "./assets/sprites/bomb.png",
+				"frameConfig": {
+					"frameWidth": 96,
+					"frameHeight": 108
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "bomb_bar",
+				"url": "./assets/sprites/bomb_bar.png",
+				"frameConfig": {
+					"frameWidth": 39,
+					"frameHeight": 9
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "rum_drop",
+				"url": "./assets/sprites/rum_drop.png",
+				"frameConfig": {
+					"frameWidth": 32,
+					"frameHeight": 32
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "sword_drop",
+				"url": "./assets/sprites/sword_drop.png",
+				"frameConfig": {
+					"frameWidth": 32,
+					"frameHeight": 32
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "run_particles",
+				"url": "./assets/sprites/run_particles.png",
+				"frameConfig": {
+					"frameWidth": 12,
+					"frameHeight": 10
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "jump_particles",
+				"url": "./assets/sprites/jump_particles.png",
+				"frameConfig": {
+					"frameWidth": 40,
+					"frameHeight": 28
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "land_particles",
+				"url": "./assets/sprites/land_particles.png",
+				"frameConfig": {
+					"frameWidth": 80,
+					"frameHeight": 10
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "life",
+				"url": "./assets/sprites/life.png",
+				"frameConfig": {
+					"frameWidth": 20,
+					"frameHeight": 18
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "continue",
+				"url": "./assets/sprites/continue.png",
+				"frameConfig": {
+					"frameWidth": 64,
+					"frameHeight": 64
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "key",
+				"url": "./assets/sprites/key.png",
+				"frameConfig": {
+					"frameWidth": 30,
+					"frameHeight": 30
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "bald_pirate",
+				"url": "./assets/sprites/bald_pirate.png",
+				"frameConfig": {
+					"frameWidth": 63,
+					"frameHeight": 67
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "big_guy",
+				"url": "./assets/sprites/big_guy.png",
+				"frameConfig": {
+					"frameWidth": 77,
+					"frameHeight": 74
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "canon",
+				"url": "./assets/sprites/canon.png",
+				"frameConfig": {
+					"frameWidth": 62,
+					"frameHeight": 46
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "capitan",
+				"url": "./assets/sprites/capitan.png",
+				"frameConfig": {
+					"frameWidth": 80,
+					"frameHeight": 72
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "cucumber",
+				"url": "./assets/sprites/cucumber.png",
+				"frameConfig": {
+					"frameWidth": 64,
+					"frameHeight": 68
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "door",
+				"url": "./assets/sprites/door.png",
+				"frameConfig": {
+					"frameWidth": 78,
+					"frameHeight": 96
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "candle",
+				"url": "./assets/sprites/candle.png",
+				"frameConfig": {
+					"frameWidth": 14,
+					"frameHeight": 32
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "candle_light",
+				"url": "./assets/sprites/candle_light.png",
+				"frameConfig": {
+					"frameWidth": 60,
+					"frameHeight": 58
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "window_light",
+				"url": "./assets/sprites/window_light.png",
+				"frameConfig": {
+					"frameWidth": 170,
+					"frameHeight": 139
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "small_chain",
+				"url": "./assets/sprites/small_chain.png",
+				"frameConfig": {
+					"frameWidth": 9,
+					"frameHeight": 52
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "big_chain",
+				"url": "./assets/sprites/big_chain.png",
+				"frameConfig": {
+					"frameWidth": 9,
+					"frameHeight": 100
+				}
+			},
+			{
+				"type": "aseprite",
+				"key": "falling_barrel",
+				"textureURL": "./assets/sprites/falling_barrel.png",
+				"atlasURL": "./assets/sprites/falling_barrel.json"
+			}
+		]
+	}
+}

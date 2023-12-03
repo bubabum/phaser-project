@@ -13,7 +13,7 @@ class Inventory {
 			{ type: 'SLOW', value: 2000 },
 		]
 		this.activeBombTimer = 2;
-		this.drawInventory(false);
+		//this.drawInventory(false);
 	}
 
 	changeActiveItem() {
@@ -36,38 +36,38 @@ class Inventory {
 	}
 
 	drawInventory(destroy = true) {
-		if (destroy) {
-			Object.keys(this.player.inventoryData).forEach((item, i) => {
-				this[item].destroy();
-				this[item + 'Quantity'].destroy();
-			})
-			this.continue.destroy();
-			this.continueQuantity.destroy();
-			// this.activeItem.destroy();
-			// this.activeItemQuantity.destroy();
-		}
-		const itemTexture = this.inventoryTextures[Object.keys(this.player.inventoryData)[this.player.activeItem]];
-		const itemQuantity = Object.values(this.player.inventoryData)[this.player.activeItem];
-		this.continue = this.scene.add.image(10, this.scene.cameras.main.height - 10, this.continueTexture)
-			.setOrigin(0, 1)
-			.setScrollFactor(0, 0)
-			.setDepth(30);
-		this.continueQuantity = this.scene.add.bitmapText(this.continue.x + 54, this.continue.y - 38, 'pixel', this.player.continue, 16, 1)
-			.setOrigin(0, 0)
-			.setScrollFactor(0, 0)
-			.setDepth(30)
-			.setDropShadow(1, 1);
-		Object.keys(this.player.inventoryData).forEach((item, i) => {
-			this[item] = this.scene.add.image(this.continue.x + (85 * (i + 1)), this.continue.y, this.inventoryTextures[item])
-				.setOrigin(0, 1)
-				.setScrollFactor(0, 0)
-				.setDepth(30);
-			this[item + 'Quantity'] = this.scene.add.bitmapText(this[item].x + 54, this[item].y - 38, 'pixel', this.player.inventoryData[item], 16, 1)
-				.setOrigin(0, 0)
-				.setScrollFactor(0, 0)
-				.setDepth(30)
-				.setDropShadow(1, 1);
-		})
+		// if (destroy) {
+		// 	Object.keys(this.player.inventoryData).forEach((item, i) => {
+		// 		this[item].destroy();
+		// 		this[item + 'Quantity'].destroy();
+		// 	})
+		// 	this.continue.destroy();
+		// 	this.continueQuantity.destroy();
+		// 	// this.activeItem.destroy();
+		// 	// this.activeItemQuantity.destroy();
+		// }
+		// const itemTexture = this.inventoryTextures[Object.keys(this.player.inventoryData)[this.player.activeItem]];
+		// const itemQuantity = Object.values(this.player.inventoryData)[this.player.activeItem];
+		// this.continue = this.scene.add.image(10, this.scene.cameras.main.height - 10, this.continueTexture)
+		// 	.setOrigin(0, 1)
+		// 	.setScrollFactor(0, 0)
+		// 	.setDepth(30);
+		// this.continueQuantity = this.scene.add.bitmapText(this.continue.x + 54, this.continue.y - 38, 'pixel', this.player.continue, 16, 1)
+		// 	.setOrigin(0, 0)
+		// 	.setScrollFactor(0, 0)
+		// 	.setDepth(30)
+		// 	.setDropShadow(1, 1);
+		// Object.keys(this.player.inventoryData).forEach((item, i) => {
+		// 	this[item] = this.scene.add.image(this.continue.x + (85 * (i + 1)), this.continue.y, this.inventoryTextures[item])
+		// 		.setOrigin(0, 1)
+		// 		.setScrollFactor(0, 0)
+		// 		.setDepth(30);
+		// 	this[item + 'Quantity'] = this.scene.add.bitmapText(this[item].x + 54, this[item].y - 38, 'pixel', this.player.inventoryData[item], 16, 1)
+		// 		.setOrigin(0, 0)
+		// 		.setScrollFactor(0, 0)
+		// 		.setDepth(30)
+		// 		.setDropShadow(1, 1);
+		// })
 		// this.activeItem = this.scene.add.image(this.continue.x + 85, this.continue.y, itemTexture)
 		// 	.setOrigin(0, 1)
 		// 	.setScrollFactor(0, 0)
@@ -79,6 +79,6 @@ class Inventory {
 	}
 
 	update() {
-		this.drawInventory();
+		//this.drawInventory();
 	}
 }
