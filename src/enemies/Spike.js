@@ -1,0 +1,37 @@
+export class Spike extends Phaser.Physics.Arcade.Sprite {
+
+	constructor({ scene, x, y, textureKey, type }) {
+		super(scene, x, y, textureKey);
+		scene.add.existing(this);
+		scene.physics.add.existing(this);
+		//this.setOrigin(1, 1)
+		this.setDepth(25);
+		this.setPropertiesByType(type);
+		if (scene.hasLight) this.setPipeline('Light2D');
+	}
+
+	setPropertiesByType(type) {
+		switch (type) {
+			case 'bottom':
+				this.setSize(58, 10);
+				this.setOffset(6, 54);
+				break;
+			case 'left':
+				this.setAngle(90)
+				this.setSize(10, 58);
+				this.setOffset(0, 6);
+				break;
+			case 'top':
+				this.setAngle(180)
+				this.setSize(58, 10);
+				this.setOffset(6, 0);
+				break;
+			case 'right':
+				this.setAngle(270);
+				this.setSize(10, 58);
+				this.setOffset(54, 6);
+				break;
+		}
+	}
+
+}
