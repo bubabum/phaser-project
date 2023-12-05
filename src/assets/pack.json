@@ -209,6 +209,15 @@
 			},
 			{
 				"type": "spritesheet",
+				"key": "seed",
+				"url": "./assets/sprites/seed.png",
+				"frameConfig": {
+					"frameWidth": 14,
+					"frameHeight": 6
+				}
+			},
+			{
+				"type": "spritesheet",
 				"key": "run_particles",
 				"url": "./assets/sprites/run_particles.png",
 				"frameConfig": {

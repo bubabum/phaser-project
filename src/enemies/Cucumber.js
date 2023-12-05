@@ -1,6 +1,7 @@
 import { CucumberIdle } from './CucumberState';
 import { CucumberRun } from './CucumberState';
 import { CucumberDash } from './CucumberState';
+import { CucumberShoot } from './CucumberState';
 import { CucumberBlowTheWick } from './CucumberState';
 import { EnemyAtack } from './EnemyState';
 import { EnemyMoveToBomb } from './EnemyState';
@@ -14,11 +15,13 @@ export class Cucumber extends Enemy {
 
 	constructor({ scene, x, y, textureKey, direction }) {
 		super({ scene, x, y, textureKey });
+		this.seeds = scene.seeds;
 		this.canInteractWithBomb = true;
 		this.maxHealth = 1;
 		this.health = this.maxHealth;
 		this.speedX = 120;
-		this.dashSpeedX = 330;
+		this.dashSpeedX = 250;
+		this.throwRange = 270;
 		//this.moveToBombSpeedX = 180;
 		this.visionRange = 200;
 		this.atackRange = 20;
@@ -28,6 +31,7 @@ export class Cucumber extends Enemy {
 		this.isInvulnerable = false;
 		this.isAtacking = false;
 		this.useBlowTheWick = true;
+		this.canShoot = true;
 		this.setBodyProperties(direction);
 		this.createHurtbox();
 		this.createAnimations(textureKey);
@@ -35,6 +39,7 @@ export class Cucumber extends Enemy {
 			new CucumberIdle(this),
 			new CucumberRun(this),
 			new CucumberDash(this),
+			new CucumberShoot(this),
 			new CucumberBlowTheWick(this),
 			new EnemyAtack(this),
 			new EnemyMoveToBomb(this),
@@ -50,6 +55,13 @@ export class Cucumber extends Enemy {
 		if (!this.bombToInteract || this?.bombToInteract.exploded) return
 		this.bombToInteract.turnOff();
 		this.bombToInteract = null;
+	}
+
+	shootSeed() {
+		this.canShoot = false;
+		const seed = this.seeds.get();
+		seed.fly(this.x, this.y, this.direction)
+		this.scene.time.delayedCall(3000, () => this.canShoot = true);
 	}
 
 	createAnimations(textureKey) {

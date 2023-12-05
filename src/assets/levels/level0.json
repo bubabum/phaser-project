@@ -229,8 +229,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":77,
-                 "x":1280,
-                 "y":448
+                 "x":1600,
+                 "y":576
                 }, 
                 {
                  "class":"BigGuy",
@@ -275,8 +275,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":448,
-                 "y":1088
+                 "x":1344,
+                 "y":448
                 }, 
                 {
                  "class":"Canon",
@@ -413,7 +413,7 @@
         {
          "columns":6,
          "firstgid":1,
-         "image":"tileset.png",
+         "image":"..\/tiles\/tileset.png",
          "imageheight":512,
          "imagewidth":384,
          "margin":0,
@@ -504,7 +504,7 @@
         {
          "columns":1,
          "firstgid":49,
-         "image":"Objects\/bald_pirate.png",
+         "image":"..\/Objects\/bald_pirate.png",
          "imageheight":67,
          "imagewidth":63,
          "margin":0,
@@ -533,7 +533,7 @@
         {
          "columns":1,
          "firstgid":50,
-         "image":"Objects\/big_guy.png",
+         "image":"..\/Objects\/big_guy.png",
          "imageheight":74,
          "imagewidth":77,
          "margin":0,
@@ -562,7 +562,7 @@
         {
          "columns":1,
          "firstgid":51,
-         "image":"Objects\/canon.png",
+         "image":"..\/Objects\/canon.png",
          "imageheight":46,
          "imagewidth":62,
          "margin":0,
@@ -586,13 +586,20 @@
                          "value":"canon"
                         }]
                 }],
-         "tilewidth":62
+         "tilewidth":62,
+         "transformations":
+            {
+             "hflip":false,
+             "preferuntransformed":true,
+             "rotate":false,
+             "vflip":false
+            }
         }, 
         {
          "class":"Capitan",
          "columns":1,
          "firstgid":52,
-         "image":"Objects\/capitan.png",
+         "image":"..\/Objects\/capitan.png",
          "imageheight":72,
          "imagewidth":80,
          "margin":0,
@@ -621,7 +628,7 @@
         {
          "columns":1,
          "firstgid":53,
-         "image":"Objects\/cucumber.png",
+         "image":"..\/Objects\/cucumber.png",
          "imageheight":68,
          "imagewidth":64,
          "margin":0,
@@ -650,7 +657,7 @@
         {
          "columns":1,
          "firstgid":54,
-         "image":"..\/src\/tiled\/Objects\/door.png",
+         "image":"..\/Objects\/door.png",
          "imageheight":96,
          "imagewidth":78,
          "margin":0,

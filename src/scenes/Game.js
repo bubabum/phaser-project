@@ -6,6 +6,7 @@ import { MovingPlatform } from '../objects/MovingPlatform';
 import { FadingPlatform } from '../objects/FadingPlatform';
 import { Bottle } from '../projectiles/Bottle';
 import { CanonBall } from '../projectiles/CanonBall';
+import { Seed } from '../projectiles/Seed';
 import { Spike } from '../enemies/Spike';
 import { FallingBarrel } from '../enemies/FallingBarrel';
 import { Life } from '../objects/Life';
@@ -512,6 +513,11 @@ export class Game extends Phaser.Scene {
 			allowGravity: false,
 			angularVelocity: 1000,
 		});
+		this.seeds = this.physics.add.group({
+			defaultKey: 'seed',
+			classType: Seed,
+			allowGravity: false,
+		});
 		const classes = {
 			'BaldPirate': BaldPirate,
 			'Capitan': Capitan,
@@ -548,7 +554,7 @@ export class Game extends Phaser.Scene {
 			this.lights.removeLight(projectile.light);
 			projectile.destroy();
 		});
-		this.physics.add.overlap([this.canonBallGroup, this.bottleGroup], this.player, (player, projectile) => {
+		this.physics.add.overlap([this.canonBallGroup, this.bottleGroup, this.seeds], this.player, (player, projectile) => {
 			if (!player.isInvulnerable) this.push(projectile, player);
 			player.takeDamage();
 		});

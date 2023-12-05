@@ -146,6 +146,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		return this.health === 0
 	}
 
+	isAlive() {
+		return this.health > 0
+	}
+
 	addTouchingPlatform(platform) {
 		this.touchingPlatform = platform;
 	}

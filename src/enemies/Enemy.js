@@ -72,6 +72,14 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 		return this.health === 0;
 	}
 
+	isAlive() {
+		return this.health > 0;
+	}
+
+	checkThrowRange() {
+		return Phaser.Math.Distance.BetweenPoints(this.player, this) < this.throwRange && this.player.isAlive()
+	}
+
 	setBodyProperties(direction) {
 		const { width, height, offsetX, offsetY } = this.bodyProperties;
 		this.setSize(width, height);

@@ -40,10 +40,6 @@ export class Capitan extends Enemy {
 		this.setState('IDLE');
 	}
 
-	checkThrowRange() {
-		return Phaser.Math.Distance.BetweenPoints(this.player, this) < this.throwRange && !this.player.isInvulnerable
-	}
-
 	throwBottle() {
 		if (this.anims.currentFrame.index === 5 && this.canThrow && ['THROW_BOTTLE'].includes(this.currentState.name)) {
 			this.canThrow = false;

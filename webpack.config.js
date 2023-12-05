@@ -12,11 +12,6 @@ module.exports = {
 				exclude: /node_modules/,
 				use: ["babel-loader"],
 			},
-			// {
-			// 	test: /\.ts$/,
-			// 	use: "ts-loader",
-			// 	exclude: /node_modules/,
-			// },
 			{
 				test: /\.(png|svg|jpg|gif)$/,
 				use: [
@@ -44,7 +39,7 @@ module.exports = {
 		},
 	},
 	resolve: {
-		extensions: [".js", ".ts"],
+		extensions: [".js"],
 	},
 	output: {
 		path: path.resolve(__dirname, "./dist"),
