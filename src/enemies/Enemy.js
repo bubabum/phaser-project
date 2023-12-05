@@ -208,7 +208,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
 	moveToBomb() {
 		if (this.bombGroup.getChildren().length === 0) return
-		const bomb = this.bombGroup.getChildren().filter(item => item.isOff === false).filter(item => item.exploded === false).sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
+		const bomb = this.bombGroup.getChildren().filter(item => item.isActive()).sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
 		if (!bomb) return
 		this.bombToInteract = bomb;
 		this.scene.physics.moveTo(this, this.bombToInteract.x, this.y, this.speedX);

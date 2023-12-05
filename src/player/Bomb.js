@@ -27,19 +27,23 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.anims.play('on');
 		this.body.setAllowGravity(false);
 	}
+	isActive() {
+		return !this.isOff && !this.exploded
+	}
 
 	throw(velocity, player) {
 		this.body.setAllowGravity(true);
 		// const bombUseType = player.inventory.bombUseTypes[player.inventory.activeBombUseType];
 		// const bombTimer = player.inventory.bombTimers[player.inventory.activeBombTimer].value;
 		const bombUseType = 'THROW';
-		const bombTimer = 700;
+		const bombTimer = 1500;
 		this.setVelocity((player.flipX ? -1 : 1) * velocity, (bombUseType === 'THROW' ? -velocity : 0));
-		this.scene.time.delayedCall(bombTimer, () => this.explode());
+		this.timer = this.scene.time.delayedCall(bombTimer, () => this.explode());
 	}
 
 	explode() {
 		if (this.isOff) return
+		this.scene.time.removeEvent(this.timer)
 		this.setAngle(0);
 		this.anims.play('explosion');
 		this.exploded = true;
@@ -55,7 +59,7 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	turnOff() {
-		this.scene.time.removeEvent(this.explosionTimer);
+		this.scene.time.removeEvent(this.timer);
 		this.isOff = true;
 		this.setVelocityX(0);
 		this.anims.play('off');

@@ -17,12 +17,11 @@ export class Cucumber extends Enemy {
 		super({ scene, x, y, textureKey });
 		this.seeds = scene.seeds;
 		this.canInteractWithBomb = true;
-		this.maxHealth = 1;
+		this.maxHealth = 5;
 		this.health = this.maxHealth;
 		this.speedX = 120;
 		this.dashSpeedX = 250;
 		this.throwRange = 270;
-		//this.moveToBombSpeedX = 180;
 		this.visionRange = 200;
 		this.atackRange = 20;
 		this.hurtboxRadius = 20;

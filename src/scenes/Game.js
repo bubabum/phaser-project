@@ -57,7 +57,7 @@ export class Game extends Phaser.Scene {
 			},
 		})
 		this.levels = [
-			{ tilemapKey: 'level0', hasLight: false },
+			{ tilemapKey: 'level0', hasLight: true },
 			{ tilemapKey: 'level1', hasLight: true },
 			{ tilemapKey: 'level2', hasLight: false },
 		];
@@ -492,9 +492,9 @@ export class Game extends Phaser.Scene {
 		door.anims.play('closing');
 	}
 	createCamera() {
-		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels).setRoundPixels(true);
+		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 		this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
-		this.cameras.main.setRoundPixels(true).setBackgroundColor(0xbababa);
+		//this.cameras.main.setRoundPixels(true).setBackgroundColor(0xbababa);
 	}
 	createEnemies() {
 		this.enemyGroup = this.physics.add.group();

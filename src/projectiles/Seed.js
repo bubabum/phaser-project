@@ -16,10 +16,8 @@ export class Seed extends Phaser.Physics.Arcade.Sprite {
 
 	preUpdate(t, dt) {
 		super.preUpdate(t, dt)
-		if (this.light) {
-			this.light.x = this.x;
-			this.light.y = this.y;
-		}
+		if (this.light) this.light.setPosition(this.x, this.y)
+		this.setFlipX(this.body.velocity.x > 0)
 	}
 
 	fly(x, y, direction, speed = this.speed) {
