@@ -12,7 +12,7 @@ import { FallingBarrel } from '../enemies/FallingBarrel';
 import { Life } from '../objects/Life';
 import { Continue } from '../objects/Continue';
 import { Key } from '../objects/Key';
-import { Player } from '../player/Player';
+import { BombGuy } from '../player/BombGuy';
 import { BaldPirate } from '../enemies/BaldPirate';
 import { BigGuy } from '../enemies/BigGuy';
 import { Canon } from '../enemies/Canon';
@@ -467,15 +467,15 @@ export class Game extends Phaser.Scene {
 			},
 			continue: 'continue_inventory',
 		}
-		this.player = new Player({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures, playerData: this.playerData });
+		this.player = new BombGuy({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures, playerData: this.playerData });
 		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);
 		this.physics.add.collider(this.player, [this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup], (player, platform) => {
-			if (player.body.onFloor()) player.addTouchingPlatform(platform);
+			if (player.body.onFloor()) player.setTouchingPlatform(platform);
 		});
 		//this.physics.add.collider(this.player, this.movingYPlatformsGroup, (player, platform) => player.touchingPlatform = platform); // create player method
 		this.physics.add.collider(this.player, this.fadingPlatformsGroup, (player, platform) => {
 			if (player.body.onFloor()) {
-				player.addTouchingPlatform(platform)
+				player.setTouchingPlatform(platform)
 				platform.fade();
 			}
 		});
@@ -543,6 +543,9 @@ export class Game extends Phaser.Scene {
 		})
 		this.physics.add.collider(this.enemyGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);
 		this.physics.add.collider(this.enemyGroup, this.movingYPlatformsGroup, (enemy, platform) => enemy.setTouchingPlatform(platform));
+		this.physics.add.overlap(this.enemyGroup, this.spikes, (enemy, spike) => {
+			if (enemy.takeDamage(true)) this.push(spike, enemy);
+		});
 		this.physics.add.overlap(this.player, this.enemyHurtboxGroup, (player, hurtbox) => {
 			if (hurtbox.enemy.canHit) {
 				player.takeDamage();

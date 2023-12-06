@@ -1,9 +1,10 @@
+import { Character } from '../utility/Character';
 import { ParticlesGroup } from '../utility/Particles';
 
-export class Enemy extends Phaser.Physics.Arcade.Sprite {
+export class Enemy extends Character {
 
 	constructor({ scene, x, y, textureKey }) {
-		super(scene, x, y, textureKey);
+		super({ scene, x, y, textureKey });
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 		this.player = scene.player;
@@ -26,14 +27,6 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 		});
 	}
 
-	setState(name) {
-		if (this?.currentState?.name === name) return
-		if (this?.currentState?.name === 'DEAD_GROUND') return
-		this.currentState = this.states.find(state => state.name === name);
-		this.currentState.enter();
-		this.anims.play(this.currentState.animation);
-	}
-
 	update() {
 		this.drawHealthBar();
 		if (this.touchingPlatform && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
@@ -51,6 +44,10 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 		}
 	}
 
+	isPlayer() {
+		return false
+	}
+
 	drawHealthBar() {
 		if (this.isCanon) return
 		if (this.healthBar || this.health === 0) {
@@ -66,14 +63,6 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.healthImage.displayWidth = width * this.health / this.maxHealth;
 		this.healthBar.setDepth(25);
 		this.healthImage.setDepth(26);
-	}
-
-	isDead() {
-		return this.health === 0;
-	}
-
-	isAlive() {
-		return this.health > 0;
 	}
 
 	checkThrowRange() {
@@ -103,10 +92,6 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 	setVelocityXByDirection(speed = this.speedX, direction = this.direction) {
 		if (direction === 'right') return this.setVelocityX(speed).setFlipX(false);
 		this.setVelocityX(-speed).setFlipX(true);
-	}
-
-	setTouchingPlatform(platform) {
-		this.touchingPlatform = platform;
 	}
 
 	checkDirectionToPlayer() {
@@ -223,43 +208,6 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 		this.setVelocityXByDirection(this.dashSpeedX);
 	}
 
-	setInvulnerability(status, effect = false) {
-		this.isInvulnerable = status;
-		if (effect === false) {
-			if (this.invulnerabilityEffect) this.invulnerabilityEffect.remove();
-			this.setAlpha(1);
-			return this
-		}
-		if (status === true) {
-			this.invulnerabilityEffect = this.scene.tweens.add({
-				targets: this,
-				duration: 100,
-				ease: 'Linear',
-				alpha: {
-					getStart: () => 0.2,
-					getEnd: () => 1,
-				},
-				repeat: -1,
-			});
-		} else {
-			this.invulnerabilityEffect.remove();
-			this.setAlpha(1);
-		}
-		return this
-	}
-
-	takeDamage() {
-		if (this.isInvulnerable || this.isDead()) return
-		this.health--;
-		if (this.health === 0) {
-			this.setState('DEAD_HIT');
-			this.setInvulnerability(true);
-		} else {
-			this.setState('HIT');
-			this.setInvulnerability(true, true);
-		}
-	}
-
 	createHurtbox() {
 		this.hurtbox = this.scene.add.circle(this.x, this.y, this.hurtboxRadius, 0x646464);
 		this.hurtbox.setVisible(false);
@@ -270,16 +218,13 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	isOnPlatform() {
-		const isGroundTilePlatform = (layer, npc) => {
-			const { x, y, width, height } = npc.body;
-			const tile = layer.getTileAtWorldXY(x + width * 0.5, y + height + 0.5);
-			return tile?.collideUp
-		}
-		return isGroundTilePlatform(this.scene.platformsLayer, this)
+		const { x, y, width, height } = this.getBounds();
+		const tile = this.scene.platformsLayer.getTileAtWorldXY(x + width * 0.5, y + height + 0.5);
+		return tile?.collideUp
 	}
 
 	canRun() {
-		const { x, y, width, height } = this.body;
+		const { x, y, width, height } = this.getBounds();
 		const tileSize = this.scene.tileset.tileWidth;
 		const groundLayer = this.scene.groundLayer;
 		const platformsLayer = this.scene.platformsLayer;
@@ -310,10 +255,20 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 			if (isLeftOrientated) return tile?.collideRight;
 			return tile?.collideLeft
 		}
+		const isNextTileSpike = (npc) => {
+			const { x, y, width, height } = npc.getBounds();
+			const posX = x + (isLeftOrientated ? -marginX : width + marginX);
+			const line = new Phaser.Geom.Line(x, y + height - 1, posX, y + height - 1);
+			for (let i = 0; i < npc.scene.spikes.getChildren().length; i++) {
+				if (Phaser.Geom.Intersects.LineToRectangle(line, npc.scene.spikes.getChildren()[i].getBounds())) return true
+			}
+			return false
+		}
 		const nextPlatformTile = isNextGroundTileCollidable(this.scene.platformsLayer, this)
 		const nextGroundTile = isNextGroundTileCollidable(this.scene.groundLayer, this)
 		const nextTile = isNextTileCollidable(this.scene.groundLayer, this)
-		if (!nextGroundTile && !nextPlatformTile || nextTile) return false
+		const nextTileHasSpikes = isNextTileSpike(this);
+		if (!nextGroundTile && !nextPlatformTile || nextTile || nextTileHasSpikes) return false
 		return true
 	}
 

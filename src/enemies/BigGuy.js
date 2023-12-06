@@ -12,7 +12,7 @@ export class BigGuy extends Enemy {
 
 	constructor({ scene, x, y, textureKey, direction }) {
 		super({ scene, x, y, textureKey });
-		this.maxHealth = 1;
+		this.maxHealth = 3;
 		this.health = this.maxHealth;
 		this.speedX = 120;
 		this.atackRange = 30;

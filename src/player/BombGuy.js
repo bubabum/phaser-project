@@ -1,3 +1,4 @@
+import { Character } from '../utility/Character';
 import { BombBar } from './BombBar';
 import { Bomb } from './Bomb';
 import { Sword } from './Sword';
@@ -14,19 +15,17 @@ import { DoorIn } from './PlayerState';
 import { DoorOut } from './PlayerState';
 
 
-export class Player extends Phaser.Physics.Arcade.Sprite {
+export class BombGuy extends Character {
 
 	constructor({ scene, x, y, textures, playerData }) {
-		super(scene, x, y - 25, textures.player);
-		scene.add.existing(this);
-		scene.physics.add.existing(this);
+		super({ scene, x, y: y - 25, texture: textures.player });
 		this.setDepth(23);
 		this.setSize(25, 50);
 		this.setOffset(20, 8);
 		this.setDepth(23);
 		this.setGravityY(400);
 		this.setMass(1);
-		this.setFriction(1, 1)
+		this.setFriction(1, 1);
 		this.maxHeath = 3;
 		this.continue = playerData.continue;
 		this.health = playerData.health;
@@ -82,13 +81,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
 	}
 
-	setState(name) {
-		if (this?.currentState?.name === name) return
-		this.currentState = this.states.find(state => state.name === name);
-		this.currentState.enter();
-		this.anims.play(this.currentState.animation);
-	}
-
 	update({ t, dt, controller }) {
 		//console.log(this.currentState.name)
 		//console.log(this.touchingPlatform)
@@ -133,6 +125,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 		currentState.handleInput({ dt, controller });
 	}
 
+	isPlayer() {
+		return true
+	}
+
 	getPlayerData(death = true) {
 		return {
 			continue: this.continue,
@@ -140,43 +136,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			inventory: this.inventoryData,
 			collected: this.collected,
 		}
-	}
-
-	isDead() {
-		return this.health === 0
-	}
-
-	isAlive() {
-		return this.health > 0
-	}
-
-	addTouchingPlatform(platform) {
-		this.touchingPlatform = platform;
-	}
-
-	setInvulnerability(status, effect = false) {
-		this.isInvulnerable = status;
-		if (effect === false) {
-			if (this.invulnerabilityEffect) this.invulnerabilityEffect.remove();
-			this.setAlpha(1);
-			return this
-		}
-		if (status === true) {
-			this.invulnerabilityEffect = this.scene.tweens.add({
-				targets: this,
-				duration: 100,
-				ease: 'Linear',
-				alpha: {
-					getStart: () => 0.2,
-					getEnd: () => 1,
-				},
-				repeat: -1,
-			});
-		} else {
-			this.invulnerabilityEffect.remove();
-			this.setAlpha(1);
-		}
-		return this
 	}
 
 	addCollectible(id, type) {
@@ -252,20 +211,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 			},
 			repeat: 0
 		});
-	}
-
-	takeDamage() {
-		if (this.isInvulnerable || this.isDead()) return
-		if (this.health === 1) {
-			this.setState('DEAD_HIT');
-			this.setInvulnerability(true);
-		} else {
-			this.setState('HIT');
-			this.setInvulnerability(true, true);
-		}
-		this.health--;
-		this.scene.registry.set('playerData', this.getPlayerData(false));
-		return true
 	}
 
 	createAnimations(textureKey) {

@@ -17,7 +17,7 @@ export class Cucumber extends Enemy {
 		super({ scene, x, y, textureKey });
 		this.seeds = scene.seeds;
 		this.canInteractWithBomb = true;
-		this.maxHealth = 5;
+		this.maxHealth = 2;
 		this.health = this.maxHealth;
 		this.speedX = 120;
 		this.dashSpeedX = 250;
