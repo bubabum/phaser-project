@@ -12,8 +12,8 @@ export class CucumberIdle extends State {
 		const { enemy } = this;
 		enemy.turnToPlayer();
 		if (enemy.canRun()) return enemy.setState('RUN');
-		if (enemy.checkThrowRange() && enemy.canThrow) return enemy.setState('SHOOT');
-		if (enemy.checkVisionRange()) return this.enemy.setState('DASH');
+		if (enemy.checkThrowRange() && enemy.canShoot) return enemy.setState('SHOOT');
+		//if (enemy.checkVisionRange()) return this.enemy.setState('DASH');
 	}
 }
 

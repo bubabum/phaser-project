@@ -239,7 +239,7 @@ export class Enemy extends Character {
 	}
 
 	canMoveForward() {
-		const marginX = 5;
+		const marginX = 15;
 		let isLeftOrientated = false;
 		if (this.direction === 'left') isLeftOrientated = true;
 		const isNextGroundTileCollidable = (layer, npc) => {
@@ -256,11 +256,15 @@ export class Enemy extends Character {
 			return tile?.collideLeft
 		}
 		const isNextTileSpike = (npc) => {
-			const { x, y, width, height } = npc.getBounds();
+			const { x, y, width, height } = npc.body;
 			const posX = x + (isLeftOrientated ? -marginX : width + marginX);
 			const line = new Phaser.Geom.Line(x, y + height - 1, posX, y + height - 1);
 			for (let i = 0; i < npc.scene.spikes.getChildren().length; i++) {
-				if (Phaser.Geom.Intersects.LineToRectangle(line, npc.scene.spikes.getChildren()[i].getBounds())) return true
+				const { x, y, width, height } = npc.scene.spikes.getChildren()[i].body;
+				const rect = new Phaser.Geom.Rectangle(x, y, width, height);
+				if (Phaser.Geom.Intersects.LineToRectangle(line, rect)) {
+					return true
+				}
 			}
 			return false
 		}

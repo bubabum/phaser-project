@@ -102,7 +102,7 @@
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 41, 0, 0, 41, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 41, 41, 41, 41, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -177,7 +177,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":78,
-                 "x":320,
+                 "x":960,
                  "y":448
                 }, 
                 {
@@ -210,56 +210,10 @@
          "name":"enemies",
          "objects":[
                 {
-                 "class":"BigGuy",
-                 "gid":50,
-                 "height":74,
-                 "id":347,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"className",
-                         "type":"string",
-                         "value":"BigGuy"
-                        }, 
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"big_guy"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":77,
-                 "x":1856,
-                 "y":1152
-                }, 
-                {
-                 "class":"BigGuy",
-                 "gid":50,
-                 "height":74,
-                 "id":348,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"className",
-                         "type":"string",
-                         "value":"BigGuy"
-                        }, 
-                        {
-                         "name":"texture",
-                         "type":"string",
-                         "value":"big_guy"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":77,
-                 "x":1280,
-                 "y":448
-                }, 
-                {
                  "class":"Cucumber",
                  "gid":53,
                  "height":68,
-                 "id":351,
+                 "id":373,
                  "name":"",
                  "properties":[
                         {
@@ -275,31 +229,31 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1088,
-                 "y":1152
+                 "x":1472,
+                 "y":512
                 }, 
                 {
-                 "class":"Canon",
-                 "gid":2147483699,
-                 "height":46,
-                 "id":352,
+                 "class":"Capitan",
+                 "gid":52,
+                 "height":72,
+                 "id":374,
                  "name":"",
                  "properties":[
                         {
                          "name":"className",
                          "type":"string",
-                         "value":"Canon"
+                         "value":"Capitan"
                         }, 
                         {
                          "name":"texture",
                          "type":"string",
-                         "value":"canon"
+                         "value":"capitan"
                         }],
                  "rotation":0,
                  "visible":true,
-                 "width":62,
-                 "x":2176,
-                 "y":1024
+                 "width":80,
+                 "x":1600,
+                 "y":576
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -404,7 +358,7 @@
          "y":0
         }],
  "nextlayerid":41,
- "nextobjectid":370,
+ "nextobjectid":375,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

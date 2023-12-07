@@ -57,7 +57,7 @@ export class Game extends Phaser.Scene {
 			},
 		})
 		this.levels = [
-			{ tilemapKey: 'level0', hasLight: true },
+			{ tilemapKey: 'level0', hasLight: false },
 			{ tilemapKey: 'level1', hasLight: true },
 			{ tilemapKey: 'level2', hasLight: false },
 		];
@@ -71,7 +71,7 @@ export class Game extends Phaser.Scene {
 				health: 3,
 				inventory: {
 					sword: 9,
-					rum: 0,
+					rum: 3,
 				},
 				collected: new Set(),
 			},
@@ -142,6 +142,10 @@ export class Game extends Phaser.Scene {
 			if (bomb.exploded) this.push(bomb, object);
 		});
 
+		// this.physics.add.overlap(this.player.bombGroup, this.player.bombGroup, (bomb1, bomb2) => {
+		// 	if (bomb1.exploded) this.push(bomb1, bomb2, 500);
+		// });
+
 		// this.physics.world.on('worldstep', () => {
 		// 	this.player.bombGroup.getChildren().forEach(item => item.setAngularVelocity(
 		// 		Phaser.Math.RadToDeg(item.body.velocity.x / item.body.halfWidth)
@@ -151,6 +155,7 @@ export class Game extends Phaser.Scene {
 		this.registry.set('playerData', this.player.getPlayerData(false));
 
 		this.cameras.main.fadeIn(1000);
+		this.rect = this.add.rectangle(0, 0, 200, 200, 0x000000).setOrigin(0, 0).setAlpha(0.7).setDepth(35);
 	}
 	update(t, dt) {
 		this.controller.update();
@@ -159,6 +164,9 @@ export class Game extends Phaser.Scene {
 		this.fallenBarrelsGroup.getChildren().forEach(barrel => barrel.update());
 		this.player.update({ t, dt, controller: this.controller });
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
+		const { x, y, width, height } = this.cameras.main.worldView;
+		this.rect.setPosition(x, y).setSize(width, height);
+
 	}
 
 	showMessageBox(messageText) {
@@ -212,13 +220,13 @@ export class Game extends Phaser.Scene {
 			});
 		}, this);
 	}
-	push(pusher, object) {
+	push(pusher, object, velocity = 200) {
 		const point = {
 			x: object.getCenter().x + (object.getCenter().x > pusher.getCenter().x ? -200 : 200),
 			y: object.getCenter().y + 200,
 		}
 		const angle = Phaser.Math.Angle.BetweenPoints(point, object.getCenter());
-		this.physics.velocityFromRotation(angle, 200, object.body.velocity);
+		this.physics.velocityFromRotation(angle, velocity, object.body.velocity);
 	}
 	getObjectCoordinateX(obj) {
 		return obj.x + obj.width * 0.5
@@ -553,7 +561,7 @@ export class Game extends Phaser.Scene {
 				this.push(hurtbox.enemy, player);
 			}
 		});
-		this.physics.add.collider([this.canonBallGroup, this.bottleGroup], [this.groundLayer], (projectile) => {
+		this.physics.add.collider([this.canonBallGroup, this.bottleGroup, this.seeds], [this.groundLayer], (projectile) => {
 			this.lights.removeLight(projectile.light);
 			projectile.destroy();
 		});
