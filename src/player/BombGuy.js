@@ -78,7 +78,8 @@ export class BombGuy extends Character {
 		this.setState('DOOR_OUT');
 
 		if (scene.hasLight) this.light = scene.lights.addLight(this.x, this.y, 700).setColor(0xaaaaaa).setIntensity(0.9);
-		this.light = this.scene.add.pointlight(400, 300, 0xaaaaaa, 100, 0.2, 0.05).setDepth(36);
+
+		//this.light = this.scene.add.pointlight(400, 300, 0xaaaaaa, 100, 0.2, 0.05).setDepth(36);
 
 	}
 

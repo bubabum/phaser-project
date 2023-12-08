@@ -57,7 +57,7 @@ export class Game extends Phaser.Scene {
 			},
 		})
 		this.levels = [
-			{ tilemapKey: 'level0', hasLight: false },
+			{ tilemapKey: 'level0', hasLight: true },
 			{ tilemapKey: 'level1', hasLight: true },
 			{ tilemapKey: 'level2', hasLight: false },
 		];
@@ -155,7 +155,7 @@ export class Game extends Phaser.Scene {
 		this.registry.set('playerData', this.player.getPlayerData(false));
 
 		this.cameras.main.fadeIn(1000);
-		this.rect = this.add.rectangle(0, 0, 200, 200, 0x000000).setOrigin(0, 0).setAlpha(0.7).setDepth(35);
+		//this.rect = this.add.rectangle(0, 0, 200, 200, 0x000000).setOrigin(0, 0).setAlpha(0.7).setDepth(35);
 	}
 	update(t, dt) {
 		this.controller.update();
@@ -164,8 +164,8 @@ export class Game extends Phaser.Scene {
 		this.fallenBarrelsGroup.getChildren().forEach(barrel => barrel.update());
 		this.player.update({ t, dt, controller: this.controller });
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
-		const { x, y, width, height } = this.cameras.main.worldView;
-		this.rect.setPosition(x, y).setSize(width, height);
+		// const { x, y, width, height } = this.cameras.main.worldView;
+		// this.rect.setPosition(x, y).setSize(width, height);
 
 	}
 
