@@ -266,6 +266,13 @@ export class Enemy extends Character {
 					return true
 				}
 			}
+			for (let i = 0; i < npc.scene.movingSpikes.getChildren().length; i++) {
+				const { x, y, width, height } = npc.scene.movingSpikes.getChildren()[i].body;
+				const rect = new Phaser.Geom.Rectangle(x, y, width, height);
+				if (Phaser.Geom.Intersects.LineToRectangle(line, rect)) {
+					return true
+				}
+			}
 			return false
 		}
 		const nextPlatformTile = isNextGroundTileCollidable(this.scene.platformsLayer, this)

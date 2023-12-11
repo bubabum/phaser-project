@@ -8,6 +8,7 @@ import { Bottle } from '../projectiles/Bottle';
 import { CanonBall } from '../projectiles/CanonBall';
 import { Seed } from '../projectiles/Seed';
 import { Spike } from '../enemies/Spike';
+import { MovingSpike } from '../enemies/MovingSpike';
 import { FallingBarrel } from '../enemies/FallingBarrel';
 import { Life } from '../objects/Life';
 import { Continue } from '../objects/Continue';
@@ -57,7 +58,7 @@ export class Game extends Phaser.Scene {
 			},
 		})
 		this.levels = [
-			{ tilemapKey: 'level0', hasLight: true },
+			{ tilemapKey: 'level0', hasLight: false },
 			{ tilemapKey: 'level1', hasLight: true },
 			{ tilemapKey: 'level2', hasLight: false },
 		];
@@ -91,7 +92,7 @@ export class Game extends Phaser.Scene {
 		this.map = this.make.tilemap({ key: this.levels[this.currentLevel].tilemapKey, tileWidth: 64, tileHeight: 64 });
 		this.tileset = this.map.addTilesetImage('tileset', 'tileset');
 		this.groundLayer = this.map.createLayer('ground', this.tileset);
-		this.groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26, 35, 36]);
+		this.groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26, 49, 50]);
 		this.createDecorationTiles();
 		this.platformsLayer = this.map.createLayer('platforms', this.tileset).setDepth(2);
 		this.platformsLayer.filterTiles(tile => tile.index > 0).forEach(tile => tile.setCollision(false, false, true, false, false));
@@ -381,6 +382,9 @@ export class Game extends Phaser.Scene {
 		this.spikes = this.physics.add.group({
 			allowGravity: false,
 		});
+		this.movingSpikes = this.physics.add.group({
+			allowGravity: false,
+		});
 		this.fallenBarrelsGroup = this.physics.add.group({
 			allowGravity: false,
 		});
@@ -402,6 +406,17 @@ export class Game extends Phaser.Scene {
 						type: tile.properties.type,
 					})
 					this.spikes.add(spike);
+				}
+				if ([53, 54, 59, 60].includes(tile.index)) {
+					const rotation = tile.properties.rotation;
+					const movingSpike = new MovingSpike({
+						scene: this,
+						x,
+						y,
+						textureKey: 'moving_spike',
+						rotation,
+					});
+					this.movingSpikes.add(movingSpike);
 				}
 				if ([40].includes(tile.index)) {
 					const fallingBarrel = new FallingBarrel({
@@ -490,12 +505,12 @@ export class Game extends Phaser.Scene {
 		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup]);
 		this.physics.add.overlap(this.player, this.doorGroup, (player, door) => this.changeLevel(door));
 		this.physics.add.overlap(this.player, this.fallenBarrelCollidersGroup, (player, collider) => collider.barrel.fall());
-		this.physics.add.overlap(this.player, this.fallenBarrelsGroup, (player, barrel) => {
-			if (player.takeDamage()) this.push(barrel, player);
+		this.physics.add.overlap(this.player, [this.fallenBarrelsGroup, this.spikes, this.movingSpikes], (player, obj) => {
+			if (player.takeDamage()) this.push(obj, player);
 		});
-		this.physics.add.overlap(this.player, this.spikes, (player, spike) => {
-			if (player.takeDamage()) this.push(spike, player);
-		});
+		// this.physics.add.overlap(this.player, this.spikes, (player, spike) => {
+		// 	if (player.takeDamage()) this.push(spike, player);
+		// });
 		this.physics.add.collider(this.player.swordGroup, this.groundLayer, (sword) => sword.destroy());
 		door.anims.play('closing');
 	}
@@ -551,7 +566,7 @@ export class Game extends Phaser.Scene {
 		})
 		this.physics.add.collider(this.enemyGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);
 		this.physics.add.collider(this.enemyGroup, this.movingYPlatformsGroup, (enemy, platform) => enemy.setTouchingPlatform(platform));
-		this.physics.add.overlap(this.enemyGroup, this.spikes, (enemy, spike) => {
+		this.physics.add.overlap(this.enemyGroup, [this.spikes, this.movingSpikes], (enemy, spike) => {
 			if (enemy.takeDamage(true)) this.push(spike, enemy);
 		});
 		this.physics.add.overlap(this.player, this.enemyHurtboxGroup, (player, hurtbox) => {
@@ -582,7 +597,7 @@ export class Game extends Phaser.Scene {
 		const { tileWidth, tileHeight } = this.tileset;
 		textureKeys.forEach(item => {
 			this.groundLayer.filterTiles(tile => [1, 2, 3].includes(tile.index)).forEach(tile => {
-				if (Game.checkChance(85) || Game.checkGroupIntersection([this.doorGroup, this.spikes], tile)) return
+				if (Game.checkChance(85) || Game.checkGroupIntersection([this.doorGroup, this.spikes, this.movingSpikes], tile)) return
 				const { width, height } = this.textures.list[item].source[0];
 				const obj = new DecorationObject({
 					scene: this,
@@ -597,7 +612,7 @@ export class Game extends Phaser.Scene {
 		this.groundLayer.filterTiles(tile => tile.index === 2).forEach(tile => {
 			if (this.groundLayer.getTileAt(tile.x - 1, tile.y)?.index !== 2) return
 			if (this.groundLayer.getTileAt(tile.x + 1, tile.y)?.index !== 2) return
-			if (Game.checkChance(90) || Game.checkGroupIntersection([this.doorGroup, this.spikes], tile)) return
+			if (Game.checkChance(90) || Game.checkGroupIntersection([this.doorGroup, this.spikes, this.movingSpikes], tile)) return
 			const { width, height } = this.textures.list['table'].source[0];
 			const table = new DecorationObject({
 				scene: this,

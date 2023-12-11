@@ -370,6 +370,15 @@
 				}
 			},
 			{
+				"type": "spritesheet",
+				"key": "moving_spike",
+				"url": "./assets/sprites/moving_spike.png",
+				"frameConfig": {
+					"frameWidth": 64,
+					"frameHeight": 64
+				}
+			},
+			{
 				"type": "aseprite",
 				"key": "falling_barrel",
 				"textureURL": "./assets/sprites/falling_barrel.png",

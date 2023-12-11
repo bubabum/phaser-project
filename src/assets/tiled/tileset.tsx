@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="tileset" tilewidth="64" tileheight="64" tilecount="48" columns="6">
- <image source="../tiles/tileset.png" width="384" height="512"/>
+<tileset version="1.9" tiledversion="1.9.2" name="tileset" tilewidth="64" tileheight="64" tilecount="60" columns="6">
+ <image source="../tiles/tileset.png" width="384" height="640"/>
  <tile id="29">
   <properties>
    <property name="axis" value="x"/>
@@ -40,6 +40,26 @@
  <tile id="47">
   <properties>
    <property name="type" value="right"/>
+  </properties>
+ </tile>
+ <tile id="52">
+  <properties>
+   <property name="rotation" type="int" value="0"/>
+  </properties>
+ </tile>
+ <tile id="53">
+  <properties>
+   <property name="rotation" type="int" value="90"/>
+  </properties>
+ </tile>
+ <tile id="58">
+  <properties>
+   <property name="rotation" type="int" value="180"/>
+  </properties>
+ </tile>
+ <tile id="59">
+  <properties>
+   <property name="rotation" type="int" value="-90"/>
   </properties>
  </tile>
 </tileset>

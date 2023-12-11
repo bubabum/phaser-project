@@ -102,7 +102,7 @@
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 41, 0, 0, 41, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 41, 41, 41, 41, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -164,7 +164,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":54,
+                 "gid":66,
                  "height":96,
                  "id":7,
                  "name":"door_in",
@@ -177,12 +177,12 @@
                  "rotation":0,
                  "visible":true,
                  "width":78,
-                 "x":960,
+                 "x":320,
                  "y":448
                 }, 
                 {
                  "class":"",
-                 "gid":54,
+                 "gid":66,
                  "height":96,
                  "id":358,
                  "name":"door_out",
@@ -210,10 +210,56 @@
          "name":"enemies",
          "objects":[
                 {
+                 "class":"BigGuy",
+                 "gid":62,
+                 "height":74,
+                 "id":347,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"BigGuy"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"big_guy"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":77,
+                 "x":1856,
+                 "y":1152
+                }, 
+                {
+                 "class":"BigGuy",
+                 "gid":62,
+                 "height":74,
+                 "id":348,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"className",
+                         "type":"string",
+                         "value":"BigGuy"
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"big_guy"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":77,
+                 "x":1280,
+                 "y":448
+                }, 
+                {
                  "class":"Cucumber",
-                 "gid":53,
+                 "gid":65,
                  "height":68,
-                 "id":373,
+                 "id":351,
                  "name":"",
                  "properties":[
                         {
@@ -229,31 +275,31 @@
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1472,
-                 "y":512
+                 "x":1088,
+                 "y":1152
                 }, 
                 {
-                 "class":"Capitan",
-                 "gid":52,
-                 "height":72,
-                 "id":374,
+                 "class":"Canon",
+                 "gid":2147483711,
+                 "height":46,
+                 "id":352,
                  "name":"",
                  "properties":[
                         {
                          "name":"className",
                          "type":"string",
-                         "value":"Capitan"
+                         "value":"Canon"
                         }, 
                         {
                          "name":"texture",
                          "type":"string",
-                         "value":"capitan"
+                         "value":"canon"
                         }],
                  "rotation":0,
                  "visible":true,
-                 "width":80,
-                 "x":1600,
-                 "y":576
+                 "width":62,
+                 "x":2176,
+                 "y":1024
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -358,7 +404,7 @@
          "y":0
         }],
  "nextlayerid":41,
- "nextobjectid":375,
+ "nextobjectid":370,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
@@ -368,12 +414,12 @@
          "columns":6,
          "firstgid":1,
          "image":"..\/tiles\/tileset.png",
-         "imageheight":512,
+         "imageheight":640,
          "imagewidth":384,
          "margin":0,
          "name":"tileset",
          "spacing":0,
-         "tilecount":48,
+         "tilecount":60,
          "tileheight":64,
          "tiles":[
                 {
@@ -452,12 +498,48 @@
                          "type":"string",
                          "value":"right"
                         }]
+                }, 
+                {
+                 "id":52,
+                 "properties":[
+                        {
+                         "name":"rotation",
+                         "type":"int",
+                         "value":0
+                        }]
+                }, 
+                {
+                 "id":53,
+                 "properties":[
+                        {
+                         "name":"rotation",
+                         "type":"int",
+                         "value":90
+                        }]
+                }, 
+                {
+                 "id":58,
+                 "properties":[
+                        {
+                         "name":"rotation",
+                         "type":"int",
+                         "value":180
+                        }]
+                }, 
+                {
+                 "id":59,
+                 "properties":[
+                        {
+                         "name":"rotation",
+                         "type":"int",
+                         "value":-90
+                        }]
                 }],
          "tilewidth":64
         }, 
         {
          "columns":1,
-         "firstgid":49,
+         "firstgid":61,
          "image":"..\/Objects\/bald_pirate.png",
          "imageheight":67,
          "imagewidth":63,
@@ -486,7 +568,7 @@
         }, 
         {
          "columns":1,
-         "firstgid":50,
+         "firstgid":62,
          "image":"..\/Objects\/big_guy.png",
          "imageheight":74,
          "imagewidth":77,
@@ -515,7 +597,7 @@
         }, 
         {
          "columns":1,
-         "firstgid":51,
+         "firstgid":63,
          "image":"..\/Objects\/canon.png",
          "imageheight":46,
          "imagewidth":62,
@@ -552,7 +634,7 @@
         {
          "class":"Capitan",
          "columns":1,
-         "firstgid":52,
+         "firstgid":64,
          "image":"..\/Objects\/capitan.png",
          "imageheight":72,
          "imagewidth":80,
@@ -581,7 +663,7 @@
         }, 
         {
          "columns":1,
-         "firstgid":53,
+         "firstgid":65,
          "image":"..\/Objects\/cucumber.png",
          "imageheight":68,
          "imagewidth":64,
@@ -610,7 +692,7 @@
         }, 
         {
          "columns":1,
-         "firstgid":54,
+         "firstgid":66,
          "image":"..\/Objects\/door.png",
          "imageheight":96,
          "imagewidth":78,
