@@ -550,6 +550,7 @@ export class Game extends Phaser.Scene {
 		}
 		if (!this.map.getObjectLayer('enemies')?.objects) return
 		this.map.getObjectLayer('enemies').objects.forEach(object => {
+			console.log(object)
 			const className = classes[object.properties.find(item => item.name === 'className').value];
 			const textureKey = object.properties.find(item => item.name === 'texture').value;
 			let direction = 'right';

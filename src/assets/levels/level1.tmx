@@ -3,54 +3,59 @@
  <editorsettings>
   <export target="level1.json" format="json"/>
  </editorsettings>
- <tileset firstgid="1" source="tiled/tileset.tsx"/>
- <tileset firstgid="49" name="bald_pirate" tilewidth="63" tileheight="67" tilecount="1" columns="1">
-  <image source="Objects/bald_pirate.png" width="63" height="67"/>
-  <tile id="0" class="BaldPirate">
+  <tileset firstgid="1" source="../tiled/tileset.tsx"/>
+ <tileset firstgid="61" name="objects" tilewidth="80" tileheight="96" tilecount="9" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="0">
    <properties>
     <property name="className" value="BaldPirate"/>
     <property name="texture" value="bald_pirate"/>
    </properties>
+   <image width="63" height="67" source="objects/bald_pirate.png"/>
   </tile>
- </tileset>
- <tileset firstgid="50" name="big_guy" tilewidth="77" tileheight="74" tilecount="1" columns="1">
-  <image source="Objects/big_guy.png" width="77" height="74"/>
-  <tile id="0" class="BigGuy">
+  <tile id="1">
    <properties>
     <property name="className" value="BigGuy"/>
     <property name="texture" value="big_guy"/>
    </properties>
+   <image width="77" height="74" source="objects/big_guy.png"/>
   </tile>
- </tileset>
- <tileset firstgid="51" name="canon" tilewidth="62" tileheight="46" tilecount="1" columns="1">
-  <image source="Objects/canon.png" width="62" height="46"/>
-  <tile id="0" class="Canon">
+  <tile id="2">
    <properties>
     <property name="className" value="Canon"/>
     <property name="texture" value="canon"/>
    </properties>
+   <image width="62" height="46" source="objects/canon.png"/>
   </tile>
- </tileset>
- <tileset firstgid="52" name="capitan" class="Capitan" tilewidth="80" tileheight="72" tilecount="1" columns="1">
-  <image source="Objects/capitan.png" width="80" height="72"/>
-  <tile id="0" class="Capitan">
+  <tile id="3">
    <properties>
     <property name="className" value="Capitan"/>
     <property name="texture" value="capitan"/>
    </properties>
+   <image width="80" height="72" source="objects/capitan.png"/>
   </tile>
- </tileset>
- <tileset firstgid="53" name="cucumber" tilewidth="64" tileheight="68" tilecount="1" columns="1">
-  <image source="Objects/cucumber.png" width="64" height="68"/>
-  <tile id="0" class="Cucumber">
+  <tile id="4">
    <properties>
     <property name="className" value="Cucumber"/>
     <property name="texture" value="cucumber"/>
    </properties>
+   <image width="64" height="68" source="objects/cucumber.png"/>
   </tile>
- </tileset>
- <tileset firstgid="54" name="door" tilewidth="78" tileheight="96" tilecount="1" columns="1">
-  <image source="../src/tiled/Objects/door.png" width="78" height="96"/>
+  <tile id="5">
+   <properties>
+    <property name="id" type="int" value="0"/>
+   </properties>
+   <image width="78" height="96" source="objects/door.png"/>
+  </tile>
+  <tile id="6">
+   <image width="64" height="64" source="objects/continue.png"/>
+  </tile>
+  <tile id="7">
+   <image width="64" height="64" source="objects/key.png"/>
+  </tile>
+  <tile id="8">
+   <image width="64" height="64" source="objects/life.png"/>
+  </tile>
  </tileset>
  <layer id="1" name="ground" width="40" height="40">
   <data encoding="csv">
