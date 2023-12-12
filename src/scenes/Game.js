@@ -58,7 +58,7 @@ export class Game extends Phaser.Scene {
 			},
 		})
 		this.levels = [
-			{ tilemapKey: 'level0', hasLight: false },
+			{ tilemapKey: 'level1', hasLight: false },
 			{ tilemapKey: 'level1', hasLight: true },
 			{ tilemapKey: 'level2', hasLight: false },
 		];
@@ -92,7 +92,7 @@ export class Game extends Phaser.Scene {
 		this.map = this.make.tilemap({ key: this.levels[this.currentLevel].tilemapKey, tileWidth: 64, tileHeight: 64 });
 		this.tileset = this.map.addTilesetImage('tileset', 'tileset');
 		this.groundLayer = this.map.createLayer('ground', this.tileset);
-		this.groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26, 49, 50]);
+		this.groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26, 50, 56]);
 		this.createDecorationTiles();
 		this.platformsLayer = this.map.createLayer('platforms', this.tileset).setDepth(2);
 		this.platformsLayer.filterTiles(tile => tile.index > 0).forEach(tile => tile.setCollision(false, false, true, false, false));
@@ -190,13 +190,14 @@ export class Game extends Phaser.Scene {
 		const { x, y } = enemy;
 		const rnd = Math.floor(Math.random() * 9) + 1;
 		let collectible;
-		if (rnd === 1) {
+		if (rnd < 10) {
 			collectible = new RumPowerUp({ scene: this, x, y, textureKey: 'rum_drop' });
 		} else if (1 < rnd && rnd < 6) {
 			collectible = new SwordPowerUp({ scene: this, x, y, textureKey: 'sword_drop' });
 		} else {
 			return
 		}
+		console.log(this.collectibles)
 		this.collectibles.add(collectible);
 		this.push(enemy, collectible)
 	}
@@ -432,8 +433,9 @@ export class Game extends Phaser.Scene {
 		})
 	}
 	createCollectibles() {
-		const layer = this.map.getLayer('collectibles');
+		const layer = this.map.getObjectLayer('collectibles')?.objects;
 		if (!layer) return
+		const { tileWidth, tileHeight } = this.tileset;
 		const classes = {
 			life: Life,
 			continue: Continue,
@@ -450,24 +452,22 @@ export class Game extends Phaser.Scene {
 			if (player.addCollectible(collectible.id, collectible.type)) collectible.disappear();
 		});
 		this.physics.add.collider(this.collectibles, [this.groundLayer, this.platformsLayer]);
-		layer.data.forEach(row => {
-			row.forEach(tile => {
-				if (tile.index === -1) return
-				const x = tile.pixelX + tile.width * 0.5;
-				const y = tile.pixelY + tile.height * 0.5;
-				const id = `${this.currentLevel}${x}${y}${tile.properties.type}`;
-				if (this.player.collected.has(id) || this.player.collected.has(`${this.currentLevel}key`) && tile.properties.type === 'key') return
-				const className = classes[tile.properties.type]
-				const collectible = new className({
-					scene: this,
-					x,
-					y,
-					textureKey: tile.properties.type,
-					type: tile.properties.type,
-				})
-				this.collectibles.add(collectible);
-				if (tile.properties.type === 'key') collectible.body.setAllowGravity(false)
+		layer.forEach(obj => {
+			const type = obj.properties.find(item => item.name === 'type').value;
+			const x = obj.x + tileWidth * 0.5;
+			const y = obj.y - tileHeight + tileHeight * 0.5;
+			const id = `${this.currentLevel}${x}${y}${type}`;
+			if (this.player.collected.has(id) || this.player.collected.has(`${this.currentLevel}key`) && type === 'key') return
+			const className = classes[type]
+			const collectible = new className({
+				scene: this,
+				x,
+				y,
+				textureKey: type,
+				type: type,
 			})
+			this.collectibles.add(collectible);
+			if (type === 'key') collectible.body.setAllowGravity(false)
 		})
 	}
 	createPlayer() {
@@ -550,7 +550,6 @@ export class Game extends Phaser.Scene {
 		}
 		if (!this.map.getObjectLayer('enemies')?.objects) return
 		this.map.getObjectLayer('enemies').objects.forEach(object => {
-			console.log(object)
 			const className = classes[object.properties.find(item => item.name === 'className').value];
 			const textureKey = object.properties.find(item => item.name === 'texture').value;
 			let direction = 'right';
