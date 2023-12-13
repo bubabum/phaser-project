@@ -248,7 +248,7 @@
   </object>
  </objectgroup>
  <objectgroup id="34" name="fading_platforms">
-  <object id="248" gid="30" x="2240" y="1728" width="64" height="64"/>
+  <object id="248" gid="30" x="2112" y="1728" width="64" height="64"/>
   <object id="249" gid="30" x="2176" y="1792" width="64" height="64"/>
   <object id="254" gid="30" x="768" y="1792" width="64" height="64"/>
   <object id="256" gid="30" x="960" y="1728" width="64" height="64"/>
