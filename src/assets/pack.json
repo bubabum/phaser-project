@@ -266,8 +266,8 @@
 				"key": "key",
 				"url": "./assets/sprites/key.png",
 				"frameConfig": {
-					"frameWidth": 30,
-					"frameHeight": 30
+					"frameWidth": 32,
+					"frameHeight": 32
 				}
 			},
 			{

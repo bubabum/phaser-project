@@ -58,7 +58,7 @@ export class Game extends Phaser.Scene {
 			},
 		})
 		this.levels = [
-			{ tilemapKey: 'level1', hasLight: false },
+			{ tilemapKey: 'level2', hasLight: false },
 			{ tilemapKey: 'level1', hasLight: true },
 			{ tilemapKey: 'level2', hasLight: false },
 		];
@@ -505,6 +505,9 @@ export class Game extends Phaser.Scene {
 		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup]);
 		this.physics.add.overlap(this.player, this.doorGroup, (player, door) => this.changeLevel(door));
 		this.physics.add.overlap(this.player, this.fallenBarrelCollidersGroup, (player, collider) => collider.barrel.fall());
+		this.physics.add.overlap(this.player.bombGroup, this.fallenBarrelCollidersGroup, (bomb, collider) => {
+			if (bomb.exploded) collider.barrel.fall();
+		});
 		this.physics.add.overlap(this.player, [this.fallenBarrelsGroup, this.spikes, this.movingSpikes], (player, obj) => {
 			if (player.takeDamage()) this.push(obj, player);
 		});
@@ -566,7 +569,7 @@ export class Game extends Phaser.Scene {
 		})
 		this.physics.add.collider(this.enemyGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);
 		this.physics.add.collider(this.enemyGroup, this.movingYPlatformsGroup, (enemy, platform) => enemy.setTouchingPlatform(platform));
-		this.physics.add.overlap(this.enemyGroup, [this.spikes, this.movingSpikes], (enemy, spike) => {
+		this.physics.add.overlap(this.enemyGroup, [this.spikes, this.movingSpikes, this.fallenBarrelsGroup], (enemy, spike) => {
 			if (enemy.takeDamage(true)) this.push(spike, enemy);
 		});
 		this.physics.add.overlap(this.player, this.enemyHurtboxGroup, (player, hurtbox) => {
