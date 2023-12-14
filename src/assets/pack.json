@@ -54,18 +54,23 @@
 			},
 			{
 				"type": "tilemapTiledJSON",
-				"key": "level0",
-				"url": "./assets/levels/level0.json"
+				"key": "first",
+				"url": "./assets/levels/first.json"
 			},
 			{
 				"type": "tilemapTiledJSON",
-				"key": "level1",
-				"url": "./assets/levels/level1.json"
+				"key": "second",
+				"url": "./assets/levels/second.json"
 			},
 			{
 				"type": "tilemapTiledJSON",
-				"key": "level2",
-				"url": "./assets/levels/level2.json"
+				"key": "eight",
+				"url": "./assets/levels/eight.json"
+			},
+			{
+				"type": "tilemapTiledJSON",
+				"key": "six_rooms",
+				"url": "./assets/levels/six_rooms.json"
 			},
 			{
 				"type": "image",

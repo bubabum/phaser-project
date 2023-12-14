@@ -58,9 +58,10 @@ export class Game extends Phaser.Scene {
 			},
 		})
 		this.levels = [
-			{ tilemapKey: 'level2', hasLight: false },
-			{ tilemapKey: 'level1', hasLight: true },
-			{ tilemapKey: 'level2', hasLight: false },
+			{ tilemapKey: 'six_rooms', hasLight: false },
+			{ tilemapKey: 'second', hasLight: false },
+			{ tilemapKey: 'eight', hasLight: false },
+			{ tilemapKey: 'six_rooms', hasLight: false },
 		];
 	}
 
@@ -118,6 +119,7 @@ export class Game extends Phaser.Scene {
 		this.createLightObjects();
 		this.createCamera();
 		//this.time.delayedCall(1000, () => this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!'))
+		this.time.delayedCall(1000, () => this.showMessageBox(`level: ${this.currentLevel}`))
 
 		if (this.hasLight) this.createLight();
 
@@ -190,14 +192,13 @@ export class Game extends Phaser.Scene {
 		const { x, y } = enemy;
 		const rnd = Math.floor(Math.random() * 9) + 1;
 		let collectible;
-		if (rnd < 10) {
+		if (rnd === 1) {
 			collectible = new RumPowerUp({ scene: this, x, y, textureKey: 'rum_drop' });
 		} else if (1 < rnd && rnd < 6) {
 			collectible = new SwordPowerUp({ scene: this, x, y, textureKey: 'sword_drop' });
 		} else {
 			return
 		}
-		console.log(this.collectibles)
 		this.collectibles.add(collectible);
 		this.push(enemy, collectible)
 	}
@@ -208,17 +209,16 @@ export class Game extends Phaser.Scene {
 		// 	!this.player.hasKey &&
 		// 	this.player.body.onFloor()) return this.showMessageBox('I need a key!')
 		const keyDown = this.controller.buttons.openDoor.isPressed;
-		const hasKey = this.player.collected.has(`${door.id - 1}key`) || door.id < this.currentLevel && door.id !== -1;
+		const hasKey = this.player.collected.has(`${this.currentLevel}key`) || door.id === -1 && this.currentLevel !== 0;
 		const onFloor = this.player.body.onFloor();
 		if (!keyDown || !hasKey || !onFloor) return
-		const movingToNextLevel = door.id > this.currentLevel;
 		door.disableBody();
 		door.anims.play('opening');
 		this.player.setState('DOOR_IN');
 		door.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'opening', function (anims) {
 			this.cameras.main.fadeOut(500);
 			this.time.delayedCall(500, () => {
-				this.scene.restart({ level: door.id, playerData: this.player.getPlayerData(false), movingToNextLevel });
+				this.scene.restart({ level: this.currentLevel + door.id, playerData: this.player.getPlayerData(false), movingToNextLevel: door.id === 1 });
 			});
 		}, this);
 	}
@@ -471,8 +471,7 @@ export class Game extends Phaser.Scene {
 		})
 	}
 	createPlayer() {
-		let door = this.doorGroup.getChildren().find(item => item.id === this.currentLevel - 1) || this.doorGroup.getChildren().sort((a, b) => a.id - b.id)[0];
-		if (!this.movingToNextLevel) door = this.doorGroup.getChildren().find(item => item.id === this.currentLevel + 1);
+		let door = this.doorGroup.getChildren().find(item => item.id === (this.movingToNextLevel ? -1 : 1));
 		const textures = {
 			player: 'bomb_guy',
 			bombBar: 'bomb_bar',
@@ -640,7 +639,8 @@ export class Game extends Phaser.Scene {
 		});
 		chainTextures.forEach(item => {
 			this.groundLayer.filterTiles(tile => [13, 14, 15].includes(tile.index)).forEach(tile => {
-				if (Game.checkChance(90)) return
+				if (Game.checkChance(60)) return
+				if ([1, 2, 3].includes(this.groundLayer.getTileAt(tile.x, tile.y + 2)?.index) && item === 'big_chain') return
 				const { width, height } = this.textures.list[item].source[0];
 				const obj = new Chain({
 					scene: this,

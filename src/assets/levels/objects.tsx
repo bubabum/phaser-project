@@ -38,7 +38,7 @@
  </tile>
  <tile id="5">
   <properties>
-   <property name="id" type="int" value="0"/>
+   <property name="id" type="int" value="-1"/>
   </properties>
   <image width="78" height="96" source="objects/door.png"/>
  </tile>

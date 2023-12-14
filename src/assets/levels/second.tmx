@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="64" tileheight="64" infinite="0" nextlayerid="42" nextobjectid="352">
  <editorsettings>
-  <export target="level1.json" format="json"/>
+  <export target="second.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" source="tileset.tsx"/>
  <tileset firstgid="61" source="objects.tsx"/>
@@ -185,7 +185,7 @@
   <object id="342" gid="66" x="384" y="1024" width="78" height="96"/>
   <object id="343" gid="66" x="640" y="2176" width="78" height="96">
    <properties>
-    <property name="id" type="int" value="2"/>
+    <property name="id" type="int" value="1"/>
    </properties>
   </object>
  </objectgroup>
