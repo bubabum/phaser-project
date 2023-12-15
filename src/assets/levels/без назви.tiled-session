@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "six_rooms.tmx",
+    "activeFile": "rules.tmx",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -49,10 +49,10 @@
         },
         "first.tmx": {
             "scale": 0.44939453124999995,
-            "selectedLayer": 5,
+            "selectedLayer": 9,
             "viewCenter": {
-                "x": 1280.6119344604285,
-                "y": 641.9748793950193
+                "x": 1275.0488939110783,
+                "y": 347.1337302794559
             }
         },
         "level0.tmx": {
@@ -133,8 +133,8 @@
             "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 740.6666666666667,
-                "y": 520.6666666666665
+                "x": 740,
+                "y": 521.3333333333334
             }
         },
         "second.tmx": {
@@ -146,11 +146,26 @@
             }
         },
         "six_rooms.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 5,
+            "expandedObjectLayers": [
+                7,
+                9,
+                8,
+                11,
+                10
+            ],
+            "scale": 0.0625,
+            "selectedLayer": 9,
             "viewCenter": {
-                "x": 2451,
-                "y": 1541
+                "x": 1392,
+                "y": 1536
+            }
+        },
+        "template.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 9,
+            "viewCenter": {
+                "x": 1569.6969696969697,
+                "y": 736.3636363636364
             }
         },
         "tileset.tsx": {
@@ -175,22 +190,21 @@
     "map.tileWidth": 64,
     "map.width": 110,
     "openFiles": [
-        "rules.tmx",
-        "six_rooms.tmx"
+        "rules.tmx"
     ],
     "project": "без назви.tiled-project",
     "recentFiles": [
         "rules.tmx",
+        "template.tmx",
         "six_rooms.tmx",
+        "first.tmx",
         "eight.tmx",
         "second.tmx",
-        "first.tmx",
         "objects.tsx",
         "level2.tmx",
         "level1.tmx",
         "level0.tmx",
         "level3.tmx",
-        "tileset.tsx",
-        "без назви.tmx"
+        "tileset.tsx"
     ]
 }

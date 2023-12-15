@@ -209,7 +209,7 @@ export class Game extends Phaser.Scene {
 		// 	!this.player.hasKey &&
 		// 	this.player.body.onFloor()) return this.showMessageBox('I need a key!')
 		const keyDown = this.controller.buttons.openDoor.isPressed;
-		const hasKey = this.player.collected.has(`${this.currentLevel}key`) || door.id === -1 && this.currentLevel !== 0;
+		const hasKey = this.player.collected.has(`${this.currentLevel}key`) && door.id === 1 || door.id === -1 && this.currentLevel !== 0;
 		const onFloor = this.player.body.onFloor();
 		if (!keyDown || !hasKey || !onFloor) return
 		door.disableBody();
