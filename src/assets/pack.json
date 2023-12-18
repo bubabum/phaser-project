@@ -73,6 +73,11 @@
 				"url": "./assets/levels/six_rooms.json"
 			},
 			{
+				"type": "tilemapTiledJSON",
+				"key": "three_isles",
+				"url": "./assets/levels/three_isles.json"
+			},
+			{
 				"type": "image",
 				"key": "continue_hud",
 				"url": "./assets/hud/continue.png"

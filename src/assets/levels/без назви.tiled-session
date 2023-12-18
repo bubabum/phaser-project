@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "rules.tmx",
+    "activeFile": "three_isles.tmx",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -48,11 +48,11 @@
             }
         },
         "first.tmx": {
-            "scale": 0.44939453124999995,
-            "selectedLayer": 9,
+            "scale": 0.75,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 1275.0488939110783,
-                "y": 347.1337302794559
+                "x": 254.66666666666669,
+                "y": 872
             }
         },
         "level0.tmx": {
@@ -133,39 +133,51 @@
             "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 740,
-                "y": 521.3333333333334
+                "x": 960,
+                "y": 639.3333333333333
             }
         },
         "second.tmx": {
-            "scale": 0.31876953125,
-            "selectedLayer": 4,
+            "scale": 0.75,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 1287.7642301329574,
-                "y": 1281.4901047729918
+                "x": 1962.6666666666665,
+                "y": 1572
             }
         },
         "six_rooms.tmx": {
             "expandedObjectLayers": [
-                7,
                 9,
                 8,
                 11,
-                10
+                10,
+                7
             ],
-            "scale": 0.0625,
-            "selectedLayer": 9,
+            "scale": 0.5,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 1392,
-                "y": 1536
+                "x": 2024,
+                "y": 2060
             }
         },
         "template.tmx": {
-            "scale": 0.33,
-            "selectedLayer": 9,
+            "scale": 0.75,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 1569.6969696969697,
-                "y": 736.3636363636364
+                "x": 572,
+                "y": 922.6666666666666
+            }
+        },
+        "three_isles.tmx": {
+            "expandedObjectLayers": [
+                30,
+                6
+            ],
+            "scale": 1.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 1392.6666666666665,
+                "y": 724.6666666666666
             }
         },
         "tileset.tsx": {
@@ -182,7 +194,7 @@
             }
         }
     },
-    "last.exportedFilePath": "D:/Projects/Phaser game/src/assets/levels",
+    "last.exportedFilePath": "D:/Сайт/Проєкт/Phaser game/src/assets/levels",
     "map.height": 55,
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
@@ -190,21 +202,22 @@
     "map.tileWidth": 64,
     "map.width": 110,
     "openFiles": [
-        "rules.tmx"
+        "rules.tmx",
+        "three_isles.tmx"
     ],
     "project": "без назви.tiled-project",
     "recentFiles": [
         "rules.tmx",
-        "template.tmx",
-        "six_rooms.tmx",
-        "first.tmx",
-        "eight.tmx",
+        "three_isles.tmx",
         "second.tmx",
+        "first.tmx",
+        "six_rooms.tmx",
+        "template.tmx",
+        "eight.tmx",
         "objects.tsx",
         "level2.tmx",
         "level1.tmx",
         "level0.tmx",
-        "level3.tmx",
-        "tileset.tsx"
+        "level3.tmx"
     ]
 }

@@ -58,6 +58,7 @@ export class Game extends Phaser.Scene {
 			},
 		})
 		this.levels = [
+			{ tilemapKey: 'three_isles', hasLight: false },
 			{ tilemapKey: 'six_rooms', hasLight: false },
 			{ tilemapKey: 'second', hasLight: false },
 			{ tilemapKey: 'eight', hasLight: false },
