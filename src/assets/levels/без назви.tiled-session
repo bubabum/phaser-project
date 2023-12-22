@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "three_isles.tmx",
+    "activeFile": "platformer.tmx",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -129,6 +129,14 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "platformer.tmx": {
+            "scale": 1,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 879,
+                "y": 651
+            }
+        },
         "rules.tmx": {
             "scale": 0.75,
             "selectedLayer": 1,
@@ -170,14 +178,14 @@
         },
         "three_isles.tmx": {
             "expandedObjectLayers": [
-                30,
-                6
+                6,
+                30
             ],
             "scale": 1.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1392.6666666666665,
-                "y": 724.6666666666666
+                "x": 2240,
+                "y": 895.6666666666666
             }
         },
         "tileset.tsx": {
@@ -203,12 +211,14 @@
     "map.width": 110,
     "openFiles": [
         "rules.tmx",
-        "three_isles.tmx"
+        "three_isles.tmx",
+        "platformer.tmx"
     ],
     "project": "без назви.tiled-project",
     "recentFiles": [
         "rules.tmx",
         "three_isles.tmx",
+        "platformer.tmx",
         "second.tmx",
         "first.tmx",
         "six_rooms.tmx",
@@ -217,7 +227,6 @@
         "objects.tsx",
         "level2.tmx",
         "level1.tmx",
-        "level0.tmx",
-        "level3.tmx"
+        "level0.tmx"
     ]
 }

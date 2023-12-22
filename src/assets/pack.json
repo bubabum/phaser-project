@@ -78,6 +78,11 @@
 				"url": "./assets/levels/three_isles.json"
 			},
 			{
+				"type": "tilemapTiledJSON",
+				"key": "platformer",
+				"url": "./assets/levels/platformer.json"
+			},
+			{
 				"type": "image",
 				"key": "continue_hud",
 				"url": "./assets/hud/continue.png"
@@ -274,10 +279,10 @@
 			{
 				"type": "spritesheet",
 				"key": "key",
-				"url": "./assets/sprites/key.png",
+				"url": "./assets/sprites/key1.png",
 				"frameConfig": {
-					"frameWidth": 32,
-					"frameHeight": 32
+					"frameWidth": 24,
+					"frameHeight": 24
 				}
 			},
 			{
