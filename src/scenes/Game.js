@@ -27,7 +27,7 @@ import { Window } from '../objects/Window';
 export class Game extends Phaser.Scene {
 
 	static checkChance(chance) {
-		return Math.floor(Math.random() * 99 + 1) <= chance
+		return Math.floor(Math.random() * 99 + 1) >= chance
 	}
 
 	static getRandomFromArray(arr) {
@@ -58,10 +58,10 @@ export class Game extends Phaser.Scene {
 			},
 		})
 		this.levels = [
-			{ tilemapKey: 'platformer', hasLight: false },
-			{ tilemapKey: 'three_isles', hasLight: false },
-			{ tilemapKey: 'six_rooms', hasLight: false },
+			{ tilemapKey: 'first', hasLight: false },
 			{ tilemapKey: 'second', hasLight: false },
+			{ tilemapKey: 'three_isles', hasLight: false },
+			{ tilemapKey: 'platformer', hasLight: false },
 			{ tilemapKey: 'eight', hasLight: false },
 			{ tilemapKey: 'six_rooms', hasLight: false },
 		];
@@ -247,12 +247,6 @@ export class Game extends Phaser.Scene {
 	}
 
 	createDecorationTiles() {
-		const chance = 25;
-		function* checkChance(chance) {
-			while (true) {
-				yield Math.floor(Math.random() * 99 + 1) <= chance
-			}
-		}
 		const getRandomTexture = (texturKey, textureIndexes) => {
 			return `${texturKey}${textureIndexes[Math.floor(Math.random() * textureIndexes.length)]}`;
 		}
@@ -312,7 +306,7 @@ export class Game extends Phaser.Scene {
 		groundTilesMap.forEach(tileOptions => {
 			this.groundLayer.filterTiles(tile => tileOptions.tiles.includes(tile.index)).forEach(tile => {
 				tileOptions.position.forEach(position => {
-					if (checkChance(chance).next().value) addRandomImage(position.x, position.y, tileOptions.textureKey, tileOptions.textureIndexes, tile);
+					if (Game.checkChance(75)) addRandomImage(position.x, position.y, tileOptions.textureKey, tileOptions.textureIndexes, tile);
 				})
 			})
 		})
@@ -601,7 +595,7 @@ export class Game extends Phaser.Scene {
 		const { tileWidth, tileHeight } = this.tileset;
 		textureKeys.forEach(item => {
 			this.groundLayer.filterTiles(tile => [1, 2, 3].includes(tile.index)).forEach(tile => {
-				if (Game.checkChance(85) || Game.checkGroupIntersection([this.doorGroup, this.spikes, this.movingSpikes], tile)) return
+				if (Game.checkChance(15) || Game.checkGroupIntersection([this.doorGroup, this.spikes, this.movingSpikes], tile)) return
 				const { width, height } = this.textures.list[item].source[0];
 				const obj = new DecorationObject({
 					scene: this,
@@ -613,11 +607,16 @@ export class Game extends Phaser.Scene {
 				this.pushableDecorationGroup.add(obj);
 			})
 		})
+		const tables = new Set();
 		this.groundLayer.filterTiles(tile => tile.index === 2).forEach(tile => {
 			if (this.groundLayer.getTileAt(tile.x - 1, tile.y)?.index !== 2) return
 			if (this.groundLayer.getTileAt(tile.x + 1, tile.y)?.index !== 2) return
-			if (Game.checkChance(90) || Game.checkGroupIntersection([this.doorGroup, this.spikes, this.movingSpikes], tile)) return
+			for (let i = -2; i < 3; i++) {
+				if (tables.has(`x${tile.x + i}y${tile.y}`)) return
+			}
+			if (Game.checkChance(20) || Game.checkGroupIntersection([this.doorGroup, this.spikes, this.movingSpikes], tile)) return
 			const { width, height } = this.textures.list['table'].source[0];
+			tables.add(`x${tile.x}y${tile.y}`)
 			const table = new DecorationObject({
 				scene: this,
 				x: tile.pixelX + width * 0.5,
@@ -641,7 +640,7 @@ export class Game extends Phaser.Scene {
 		});
 		chainTextures.forEach(item => {
 			this.groundLayer.filterTiles(tile => [13, 14, 15].includes(tile.index)).forEach(tile => {
-				if (Game.checkChance(60)) return
+				if (Game.checkChance(40)) return
 				if ([1, 2, 3].includes(this.groundLayer.getTileAt(tile.x, tile.y + 2)?.index) && item === 'big_chain') return
 				const { width, height } = this.textures.list[item].source[0];
 				const obj = new Chain({
@@ -683,17 +682,3 @@ export class Game extends Phaser.Scene {
 		this.lights.enable().setAmbientColor(0x333333);
 	}
 }
-
-function getKeyFrames(array) { //utility for production
-	let start = 0;
-	let end = -1;
-	let result = [];
-	array.forEach(item => {
-		end += item;
-		result.push([start, end])
-		start = end + 1;
-	})
-	return result
-}
-
-//console.log(getKeyFrames([38, 16, 1, 4, 2, 3, 11, 8, 1, 16, 11, 8, 6, 4]))
