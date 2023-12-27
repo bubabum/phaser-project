@@ -83,6 +83,11 @@
 				"url": "./assets/levels/platformer.json"
 			},
 			{
+				"type": "tilemapTiledJSON",
+				"key": "boss",
+				"url": "./assets/levels/boss.json"
+			},
+			{
 				"type": "image",
 				"key": "continue_hud",
 				"url": "./assets/hud/continue.png"

@@ -39,6 +39,14 @@
             "dynamicWrapping": false,
             "scaleInDock": 1
         },
+        "boss.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 1712,
+                "y": 832
+            }
+        },
         "eight.tmx": {
             "scale": 0.21251302083333332,
             "selectedLayer": 4,
@@ -142,7 +150,7 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 960,
-                "y": 639.3333333333333
+                "y": 638.6666666666665
             }
         },
         "second.tmx": {
@@ -169,11 +177,11 @@
             }
         },
         "template.tmx": {
-            "scale": 0.75,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 572,
-                "y": 922.6666666666666
+                "x": 1088,
+                "y": 716
             }
         },
         "three_isles.tmx": {
@@ -185,7 +193,7 @@
             "selectedLayer": 2,
             "viewCenter": {
                 "x": 2240,
-                "y": 895.6666666666666
+                "y": 895.3333333333333
             }
         },
         "tileset.tsx": {
@@ -216,17 +224,17 @@
     ],
     "project": "без назви.tiled-project",
     "recentFiles": [
-        "rules.tmx",
+        "boss.tmx",
+        "template.tmx",
         "three_isles.tmx",
         "platformer.tmx",
+        "rules.tmx",
         "second.tmx",
         "first.tmx",
         "six_rooms.tmx",
-        "template.tmx",
         "eight.tmx",
         "objects.tsx",
         "level2.tmx",
-        "level1.tmx",
-        "level0.tmx"
+        "level1.tmx"
     ]
 }

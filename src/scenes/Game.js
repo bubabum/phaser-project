@@ -58,6 +58,7 @@ export class Game extends Phaser.Scene {
 			},
 		})
 		this.levels = [
+			{ tilemapKey: 'boss', hasLight: false },
 			{ tilemapKey: 'first', hasLight: false },
 			{ tilemapKey: 'second', hasLight: false },
 			{ tilemapKey: 'three_isles', hasLight: false },
