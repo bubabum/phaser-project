@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="objects" tilewidth="80" tileheight="96" tilecount="9" columns="0">
+<tileset version="1.9" tiledversion="1.9.2" name="objects" tilewidth="80" tileheight="96" tilecount="10" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -59,5 +59,8 @@
    <property name="type" value="life"/>
   </properties>
   <image width="64" height="64" source="objects/life.png"/>
+ </tile>
+ <tile id="9">
+  <image width="68" height="46" source="objects/whale.png"/>
  </tile>
 </tileset>

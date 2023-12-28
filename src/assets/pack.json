@@ -238,6 +238,15 @@
 			},
 			{
 				"type": "spritesheet",
+				"key": "bubble",
+				"url": "./assets/sprites/bubble.png",
+				"frameConfig": {
+					"frameWidth": 22,
+					"frameHeight": 21
+				}
+			},
+			{
+				"type": "spritesheet",
 				"key": "run_particles",
 				"url": "./assets/sprites/run_particles.png",
 				"frameConfig": {
@@ -333,6 +342,15 @@
 				"frameConfig": {
 					"frameWidth": 64,
 					"frameHeight": 68
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "whale",
+				"url": "./assets/sprites/whale.png",
+				"frameConfig": {
+					"frameWidth": 68,
+					"frameHeight": 46
 				}
 			},
 			{

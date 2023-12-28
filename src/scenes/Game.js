@@ -5,6 +5,7 @@ import { Door } from '../objects/Door';
 import { MovingPlatform } from '../objects/MovingPlatform';
 import { FadingPlatform } from '../objects/FadingPlatform';
 import { Bottle } from '../projectiles/Bottle';
+import { Bubble } from '../projectiles/Bubble';
 import { CanonBall } from '../projectiles/CanonBall';
 import { Seed } from '../projectiles/Seed';
 import { Spike } from '../enemies/Spike';
@@ -19,6 +20,7 @@ import { BigGuy } from '../enemies/BigGuy';
 import { Canon } from '../enemies/Canon';
 import { Capitan } from '../enemies/Capitan';
 import { Cucumber } from '../enemies/Cucumber';
+import { Boss } from '../enemies/Boss';
 import { DecorationObject } from '../objects/DecorationObject';
 import { Chain } from '../objects/Chain';
 import { Candle } from '../objects/Candle';
@@ -52,13 +54,13 @@ export class Game extends Phaser.Scene {
 			key: 'Game',
 			physics: {
 				arcade: {
-					//debug: true,
+					debug: true,
 					gravity: { y: 400 }
 				},
 			},
 		})
 		this.levels = [
-			{ tilemapKey: 'boss', hasLight: false },
+			{ tilemapKey: 'boss', hasLight: false, hasBoss: true },
 			{ tilemapKey: 'first', hasLight: false },
 			{ tilemapKey: 'second', hasLight: false },
 			{ tilemapKey: 'three_isles', hasLight: false },
@@ -84,6 +86,7 @@ export class Game extends Phaser.Scene {
 		} = props;
 		this.currentLevel = level;
 		this.hasLight = this.levels[this.currentLevel].hasLight;
+		this.hasBoss = this.levels[this.currentLevel].hasBoss;
 		this.playerData = playerData;
 		this.movingToNextLevel = movingToNextLevel;
 	}
@@ -121,6 +124,7 @@ export class Game extends Phaser.Scene {
 		this.createDecorations();
 		this.createLightObjects();
 		this.createCamera();
+		if (this.hasBoss) this.createBoss();
 		//this.time.delayedCall(1000, () => this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!'))
 		this.time.delayedCall(1000, () => this.showMessageBox(`level: ${this.currentLevel}`))
 
@@ -170,6 +174,7 @@ export class Game extends Phaser.Scene {
 		this.fallenBarrelsGroup.getChildren().forEach(barrel => barrel.update());
 		this.player.update({ t, dt, controller: this.controller });
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
+		if (this.hasBoss) this.boss.update();
 		// const { x, y, width, height } = this.cameras.main.worldView;
 		// this.rect.setPosition(x, y).setSize(width, height);
 
@@ -583,6 +588,27 @@ export class Game extends Phaser.Scene {
 			if (!player.isInvulnerable) this.push(projectile, player);
 			player.takeDamage();
 		});
+	}
+	createBoss() {
+		this.bubbles = this.physics.add.group({
+			defaultKey: 'bubble',
+			classType: Bubble,
+			allowGravity: false,
+			bounceX: 1,
+			bounceY: 1,
+		});
+		const layer = this.map.getObjectLayer('boss')?.objects;
+		if (!layer) return
+		const obj = layer[0];
+		this.boss = new Boss({
+			scene: this,
+			x: this.getObjectCoordinateX(obj),
+			y: this.getObjectCoordinateY(obj),
+			textureKey: 'whale',
+			direction: 'right',
+		});
+		this.physics.add.collider(this.boss, [this.groundLayer, this.platformsLayer]);
+		this.physics.add.collider(this.bubbles, this.groundLayer);
 	}
 	createDecorations() {
 		const textureKeys = ['barrel', 'blue_bottle', 'green_bottle', 'red_bottle', 'skull'];

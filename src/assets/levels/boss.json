@@ -177,8 +177,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":78,
-                 "x":448,
-                 "y":576
+                 "x":576,
+                 "y":1152
                 }, 
                 {
                  "class":"",
@@ -197,6 +197,29 @@
                  "width":78,
                  "x":832,
                  "y":1152
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":45,
+         "name":"boss",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":70,
+                 "height":46,
+                 "id":382,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":68,
+                 "x":832,
+                 "y":1024
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -248,8 +271,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":45,
- "nextobjectid":382,
+ "nextlayerid":46,
+ "nextobjectid":383,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
@@ -394,7 +417,7 @@
          "margin":0,
          "name":"objects",
          "spacing":0,
-         "tilecount":9,
+         "tilecount":10,
          "tileheight":96,
          "tiles":[
                 {
@@ -529,6 +552,12 @@
                          "type":"string",
                          "value":"life"
                         }]
+                }, 
+                {
+                 "id":9,
+                 "image":"objects\/whale.png",
+                 "imageheight":46,
+                 "imagewidth":68
                 }],
          "tilewidth":80
         }],

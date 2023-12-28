@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "platformer.tmx",
+    "activeFile": "boss.tmx",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -40,11 +40,11 @@
             "scaleInDock": 1
         },
         "boss.tmx": {
-            "scale": 0.25,
-            "selectedLayer": 5,
+            "scale": 1.5,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 1712,
-                "y": 832
+                "x": 664,
+                "y": 974.6666666666665
             }
         },
         "eight.tmx": {
@@ -150,7 +150,7 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 960,
-                "y": 638.6666666666665
+                "y": 639.3333333333333
             }
         },
         "second.tmx": {
@@ -211,6 +211,7 @@
         }
     },
     "last.exportedFilePath": "D:/Сайт/Проєкт/Phaser game/src/assets/levels",
+    "last.imagePath": "D:/Сайт/Проєкт/Phaser game/src/assets/levels/objects",
     "map.height": 55,
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
@@ -219,21 +220,20 @@
     "map.width": 110,
     "openFiles": [
         "rules.tmx",
-        "three_isles.tmx",
-        "platformer.tmx"
+        "boss.tmx"
     ],
     "project": "без назви.tiled-project",
     "recentFiles": [
+        "rules.tmx",
         "boss.tmx",
+        "objects.tsx",
         "template.tmx",
         "three_isles.tmx",
         "platformer.tmx",
-        "rules.tmx",
         "second.tmx",
         "first.tmx",
         "six_rooms.tmx",
         "eight.tmx",
-        "objects.tsx",
         "level2.tmx",
         "level1.tmx"
     ]
