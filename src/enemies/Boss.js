@@ -1,5 +1,6 @@
 import { BossIdle } from './BossState';
-import { BossMove } from './BossState';
+import { BossDisappear } from './BossState';
+import { BossAppear } from './BossState';
 import { BossThrowBubble } from './BossState';
 import { EnemyHit } from './EnemyState';
 import { EnemyDeadHit } from './EnemyState';
@@ -24,21 +25,21 @@ export class Boss extends Enemy {
 			[-7, -1],
 			[2, 1],
 			[2, -1],
-		],
-			// this.throwRange = 270;
-			// this.atackRange = 40;
-			// this.hurtboxRadius = 25;
-			// this.hurtboxOffsetY = 0;
-			this.bodyProperties = { width: 64, height: 40, offsetX: 3, offsetY: 6, flipOffsetX: 1 };
+		];
+		this.hurtboxRadius = 20;
+		this.hurtboxOffsetY = 0;
+		this.bodyProperties = { width: 64, height: 40, offsetX: 3, offsetY: 6, flipOffsetX: 1 };
 		this.isInvulnerable = false;
 		this.isAtacking = false;
 		this.canThrow = true;
+		this.bubbleTimer = null;
 		this.setBodyProperties(direction);
-		//this.createHurtbox();
+		this.createHurtbox();
 		this.createAnimations(textureKey);
 		this.states = [
 			new BossIdle(this),
-			new BossMove(this),
+			new BossDisappear(this),
+			new BossAppear(this),
 			new BossThrowBubble(this),
 			new EnemyHit(this),
 			new EnemyDeadHit(this),
@@ -47,41 +48,29 @@ export class Boss extends Enemy {
 		this.setState('IDLE');
 	}
 
+	isBoss() {
+		return true
+	}
+
 	changePosition() {
 		const { tileWidth, tileHeight } = this.scene.tileset;
-		let rnd = Math.floor(Math.random() * (this.movePositions.length - 1));
-		console.log(this.movePositions[rnd])
+		let rnd;
+		do {
+			rnd = Math.floor(Math.random() * (this.movePositions.length - 1));
+		} while (rnd === this.position);
+		this.position = rnd;
 		const x = this.startX + this.movePositions[rnd][0] * tileWidth;
 		const y = this.startY + this.movePositions[rnd][1] * tileHeight;
 		this.setPosition(x, y);
 	}
 
 	throwBubble() {
-		if (this.anims.currentFrame.index === 5 && this.canThrow) {
-			this.canThrow = false;
-			const bubble = this.bubbles.get();
-			bubble.setPosition(this.x, this.y);
-			const angle = Phaser.Math.Angle.BetweenPoints(this, this.player);
-			this.scene.physics.velocityFromRotation(angle, 250, bubble.body.velocity);
-			this.scene.time.delayedCall(3000, () => this.canThrow = true);
-			this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'throw_bubble', function (anims) {
-				this.setState('IDLE')
-			}, this);
-		}
-	}
-
-	checkScaryRun() {
-		if (this.bombGroup.getChildren().length === 0) return
-		for (let i = 0; i < this.bombGroup.getChildren().length; i++) {
-			if (Phaser.Math.Distance.BetweenPoints(this.bombGroup.getChildren()[i], this) < this.scaryRunRange) return true
-		}
-		return false
-	}
-
-	makeScaryRun() {
-		const bomb = this.bombGroup.getChildren().sort((a, b) => Math.abs(a.x - this.x) - Math.abs(b.x - this.x))[0];
-		if (bomb.x < this.x) return this.setDirection('right')
-		this.setDirection('left');
+		if (!this.canThrow) return
+		this.canThrow = false;
+		const bubble = this.bubbles.get();
+		bubble.setPosition(this.x, this.y);
+		const angle = Phaser.Math.Angle.BetweenPoints(this, this.player);
+		this.scene.physics.velocityFromRotation(angle, 250, bubble.body.velocity);
 	}
 
 	createAnimations(textureKey) {
@@ -117,7 +106,7 @@ export class Boss extends Enemy {
 		// });
 		this.anims.create({
 			key: 'atack',
-			frames: this.anims.generateFrameNumbers(textureKey, { start: 79, end: 88 }),
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 68, end: 78 }),
 			frameRate: 20,
 			repeat: 0,
 		});
@@ -143,7 +132,7 @@ export class Boss extends Enemy {
 			key: 'hit',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 89, end: 95 }),
 			frameRate: 20,
-			repeat: 0,
+			repeat: -1,
 		});
 		this.anims.create({
 			key: 'dead_hit',
@@ -155,6 +144,18 @@ export class Boss extends Enemy {
 			key: 'dead_ground',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 102, end: 105 }),
 			frameRate: 10,
+			repeat: -1,
+		});
+		this.anims.create({
+			key: 'disappear',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 106, end: 115 }),
+			frameRate: 20,
+			repeat: -1,
+		});
+		this.anims.create({
+			key: 'appear',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 115, end: 106 }),
+			frameRate: 20,
 			repeat: -1,
 		});
 	}

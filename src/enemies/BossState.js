@@ -7,7 +7,8 @@ export class BossIdle extends State {
 	enter() {
 		const { enemy } = this;
 		//enemy.setVelocityX(0);
-		this.enemy.scene.time.delayedCall(4000, () => enemy.setState('MOVE'));
+		enemy.canThrow = true;
+		enemy.bubbleTimer = enemy.scene.time.delayedCall(3500, () => enemy.setState('DISAPPEAR'));
 	}
 	handleState() {
 		const { enemy } = this;
@@ -18,22 +19,31 @@ export class BossIdle extends State {
 	}
 }
 
-export class BossMove extends State {
+export class BossDisappear extends State {
 	constructor(enemy) {
-		super({ name: 'MOVE', enemy, animation: 'run' });
+		super({ name: 'DISAPPEAR', enemy, animation: 'disappear' });
+	}
+	enter() {
+		const { enemy } = this;
+		enemy.turnToPlayer();
+	}
+	handleState() {
+		const { enemy } = this;
+		if (enemy.anims.getProgress() === 1) enemy.setState('APPEAR');
+	}
+}
+export class BossAppear extends State {
+	constructor(enemy) {
+		super({ name: 'APPEAR', enemy, animation: 'appear' });
 	}
 	enter() {
 		const { enemy } = this;
 		enemy.changePosition();
-		enemy.setState('THROW_BUBBLE');
-		// enemy.setVelocityXByDirection();
+		enemy.turnToPlayer();
 	}
 	handleState() {
 		const { enemy } = this;
-		// if (enemy.checkAtackRange()) return enemy.setState('ATACK');
-		// if (enemy.checkThrowRange() && enemy.canThrow) return enemy.setState('THROW_BOTTLE');
-		// if (!enemy.canMoveForward()) enemy.toogleDirection();
-		// if (enemy.body.velocity.x === 0) enemy.setVelocityXByDirection();
+		if (enemy.anims.getProgress() === 1) enemy.setState('THROW_BUBBLE');
 	}
 }
 
@@ -47,6 +57,7 @@ export class BossThrowBubble extends State {
 	}
 	handleState() {
 		const { enemy } = this;
-		enemy.throwBubble();
+		if (enemy.anims.currentFrame.index > 4) enemy.throwBubble();
+		if (enemy.anims.getProgress() === 1) enemy.setState('IDLE');
 	}
 }

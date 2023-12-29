@@ -63,10 +63,14 @@ export class EnemyHit extends State {
 		super({ name: 'HIT', enemy, animation: 'hit' });
 	}
 	enter() {
-		this.enemy.scene.time.delayedCall(1000, () => this.enemy.setInvulnerability(false));
+		const { enemy } = this;
+		enemy.scene.time.delayedCall(1000, () => enemy.setInvulnerability(false));
+		if (enemy.isBoss() && enemy.bubbleTimer) enemy.bubbleTimer.remove();
 	}
 	handleState() {
-		if (this.enemy.body.velocity.y > 0) this.enemy.setState('FALL');
+		const { enemy } = this;
+		if (enemy.body.velocity.y > 0) enemy.setState('FALL');
+		if (enemy.isBoss() && enemy.anims.getProgress() === 1) enemy.setState('DISAPPEAR');
 	}
 }
 

@@ -124,7 +124,16 @@ export class Game extends Phaser.Scene {
 		this.createDecorations();
 		this.createLightObjects();
 		this.createCamera();
-		if (this.hasBoss) this.createBoss();
+		if (this.hasBoss) {
+			this.createBoss();
+			this.physics.add.overlap(this.boss, this.player.bombGroup, (boss, bomb) => {
+				if (bomb.exploded) boss.takeDamage();
+			});
+			this.physics.add.overlap(this.boss, this.player.swordGroup, (boss, sword) => {
+				boss.takeDamage();
+				sword.destroy();
+			});
+		}
 		//this.time.delayedCall(1000, () => this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!'))
 		this.time.delayedCall(1000, () => this.showMessageBox(`level: ${this.currentLevel}`))
 
