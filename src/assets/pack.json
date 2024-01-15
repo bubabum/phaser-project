@@ -94,6 +94,11 @@
 			},
 			{
 				"type": "image",
+				"key": "key_hud",
+				"url": "./assets/hud/key.png"
+			},
+			{
+				"type": "image",
 				"key": "health_bar",
 				"url": "./assets/hud/health_bar.png"
 			},
@@ -346,6 +351,15 @@
 			},
 			{
 				"type": "spritesheet",
+				"key": "crabby",
+				"url": "./assets/sprites/crabby.png",
+				"frameConfig": {
+					"frameWidth": 160,
+					"frameHeight": 96
+				}
+			},
+			{
+				"type": "spritesheet",
 				"key": "whale",
 				"url": "./assets/sprites/whale.png",
 				"frameConfig": {
@@ -360,6 +374,15 @@
 				"frameConfig": {
 					"frameWidth": 78,
 					"frameHeight": 96
+				}
+			},
+			{
+				"type": "spritesheet",
+				"key": "gate",
+				"url": "./assets/sprites/gate.png",
+				"frameConfig": {
+					"frameWidth": 16,
+					"frameHeight": 64
 				}
 			},
 			{

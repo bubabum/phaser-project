@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "boss.tmx",
+    "activeFile": "second.tmx",
     "automapping.whileDrawing": true,
     "expandedProjectPaths": [
         "."
@@ -43,8 +43,8 @@
             "scale": 1.5,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 664,
-                "y": 974.6666666666665
+                "x": 1280,
+                "y": 640
             }
         },
         "eight.tmx": {
@@ -56,11 +56,11 @@
             }
         },
         "first.tmx": {
-            "scale": 0.75,
-            "selectedLayer": 2,
+            "scale": 1,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 254.66666666666669,
-                "y": 872
+                "x": 619.5,
+                "y": 433
             }
         },
         "level0.tmx": {
@@ -149,16 +149,20 @@
             "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 960,
-                "y": 639.3333333333333
+                "x": 986.6666666666666,
+                "y": 720
             }
         },
         "second.tmx": {
-            "scale": 0.75,
-            "selectedLayer": 1,
+            "expandedObjectLayers": [
+                26,
+                6
+            ],
+            "scale": 0.5,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 1962.6666666666665,
-                "y": 1572
+                "x": 1493,
+                "y": 1034
             }
         },
         "six_rooms.tmx": {
@@ -186,14 +190,14 @@
         },
         "three_isles.tmx": {
             "expandedObjectLayers": [
-                6,
-                30
+                30,
+                6
             ],
-            "scale": 1.5,
+            "scale": 0.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 2240,
-                "y": 895.3333333333333
+                "x": 3125,
+                "y": 1266
             }
         },
         "tileset.tsx": {
@@ -210,8 +214,8 @@
             }
         }
     },
-    "last.exportedFilePath": "D:/Сайт/Проєкт/Phaser game/src/assets/levels",
-    "last.imagePath": "D:/Сайт/Проєкт/Phaser game/src/assets/levels/objects",
+    "last.exportedFilePath": "D:/Projects/Phaser game/src/assets/levels",
+    "last.imagePath": "D:/Projects/Phaser game/src/assets/levels/objects",
     "map.height": 55,
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
@@ -220,18 +224,19 @@
     "map.width": 110,
     "openFiles": [
         "rules.tmx",
-        "boss.tmx"
+        "boss.tmx",
+        "second.tmx"
     ],
     "project": "без назви.tiled-project",
     "recentFiles": [
         "rules.tmx",
         "boss.tmx",
+        "second.tmx",
+        "three_isles.tmx",
+        "first.tmx",
         "objects.tsx",
         "template.tmx",
-        "three_isles.tmx",
         "platformer.tmx",
-        "second.tmx",
-        "first.tmx",
         "six_rooms.tmx",
         "eight.tmx",
         "level2.tmx",

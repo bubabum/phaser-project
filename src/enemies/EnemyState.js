@@ -31,14 +31,13 @@ export class EnemyAtack extends State {
 		super({ name: 'ATACK', enemy, animation: 'atack' });
 	}
 	enter() {
-		this.enemy.setVelocityX(0);
-		this.enemy.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'atack', function (anims) {
-			this.enemy.hit = false;
-			this.enemy.setState('IDLE');
-		}, this);
+		const { enemy } = this;
+		enemy.setVelocityX(0);
 	}
 	handleState() {
-		if (this.enemy.checkAtackFrame()) this.enemy.atack();
+		const { enemy } = this;
+		enemy.checkAtackFrame();
+		if (enemy.anims.getProgress() === 1) enemy.setState('IDLE');
 	}
 }
 
@@ -48,13 +47,11 @@ export class EnemyAirAtack extends State {
 	}
 	enter() {
 		this.enemy.setVelocityX(0);
-		this.enemy.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'air_atack', function (anims) {
-			this.enemy.hit = false;
-			this.enemy.setState('FALL');
-		}, this);
 	}
 	handleState() {
-		if (this.enemy.checkAtackFrame()) this.enemy.atack();
+		const { enemy } = this;
+		enemy.checkAtackFrame();
+		if (enemy.anims.getProgress() === 1) enemy.setState('FALL');
 	}
 }
 
@@ -65,12 +62,10 @@ export class EnemyHit extends State {
 	enter() {
 		const { enemy } = this;
 		enemy.scene.time.delayedCall(1000, () => enemy.setInvulnerability(false));
-		if (enemy.isBoss() && enemy.bubbleTimer) enemy.bubbleTimer.remove();
 	}
 	handleState() {
 		const { enemy } = this;
 		if (enemy.body.velocity.y > 0) enemy.setState('FALL');
-		if (enemy.isBoss() && enemy.anims.getProgress() === 1) enemy.setState('DISAPPEAR');
 	}
 }
 

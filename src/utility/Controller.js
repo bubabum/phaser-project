@@ -64,6 +64,7 @@ export class Controller {
 	}
 
 	update() {
+		if (this.scene.player.disabledInput) return
 		const gamepad = this.scene.input?.gamepad.getPad(0);
 		for (let key in this.buttons) {
 			const button = this.buttons[key];

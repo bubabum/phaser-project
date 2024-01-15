@@ -9,8 +9,6 @@ export class Enemy extends Character {
 		scene.physics.add.existing(this);
 		this.player = scene.player;
 		this.hitFrame = 5;
-		this.canHit = false;
-		//this.enemyHurtboxGroup = scene.enemyHurtboxGroup;
 		this.canonBallGroup = scene.canonBallGroup;
 		this.bombGroup = this.player.bombGroup;
 		this.bombToInteract = null;
@@ -35,7 +33,7 @@ export class Enemy extends Character {
 		}
 		this.currentState.handleState();
 		// if (this.stateName) this.stateName.destroy();
-		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${this.health}`, { font: '16px Courier', fill: '#ffffff' });
+		// this.stateName = this.scene.add.text(this.x, this.y - 70, `${this.currentState.name} ${'state'}`, { font: '16px Courier', fill: '#ffffff' });
 		// this.stateName.x -= this.stateName.width * 0.5;
 		if (this?.hurtbox?.body) {
 			const posY = this.body.position.y + this.body.height * 0.5 + this.hurtboxOffsetY;
@@ -112,15 +110,8 @@ export class Enemy extends Character {
 	}
 
 	checkAtackFrame() {
-		return this.anims.currentFrame.index === this.hitFrame;
-	}
-
-	atack() {
-		this.canHit = true;
-	}
-
-	completeAtack() {
-		this.canHit = false;
+		if (this.anims.currentFrame.index === this.hitFrame) return this.hurtbox.body.checkCollision.none = false;
+		this.hurtbox.body.checkCollision.none = true;
 	}
 
 	checkVisionRange() {
@@ -215,6 +206,7 @@ export class Enemy extends Character {
 		this.hurtbox.body.setCircle(this.hurtboxRadius);
 		this.hurtbox.body.setAllowGravity(false);
 		this.hurtbox.enemy = this;
+		this.hurtbox.body.checkCollision.none = true
 	}
 
 	isOnPlatform() {
@@ -224,6 +216,16 @@ export class Enemy extends Character {
 	}
 
 	canRun() {
+		// const { x, y, width, height } = this.getBounds();
+		// const tileSize = this.scene.tileset.tileWidth;
+		// const groundLayer = this.scene.groundLayer;
+		// const platformsLayer = this.scene.platformsLayer;
+		// const rightGroundTile = groundLayer.getTileAtWorldXY(x + width * 0.5 + tileSize, y + height + 0.5);
+		// const leftGroundTile = groundLayer.getTileAtWorldXY(x + width * 0.5 - tileSize, y + height + 0.5);
+		// const rightPlatformTile = platformsLayer.getTileAtWorldXY(x + width * 0.5 + tileSize, y + height + 0.5);
+		// const leftPlatformTile = platformsLayer.getTileAtWorldXY(x + width * 0.5 - tileSize, y + height + 0.5);
+		// return rightGroundTile?.collideUp || leftGroundTile?.collideUp || rightPlatformTile?.collideUp || leftPlatformTile?.collideUp
+
 		const { x, y, width, height } = this.getBounds();
 		const tileSize = this.scene.tileset.tileWidth;
 		const groundLayer = this.scene.groundLayer;
@@ -234,7 +236,8 @@ export class Enemy extends Character {
 		const leftGroundTile = groundLayer.getTileAtWorldXY(x + width * 0.5 - tileSize, y + height + 0.5);
 		const rightPlatformTile = platformsLayer.getTileAtWorldXY(x + width * 0.5 + tileSize, y + height + 0.5);
 		const leftPlatformTile = platformsLayer.getTileAtWorldXY(x + width * 0.5 - tileSize, y + height + 0.5);
-		if (!rightGroundTile?.collideUp && leftTile?.collideRight || !leftGroundTile?.collideUp && rightTile?.collideLeft) return false
+		if (!rightGroundTile?.collideUp && !rightPlatformTile?.collideUp && leftTile?.collideRight) return false
+		if (!leftGroundTile?.collideUp && !leftPlatformTile?.collideUp && rightTile?.collideLeft) return false
 		return rightGroundTile?.collideUp || leftGroundTile?.collideUp || rightPlatformTile?.collideUp || leftPlatformTile?.collideUp
 	}
 
@@ -256,6 +259,10 @@ export class Enemy extends Character {
 			return tile?.collideLeft
 		}
 		const isNextTileSpike = (npc) => {
+			const createRect = (body) => {
+				let { x, y, width, height } = body;
+				return new Phaser.Geom.Rectangle(x, y, width, height);
+			}
 			const { x, y, width, height } = npc.body;
 			const posX = x + (isLeftOrientated ? -marginX : width + marginX);
 			const line = new Phaser.Geom.Line(x, y + height - 1, posX, y + height - 1);
@@ -267,9 +274,9 @@ export class Enemy extends Character {
 				}
 			}
 			for (let i = 0; i < npc.scene.movingSpikes.getChildren().length; i++) {
-				const { x, y, width, height } = npc.scene.movingSpikes.getChildren()[i].body;
-				const rect = new Phaser.Geom.Rectangle(x, y, width, height);
-				if (Phaser.Geom.Intersects.LineToRectangle(line, rect)) {
+				const rectA = createRect(npc.scene.movingSpikes.getChildren()[i].body);
+				const rectB = createRect(npc.body);
+				if (Phaser.Geom.Intersects.LineToRectangle(line, rectA) && !Phaser.Geom.Intersects.RectangleToRectangle(rectA, rectB)) {
 					return true
 				}
 			}

@@ -13,6 +13,7 @@ import { DeadHit } from './PlayerState';
 import { DeadGround } from './PlayerState';
 import { DoorIn } from './PlayerState';
 import { DoorOut } from './PlayerState';
+import { Dialogue } from '../utility/Dialogue';
 
 
 export class BombGuy extends Character {
@@ -60,6 +61,7 @@ export class BombGuy extends Character {
 		});
 
 		this.particles = new ParticlesGroup({ scene: this.scene, textures: textures.particles, emitter: this });
+		this.dialogue = new Dialogue(scene, this);
 
 		this.createAnimations(textures.player);
 
@@ -78,6 +80,8 @@ export class BombGuy extends Character {
 		this.setState('DOOR_OUT');
 
 		if (scene.hasLight) this.light = scene.lights.addLight(this.x, this.y, 700).setColor(0xaaaaaa).setIntensity(0.9);
+
+		//this.disabledInput = true;
 
 		//this.light = this.scene.add.pointlight(400, 300, 0xaaaaaa, 100, 0.2, 0.05).setDepth(36);
 
@@ -124,6 +128,8 @@ export class BombGuy extends Character {
 			}
 		}
 
+		if (this.dialogue.isVisible) this.dialogue.update();
+
 		currentState.handleInput({ dt, controller });
 	}
 
@@ -133,6 +139,7 @@ export class BombGuy extends Character {
 
 	getPlayerData(death = true) {
 		return {
+			currentLevel: this.scene.currentLevel,
 			continue: this.continue,
 			health: death ? this.maxHeath : this.health,
 			inventory: this.inventoryData,

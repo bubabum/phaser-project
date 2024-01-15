@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="objects" tilewidth="80" tileheight="96" tilecount="10" columns="0">
+<tileset version="1.9" tiledversion="1.9.2" name="objects" tilewidth="80" tileheight="96" tilecount="11" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -62,5 +62,8 @@
  </tile>
  <tile id="9">
   <image width="68" height="46" source="objects/whale.png"/>
+ </tile>
+ <tile id="11">
+  <image width="16" height="64" source="objects/blocking_spike.png"/>
  </tile>
 </tileset>

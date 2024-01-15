@@ -4,6 +4,7 @@ export class MovingSpike extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y, textureKey);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
+		this.state = 'RAISE';
 		this.setDepth(22);
 		this.setAngle(rotation);
 		this.createAnimations(textureKey);
@@ -14,6 +15,7 @@ export class MovingSpike extends Phaser.Physics.Arcade.Sprite {
 
 	drop() {
 		this.anims.play('move');
+		this.state = 'DROP';
 		this.disableBody();
 		this.scene.time.delayedCall(250, () => {
 			this.anims.play('idle_bottom');
@@ -23,6 +25,7 @@ export class MovingSpike extends Phaser.Physics.Arcade.Sprite {
 
 	raise() {
 		this.anims.playReverse('move');
+		this.state = 'RAISE';
 		this.enableBody();
 		this.scene.time.delayedCall(250, () => {
 			this.anims.play('idle_top');

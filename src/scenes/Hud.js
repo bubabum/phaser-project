@@ -19,10 +19,12 @@ export class Hud extends Phaser.Scene {
 
 	updateData(parent, key, data) {
 		if (key !== 'playerData') return
+		console.log(data.collected.has(`${data.currentLevel}key`))
 		this.continue.setText(data.continue);
 		this.drawLives(data.health);
 		this.sword.setText(data.inventory.sword);
 		this.rum.setText(data.inventory.rum);
+		this.key.setVisible(data.collected.has(`${data.currentLevel}key`));
 	}
 
 	createHud(parent, key, data) {
@@ -31,7 +33,7 @@ export class Hud extends Phaser.Scene {
 		this.add.image(10, 10, this.textures.get('continue_hud'))
 			.setOrigin(0, 0)
 			.setDepth(30);
-		this.continue = this.add.bitmapText(50, 30, 'font', data.continue, 16, 1)
+		this.continue = this.add.bitmapText(50, 34, 'font', data.continue, 16, 1)
 			.setOrigin(0, 0.5)
 			.setDepth(30)
 			.setDropShadow(1, 1);
@@ -39,17 +41,21 @@ export class Hud extends Phaser.Scene {
 			.setOrigin(0, 0)
 			.setDepth(30);
 		this.drawLives(data.health);
+		this.key = this.add.image(10, 50, this.textures.get('key_hud'))
+			.setVisible(data.collected.has(`${data.currentLevel}key`))
+			.setOrigin(0, 0)
+			.setDepth(30);
 		this.add.image(10, height - 10, this.textures.get('sword_hud'))
 			.setOrigin(0, 1)
 			.setDepth(30);
-		this.sword = this.add.bitmapText(35, height - 14, 'font', data.inventory.sword, 16, 1)
+		this.sword = this.add.bitmapText(35, height - 6, 'font', data.inventory.sword, 16, 1)
 			.setOrigin(0, 1)
 			.setDepth(30)
 			.setDropShadow(1, 1);
 		this.add.image(77, height - 10, this.textures.get('rum_hud'))
 			.setOrigin(0, 1)
 			.setDepth(30);
-		this.rum = this.add.bitmapText(100, height - 14, 'font', data.inventory.rum, 16, 1)
+		this.rum = this.add.bitmapText(100, height - 6, 'font', data.inventory.rum, 16, 1)
 			.setOrigin(0, 1)
 			.setDepth(30)
 			.setDropShadow(1, 1);

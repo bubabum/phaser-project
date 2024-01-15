@@ -5,6 +5,7 @@ export class Window extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 		this.light = scene.add.sprite(x + 20, y - 20, `${textureKey}_light`);
 		this.light.setOrigin(1, 0);
+		//this.light.setDepth(130);
 		this.createAnimations(textureKey);
 		this.light.setFlipX(true);
 		this.light.anims.play('idle');

@@ -1,10 +1,12 @@
+import { BossWaiting } from './BossState';
 import { BossIdle } from './BossState';
 import { BossDisappear } from './BossState';
 import { BossAppear } from './BossState';
 import { BossThrowBubble } from './BossState';
-import { EnemyHit } from './EnemyState';
-import { EnemyDeadHit } from './EnemyState';
-import { EnemyDeadGround } from './EnemyState';
+import { BossAtack } from './BossState';
+import { BossHit } from './BossState';
+import { BossDeadHit } from './BossState';
+import { BossDeadGround } from './BossState';
 import { Enemy } from './Enemy';
 
 export class Boss extends Enemy {
@@ -14,6 +16,7 @@ export class Boss extends Enemy {
 		this.bubbles = scene.bubbles;
 		this.maxHealth = 10;
 		this.health = this.maxHealth;
+		this.atackRange = 40;
 		//this.speedX = 120;
 		this.startX = x;
 		this.startY = y;
@@ -37,15 +40,17 @@ export class Boss extends Enemy {
 		this.createHurtbox();
 		this.createAnimations(textureKey);
 		this.states = [
+			new BossWaiting(this),
 			new BossIdle(this),
 			new BossDisappear(this),
 			new BossAppear(this),
 			new BossThrowBubble(this),
-			new EnemyHit(this),
-			new EnemyDeadHit(this),
-			new EnemyDeadGround(this),
+			new BossAtack(this),
+			new BossHit(this),
+			new BossDeadHit(this),
+			new BossDeadGround(this),
 		];
-		this.setState('IDLE');
+		this.setState('WAITING');
 	}
 
 	isBoss() {

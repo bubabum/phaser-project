@@ -2,6 +2,7 @@ import { Controller } from '../utility/Controller';
 import { RumPowerUp } from '../objects/RumPowerUp';
 import { SwordPowerUp } from '../objects/SwordPowerUp';
 import { Door } from '../objects/Door';
+import { Gate } from '../objects/Gate';
 import { MovingPlatform } from '../objects/MovingPlatform';
 import { FadingPlatform } from '../objects/FadingPlatform';
 import { Bottle } from '../projectiles/Bottle';
@@ -54,19 +55,21 @@ export class Game extends Phaser.Scene {
 			key: 'Game',
 			physics: {
 				arcade: {
-					debug: true,
+					//debug: true,
 					gravity: { y: 400 }
 				},
 			},
 		})
 		this.levels = [
-			{ tilemapKey: 'boss', hasLight: false, hasBoss: true },
-			{ tilemapKey: 'first', hasLight: false },
-			{ tilemapKey: 'second', hasLight: false },
+			//{ tilemapKey: 'boss', hasLight: true, hasBoss: true },
+			//{ tilemapKey: 'eight', hasLight: false },
+			// { tilemapKey: 'first', hasLight: true },
+			{ tilemapKey: 'second', hasLight: true },
 			{ tilemapKey: 'three_isles', hasLight: false },
 			{ tilemapKey: 'platformer', hasLight: false },
 			{ tilemapKey: 'eight', hasLight: false },
 			{ tilemapKey: 'six_rooms', hasLight: false },
+			{ tilemapKey: 'boss', hasLight: false, hasBoss: true },
 		];
 	}
 
@@ -77,8 +80,8 @@ export class Game extends Phaser.Scene {
 				continue: 3,
 				health: 3,
 				inventory: {
-					sword: 9,
-					rum: 3,
+					sword: 0,
+					rum: 0,
 				},
 				collected: new Set(),
 			},
@@ -99,6 +102,21 @@ export class Game extends Phaser.Scene {
 		this.map = this.make.tilemap({ key: this.levels[this.currentLevel].tilemapKey, tileWidth: 64, tileHeight: 64 });
 		this.tileset = this.map.addTilesetImage('tileset', 'tileset');
 		this.groundLayer = this.map.createLayer('ground', this.tileset);
+		// const tileCollisionMap = {
+		// 	1: [true, false, true, false, false],
+		// 	2: [false, false, true, false, false],
+		// 	3: [false, true, true, false, false],
+		// 	7: [true, false, false, false, false],
+		// 	8: [true, true, true, true, false],
+		// 	9: [false, true, false, false, false],
+		// 	13: [true, false, false, true, false],
+		// 	14: [false, false, false, true, false],
+		// 	15: [false, true, false, true, false],
+		// 	56: [true, true, true, false, false],
+		// }
+		// this.groundLayer.forEachTile(tile => {
+		// 	if (tileCollisionMap[tile.index]) tile.setCollision(...tileCollisionMap[tile.index])
+		// })
 		this.groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26, 50, 56]);
 		this.createDecorationTiles();
 		this.platformsLayer = this.map.createLayer('platforms', this.tileset).setDepth(2);
@@ -135,7 +153,8 @@ export class Game extends Phaser.Scene {
 			});
 		}
 		//this.time.delayedCall(1000, () => this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!'))
-		this.time.delayedCall(1000, () => this.showMessageBox(`level: ${this.currentLevel}`))
+		//this.time.delayedCall(1000, () => this.showMessageBox(`level: ${this.currentLevel + 1}`))
+		//this.time.delayedCall(1000, () => this.showMessageBox(`I need key!`))
 
 		if (this.hasLight) this.createLight();
 
@@ -143,9 +162,8 @@ export class Game extends Phaser.Scene {
 			if (bomb.exploded && player.takeDamage()) this.push(bomb, player);
 		});
 		this.physics.add.overlap(this.player.bombGroup, this.enemyGroup, (bomb, enemy) => {
-			if (!enemy.isInvulnerable && bomb.exploded) {
+			if (bomb.exploded && enemy.takeDamage()) {
 				this.push(bomb, enemy);
-				enemy.takeDamage();
 				if (enemy.health === 0) this.dropPowerUp(enemy);
 			}
 		});
@@ -184,6 +202,8 @@ export class Game extends Phaser.Scene {
 		this.player.update({ t, dt, controller: this.controller });
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
 		if (this.hasBoss) this.boss.update();
+		// if (this.box) this.box.setPosition(this.player.x, this.player.y)
+		if (this.messageBox) this.messageBox.setPosition(this.box.x + 20, this.box.y - 60)
 		// const { x, y, width, height } = this.cameras.main.worldView;
 		// this.rect.setPosition(x, y).setSize(width, height);
 
@@ -196,13 +216,17 @@ export class Game extends Phaser.Scene {
 			this.messageTimer.remove();
 		}
 		const { width, height } = this.cameras.main.worldView;
-		this.messageBox = this.add.bitmapText(width / 2, height - 40, 'font', messageText, 20, 1).setMaxWidth(600).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(32).setDropShadow(1, 1);
+		const { x, y } = this.player;
+		//this.messageBox = this.add.bitmapText(width / 2, height - 40, 'font', messageText, 20, 1).setMaxWidth(600).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(32).setDropShadow(1, 1);
+		this.messageBox = this.add.bitmapText(width / 2, height - 40, 'font', messageText, 12, 1).setMaxWidth(200).setOrigin(0, 1).setDepth(32).setDropShadow(1, 1);
 		const bounds = this.messageBox.getTextBounds(true).global;
-		this.box = this.add.rectangle(bounds.x - 20, bounds.y - 20, bounds.width + 40, bounds.height + 40, 0x323443, 0.9).setScrollFactor(0, 0).setDepth(31).setOrigin(0, 0); //323443
-		this.messageTimer = this.time.delayedCall(5000, () => {
-			this.messageBox.destroy();
-			this.box.destroy();
-		});
+		//this.box = this.add.rectangle(bounds.x - 20, bounds.y - 20, bounds.width + 40, bounds.height + 40, 0x323443, 0.9).setScrollFactor(0, 0).setDepth(31).setOrigin(0, 0);
+		//this.subBox = this.add.rectangle(x, y - 50, 204, 104, 0x323443, 1).setDepth(31).setOrigin(0, 1); //0x323443
+		this.box = this.add.rectangle(x + 2, y - 52, 200, 100, 0x323443, 0.5).setDepth(31).setOrigin(0, 1).setStrokeStyle(2, 0x323443, 1); //0x987064
+		// this.messageTimer = this.time.delayedCall(5000, () => {
+		// 	this.messageBox.destroy();
+		// 	this.box.destroy();
+		// });
 	}
 
 	dropPowerUp(enemy) {
@@ -226,9 +250,11 @@ export class Game extends Phaser.Scene {
 		// 	!this.player.hasKey &&
 		// 	this.player.body.onFloor()) return this.showMessageBox('I need a key!')
 		const keyDown = this.controller.buttons.openDoor.isPressed;
+		if (!keyDown) return
 		const hasKey = this.player.collected.has(`${this.currentLevel}key`) && door.id === 1 || door.id === -1 && this.currentLevel !== 0;
 		const onFloor = this.player.body.onFloor();
-		if (!keyDown || !hasKey || !onFloor) return
+		if (keyDown && door.id === -1 && this.currentLevel === 0) return this.player.dialogue.show('Closed. It is first level, maybe you should go ahead.');
+		if (keyDown && !hasKey || !onFloor) return this.player.dialogue.show('Closed. I need key!');
 		door.disableBody();
 		door.anims.play('opening');
 		this.player.setState('DOOR_IN');
@@ -579,15 +605,16 @@ export class Game extends Phaser.Scene {
 		})
 		this.physics.add.collider(this.enemyGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);
 		this.physics.add.collider(this.enemyGroup, this.movingYPlatformsGroup, (enemy, platform) => enemy.setTouchingPlatform(platform));
-		this.physics.add.overlap(this.enemyGroup, [this.spikes, this.movingSpikes, this.fallenBarrelsGroup], (enemy, spike) => {
-			if (enemy.takeDamage(true)) this.push(spike, enemy);
+		this.physics.add.overlap(this.enemyGroup, [this.spikes, this.movingSpikes, this.fallenBarrelsGroup], (enemy, obj) => {
+			if (enemy.takeDamage(true)) this.push(obj, enemy);
 		});
 		this.physics.add.overlap(this.player, this.enemyHurtboxGroup, (player, hurtbox) => {
-			if (hurtbox.enemy.canHit) {
-				player.takeDamage();
-				hurtbox.enemy.completeAtack();
-				this.push(hurtbox.enemy, player);
-			}
+			if (player.takeDamage()) this.push(hurtbox.enemy, player);
+			// if (hurtbox.enemy.canHit) {
+			// 	player.takeDamage();
+			// 	hurtbox.enemy.completeAtack();
+			// 	this.push(hurtbox.enemy, player);
+			// }
 		});
 		this.physics.add.collider([this.canonBallGroup, this.bottleGroup, this.seeds], [this.groundLayer], (projectile) => {
 			this.lights.removeLight(projectile.light);
@@ -606,18 +633,75 @@ export class Game extends Phaser.Scene {
 			bounceX: 1,
 			bounceY: 1,
 		});
+		this.gates = this.physics.add.group({
+			allowGravity: false,
+			immovable: true,
+		});
 		const layer = this.map.getObjectLayer('boss')?.objects;
 		if (!layer) return
-		const obj = layer[0];
-		this.boss = new Boss({
-			scene: this,
-			x: this.getObjectCoordinateX(obj),
-			y: this.getObjectCoordinateY(obj),
-			textureKey: 'whale',
-			direction: 'right',
-		});
-		this.physics.add.collider(this.boss, [this.groundLayer, this.platformsLayer]);
-		this.physics.add.collider(this.bubbles, this.groundLayer);
+		layer.forEach(obj => {
+			const type = obj.properties.find(item => item.name === 'type').value;
+			switch (type) {
+				case 'boss':
+					this.boss = new Boss({
+						scene: this,
+						x: this.getObjectCoordinateX(obj),
+						y: this.getObjectCoordinateY(obj),
+						textureKey: 'whale',
+						direction: 'right',
+					});
+					this.physics.add.collider(this.boss, [this.groundLayer, this.platformsLayer]);
+					this.physics.add.collider(this.bubbles, [this.groundLayer, this.gates]);
+					this.physics.add.overlap(this.bubbles, this.player, (player, projectile) => {
+						if (player.takeDamage()) this.push(projectile, player);
+					});
+					this.physics.add.overlap(this.player, this.boss.hurtbox, (player, hurtbox) => {
+						if (player.takeDamage()) this.push(hurtbox.enemy, player);
+					});
+					return
+				case 'trigger':
+					this.bossTrigger = this.add.circle(obj.x, obj.y, 10, 0x646464);
+					this.bossTrigger.setVisible(false);
+					this.physics.add.existing(this.bossTrigger);
+					this.bossTrigger.body.setCircle(10);
+					this.bossTrigger.body.setAllowGravity(false);
+					this.physics.add.overlap(this.player, this.bossTrigger, () => {
+						this.bossTrigger.body.setEnable(false);
+						this.cameras.main.stopFollow();
+						this.cameras.main.pan(this.cameraPoint.x, this.cameraPoint.y, 2000);
+						this.enterGate.close();
+						this.time.delayedCall(2000, () => this.boss.setState('DISAPPEAR'))
+					});
+					return
+				case 'camera_point':
+					this.cameraPoint = { x: obj.x, y: obj.y }
+					return
+				case 'enter':
+					const enterGate = new Gate({
+						scene: this,
+						x: this.getObjectCoordinateX(obj),
+						y: this.getObjectCoordinateY(obj),
+						textureKey: 'gate',
+						status: 'OPENED',
+					});
+					this.gates.add(enterGate);
+					this.enterGate = enterGate;
+					return
+				case 'exit':
+					const exitGate = new Gate({
+						scene: this,
+						x: this.getObjectCoordinateX(obj),
+						y: this.getObjectCoordinateY(obj),
+						textureKey: 'gate',
+						status: 'CLOSED',
+					});
+					this.gates.add(exitGate);
+					this.exitGate = exitGate;
+					return
+			}
+		})
+		this.physics.add.collider(this.gates, [this.groundLayer, this.player]);
+		this.physics.add.collider(this.player, [this.gates]);
 	}
 	createDecorations() {
 		const textureKeys = ['barrel', 'blue_bottle', 'green_bottle', 'red_bottle', 'skull'];
@@ -650,7 +734,7 @@ export class Game extends Phaser.Scene {
 			for (let i = -2; i < 3; i++) {
 				if (tables.has(`x${tile.x + i}y${tile.y}`)) return
 			}
-			if (Game.checkChance(20) || Game.checkGroupIntersection([this.doorGroup, this.spikes, this.movingSpikes], tile)) return
+			if (Game.checkChance(10) || Game.checkGroupIntersection([this.doorGroup, this.spikes, this.movingSpikes], tile)) return
 			const { width, height } = this.textures.list['table'].source[0];
 			tables.add(`x${tile.x}y${tile.y}`)
 			const table = new DecorationObject({
@@ -688,7 +772,7 @@ export class Game extends Phaser.Scene {
 			})
 		});
 
-		this.physics.add.collider(this.pushableDecorationGroup, [this.groundLayer, this.platformsLayer, this.pushableDecorationGroup]);
+		this.physics.add.collider(this.pushableDecorationGroup, [this.groundLayer, this.platformsLayer]);
 	}
 
 	createLightObjects() {
