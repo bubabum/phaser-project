@@ -462,6 +462,26 @@
 			},
 			{
 				"type": "audio",
+				"key": "hit_bomb",
+				"url": "./assets/audio/hit_bomb.wav"
+			},
+			{
+				"type": "audio",
+				"key": "hit",
+				"url": "./assets/audio/hit.wav"
+			},
+			{
+				"type": "audio",
+				"key": "land",
+				"url": "./assets/audio/land.wav"
+			},
+			{
+				"type": "audio",
+				"key": "throw",
+				"url": "./assets/audio/throw.wav"
+			},
+			{
+				"type": "audio",
 				"key": "walk",
 				"url": "./assets/audio/walk.wav"
 			}

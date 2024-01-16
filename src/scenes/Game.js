@@ -191,7 +191,8 @@ export class Game extends Phaser.Scene {
 		this.registry.set('playerData', this.player.getPlayerData(false));
 
 		this.cameras.main.fadeIn(1000);
-		this.sound.play('theme');
+		this.theme = this.sound.add('theme');
+		this.theme.setVolume(0.2).play();
 		//this.rect = this.add.rectangle(0, 0, 200, 200, 0x000000).setOrigin(0, 0).setAlpha(0.7).setDepth(35);
 	}
 	update(t, dt) {
@@ -538,7 +539,11 @@ export class Game extends Phaser.Scene {
 				platform.fade();
 			}
 		});
-		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup]);
+		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup], (bomb) => {
+			if (Math.abs(bomb.body.velocity.x) < 10 && Math.abs(bomb.body.velocity.y) < 10 || Math.abs(bomb.body.velocity.y) < 5) return
+			const sound = this.sound.add('hit_bomb');
+			sound.setVolume(0.5).play();
+		});
 		this.physics.add.overlap(this.player, this.doorGroup, (player, door) => this.changeLevel(door));
 		this.physics.add.overlap(this.player, this.fallenBarrelCollidersGroup, (player, collider) => collider.barrel.fall());
 		this.physics.add.overlap(this.player.bombGroup, this.fallenBarrelCollidersGroup, (bomb, collider) => {

@@ -20,17 +20,29 @@ export class Run extends State {
 	}
 	enter() {
 		const { player } = this;
-		player.walkBuffer = true;
+		//player.walkBuffer = true;
 	}
 	handleInput({ controller }) {
 		const { player } = this;
-		const { moveRight, moveLeft, jump } = controller.buttons
-
-		if (player.walkBuffer && !player.walk.isPlaying) {
-			player.walkBuffer = false;
-			player.walk.play();
-			player.scene.time.delayedCall(270, () => player.walkBuffer = true);
-		}
+		const { moveRight, moveLeft, jump } = controller.buttons;
+		if (!player.walk.isPlaying) player.walk.play();
+		// if (!player.walk.isPlaying && !player.walkSoundTimer) {
+		// 	player.walk.play();
+		// 	player.walkSoundTimer = player.scene.time.delayedCall(150, () => {
+		// 		player.walkSoundTimer = null;
+		// 		//player.scene.time.removeEvent(player.walkSoundTimer);
+		// 		//player.walkSoundTimer.destroy();
+		// 		console.log(player.walkSoundTimer)
+		// 	});
+		// }
+		// if (player.walkBuffer && !player.walk.isPlaying && !player.walkSoundTimer) {
+		// 	player.walkBuffer = false;
+		// 	player.walk.play();
+		// 	player.walkSoundTimer = player.scene.time.delayedCall(200, () => {
+		// 		player.walkBuffer = true;
+		// 		player.walkSoundTimer.remove();
+		// 	});
+		// }
 		if (moveRight.isPressed) {
 			player.setVelocityX(player.runVelocity);
 		} else if (moveLeft.isPressed) {
@@ -137,6 +149,7 @@ export class Land extends State {
 	}
 	enter() {
 		const { player } = this;
+		player.land.play();
 		player.setVelocityX(0);
 		player.madeDoubleJump = false;
 		player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'land', function (anims) {
@@ -157,6 +170,7 @@ export class Hit extends State {
 	}
 	enter() {
 		const { player } = this;
+		player.scene.sound.play('hit');
 		player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hit', function (anims) {
 			player.setState('FALL');
 			player.scene.time.delayedCall(2000, () => player.setInvulnerability(false));
@@ -172,6 +186,8 @@ export class DeadHit extends State {
 		super({ name: 'DEAD_HIT', player, animation: 'dead_hit' });
 	}
 	enter() {
+		const { player } = this;
+		player.scene.sound.play('hit');
 	}
 	handleInput() {
 		const { player } = this;

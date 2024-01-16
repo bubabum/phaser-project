@@ -64,7 +64,9 @@ export class BombGuy extends Character {
 		this.dialogue = new Dialogue(scene, this);
 		this.jump = scene.sound.add('jump');
 		this.walk = scene.sound.add('walk');
-		this.jump.setVolume(0.5)
+		this.land = scene.sound.add('land');
+		this.throw = scene.sound.add('throw');
+		this.throw.setVolume(0.2);
 
 		this.createAnimations(textures.player);
 
@@ -188,12 +190,14 @@ export class BombGuy extends Character {
 
 	throwBomb() {
 		//if (!this.bombBar.isVisible()) return
+		this.throw.play();
 		if (this.activeBomb) this.activeBomb.throw(this.bombMaxVelocity * this.bombBar.stopCharging(), this);
 		this.activeBomb = null;
 	}
 
 	throwSword() {
 		if (this.inventoryData.sword === 0 || this.swordGroup.getChildren().length === this.swordGroup.maxSize || this.isDead()) return
+		this.throw.play();
 		const sowrd = this.swordGroup.get();
 		if (sowrd) sowrd.throw(this);
 		this.inventoryData.sword--;
