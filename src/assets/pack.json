@@ -444,6 +444,26 @@
 				"key": "falling_barrel",
 				"textureURL": "./assets/sprites/falling_barrel.png",
 				"atlasURL": "./assets/sprites/falling_barrel.json"
+			},
+			{
+				"type": "audio",
+				"key": "theme",
+				"url": "./assets/audio/theme.wav"
+			},
+			{
+				"type": "audio",
+				"key": "jump",
+				"url": "./assets/audio/jump.wav"
+			},
+			{
+				"type": "audio",
+				"key": "explosion",
+				"url": "./assets/audio/explosion.wav"
+			},
+			{
+				"type": "audio",
+				"key": "walk",
+				"url": "./assets/audio/walk.wav"
 			}
 		]
 	}

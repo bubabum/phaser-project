@@ -19,10 +19,18 @@ export class Run extends State {
 		super({ name: 'RUN', player, animation: 'run' });
 	}
 	enter() {
+		const { player } = this;
+		player.walkBuffer = true;
 	}
 	handleInput({ controller }) {
 		const { player } = this;
 		const { moveRight, moveLeft, jump } = controller.buttons
+
+		if (player.walkBuffer && !player.walk.isPlaying) {
+			player.walkBuffer = false;
+			player.walk.play();
+			player.scene.time.delayedCall(270, () => player.walkBuffer = true);
+		}
 		if (moveRight.isPressed) {
 			player.setVelocityX(player.runVelocity);
 		} else if (moveLeft.isPressed) {
@@ -64,6 +72,7 @@ export class Jump extends State {
 	}
 	enter() {
 		const { player } = this;
+		player.jump.play();
 		player.setVelocityY(player.jumpVelocity);
 		player.touchingPlatform = null;
 	}

@@ -46,6 +46,7 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.scene.time.removeEvent(this.timer)
 		this.setAngle(0);
 		this.anims.play('explosion');
+		this.scene.sound.play('explosion');
 		this.exploded = true;
 		this.body.moves = false;
 		this.scene.cameras.main.shake(150, 0.01);

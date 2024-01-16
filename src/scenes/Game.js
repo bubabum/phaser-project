@@ -95,7 +95,6 @@ export class Game extends Phaser.Scene {
 	}
 
 	preload() {
-
 	}
 
 	create() {
@@ -192,6 +191,7 @@ export class Game extends Phaser.Scene {
 		this.registry.set('playerData', this.player.getPlayerData(false));
 
 		this.cameras.main.fadeIn(1000);
+		this.sound.play('theme');
 		//this.rect = this.add.rectangle(0, 0, 200, 200, 0x000000).setOrigin(0, 0).setAlpha(0.7).setDepth(35);
 	}
 	update(t, dt) {

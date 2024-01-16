@@ -62,6 +62,9 @@ export class BombGuy extends Character {
 
 		this.particles = new ParticlesGroup({ scene: this.scene, textures: textures.particles, emitter: this });
 		this.dialogue = new Dialogue(scene, this);
+		this.jump = scene.sound.add('jump');
+		this.walk = scene.sound.add('walk');
+		this.jump.setVolume(0.5)
 
 		this.createAnimations(textures.player);
 
