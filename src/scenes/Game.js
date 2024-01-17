@@ -63,7 +63,7 @@ export class Game extends Phaser.Scene {
 		this.levels = [
 			//{ tilemapKey: 'boss', hasLight: true, hasBoss: true },
 			//{ tilemapKey: 'eight', hasLight: false },
-			// { tilemapKey: 'first', hasLight: true },
+			{ tilemapKey: 'first', hasLight: true },
 			{ tilemapKey: 'second', hasLight: true },
 			{ tilemapKey: 'three_isles', hasLight: false },
 			{ tilemapKey: 'platformer', hasLight: false },
@@ -80,7 +80,7 @@ export class Game extends Phaser.Scene {
 				continue: 3,
 				health: 3,
 				inventory: {
-					sword: 0,
+					sword: 9,
 					rum: 0,
 				},
 				collected: new Set(),
@@ -217,29 +217,30 @@ export class Game extends Phaser.Scene {
 		this.theme.setVolume(0.2).play();
 	}
 
-	showMessageBox(messageText) {
-		if (this.messageBox) {
-			this.messageBox.destroy();
-			this.box.destroy();
-			this.messageTimer.remove();
-		}
-		const { width, height } = this.cameras.main.worldView;
-		const { x, y } = this.player;
-		//this.messageBox = this.add.bitmapText(width / 2, height - 40, 'font', messageText, 20, 1).setMaxWidth(600).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(32).setDropShadow(1, 1);
-		this.messageBox = this.add.bitmapText(width / 2, height - 40, 'font', messageText, 12, 1).setMaxWidth(200).setOrigin(0, 1).setDepth(32).setDropShadow(1, 1);
-		const bounds = this.messageBox.getTextBounds(true).global;
-		//this.box = this.add.rectangle(bounds.x - 20, bounds.y - 20, bounds.width + 40, bounds.height + 40, 0x323443, 0.9).setScrollFactor(0, 0).setDepth(31).setOrigin(0, 0);
-		//this.subBox = this.add.rectangle(x, y - 50, 204, 104, 0x323443, 1).setDepth(31).setOrigin(0, 1); //0x323443
-		this.box = this.add.rectangle(x + 2, y - 52, 200, 100, 0x323443, 0.5).setDepth(31).setOrigin(0, 1).setStrokeStyle(2, 0x323443, 1); //0x987064
-		// this.messageTimer = this.time.delayedCall(5000, () => {
-		// 	this.messageBox.destroy();
-		// 	this.box.destroy();
-		// });
-	}
+	// showMessageBox(messageText) {
+	// 	if (this.messageBox) {
+	// 		this.messageBox.destroy();
+	// 		this.box.destroy();
+	// 		this.messageTimer.remove();
+	// 	}
+	// 	const { width, height } = this.cameras.main.worldView;
+	// 	const { x, y } = this.player;
+	// 	//this.messageBox = this.add.bitmapText(width / 2, height - 40, 'font', messageText, 20, 1).setMaxWidth(600).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(32).setDropShadow(1, 1);
+	// 	this.messageBox = this.add.bitmapText(width / 2, height - 40, 'font', messageText, 12, 1).setMaxWidth(200).setOrigin(0, 1).setDepth(32).setDropShadow(1, 1);
+	// 	const bounds = this.messageBox.getTextBounds(true).global;
+	// 	//this.box = this.add.rectangle(bounds.x - 20, bounds.y - 20, bounds.width + 40, bounds.height + 40, 0x323443, 0.9).setScrollFactor(0, 0).setDepth(31).setOrigin(0, 0);
+	// 	//this.subBox = this.add.rectangle(x, y - 50, 204, 104, 0x323443, 1).setDepth(31).setOrigin(0, 1); //0x323443
+	// 	this.box = this.add.rectangle(x + 2, y - 52, 200, 100, 0x323443, 0.5).setDepth(31).setOrigin(0, 1).setStrokeStyle(2, 0x323443, 1); //0x987064
+	// 	// this.messageTimer = this.time.delayedCall(5000, () => {
+	// 	// 	this.messageBox.destroy();
+	// 	// 	this.box.destroy();
+	// 	// });
+	// }
 
 	dropPowerUp(enemy) {
 		const { x, y } = enemy;
-		const rnd = Math.floor(Math.random() * 9) + 1;
+		let rnd = Math.floor(Math.random() * 9) + 1;
+		rnd = 2
 		let collectible;
 		if (rnd === 1) {
 			collectible = new RumPowerUp({ scene: this, x, y, textureKey: 'rum_drop' });
@@ -565,7 +566,7 @@ export class Game extends Phaser.Scene {
 		// this.physics.add.overlap(this.player, this.spikes, (player, spike) => {
 		// 	if (player.takeDamage()) this.push(spike, player);
 		// });
-		this.physics.add.collider(this.player.swordGroup, this.groundLayer, (sword) => sword.destroy());
+		this.physics.add.collider(this.player.swordGroup, this.groundLayer, (sword) => sword.embed());
 		door.anims.play('closing');
 	}
 	createCamera() {

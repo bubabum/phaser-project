@@ -63,6 +63,16 @@ export class Enemy extends Character {
 		this.healthImage.setDepth(26);
 	}
 
+	getVolume() {
+		if (this.chackRange() > 500) return 0
+		if (this.chackRange() < 100) return 1
+		return 1 - (this.chackRange() - 100) / 400
+	}
+
+	chackRange() {
+		return Phaser.Math.Distance.BetweenPoints(this.player, this)
+	}
+
 	checkThrowRange() {
 		return Phaser.Math.Distance.BetweenPoints(this.player, this) < this.throwRange && this.player.isAlive()
 	}

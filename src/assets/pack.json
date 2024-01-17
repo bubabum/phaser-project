@@ -129,7 +129,7 @@
 			},
 			{
 				"type": "image",
-				"key": "sword",
+				"key": "sword1",
 				"url": "./assets/images/sword.png"
 			},
 			{
@@ -216,6 +216,15 @@
 			},
 			{
 				"type": "spritesheet",
+				"key": "sword",
+				"url": "./assets/sprites/sword.png",
+				"frameConfig": {
+					"frameWidth": 19,
+					"frameHeight": 19
+				}
+			},
+			{
+				"type": "spritesheet",
 				"key": "rum_drop",
 				"url": "./assets/sprites/rum_drop.png",
 				"frameConfig": {
@@ -228,8 +237,8 @@
 				"key": "sword_drop",
 				"url": "./assets/sprites/sword_drop.png",
 				"frameConfig": {
-					"frameWidth": 32,
-					"frameHeight": 32
+					"frameWidth": 23,
+					"frameHeight": 24
 				}
 			},
 			{
@@ -467,6 +476,11 @@
 			},
 			{
 				"type": "audio",
+				"key": "sword_embedded",
+				"url": "./assets/audio/sword_embedded.wav"
+			},
+			{
+				"type": "audio",
 				"key": "hit",
 				"url": "./assets/audio/hit.wav"
 			},
@@ -489,6 +503,11 @@
 				"type": "audio",
 				"key": "enemy_atack",
 				"url": "./assets/audio/enemy_atack.wav"
+			},
+			{
+				"type": "audio",
+				"key": "shoot",
+				"url": "./assets/audio/shoot.wav"
 			}
 		]
 	}

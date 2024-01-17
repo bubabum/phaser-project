@@ -56,7 +56,7 @@ export class BombGuy extends Character {
 		this.swordGroup = scene.physics.add.group({
 			defaultKey: 'sword',
 			classType: Sword,
-			maxSize: 1,
+			maxSize: 3,
 			allowGravity: false,
 		});
 
