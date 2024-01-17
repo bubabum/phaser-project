@@ -66,7 +66,7 @@ export class BombGuy extends Character {
 		this.walk = scene.sound.add('walk');
 		this.land = scene.sound.add('land');
 		this.throw = scene.sound.add('throw');
-		this.throw.setVolume(0.2);
+		//this.throw.setVolume(0.2);
 
 		this.createAnimations(textures.player);
 

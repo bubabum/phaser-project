@@ -191,7 +191,7 @@ export class DeadHit extends State {
 	}
 	handleInput() {
 		const { player } = this;
-		if (player.body.velocity.y === 0) player.setState('DEAD_GROUND');
+		if (player.body.velocity.y === 0 || player.touchingPlatform) player.setState('DEAD_GROUND');
 	}
 }
 

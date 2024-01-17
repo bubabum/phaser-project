@@ -191,11 +191,12 @@ export class Game extends Phaser.Scene {
 		this.registry.set('playerData', this.player.getPlayerData(false));
 
 		this.cameras.main.fadeIn(1000);
-		this.theme = this.sound.add('theme');
-		this.theme.setVolume(0.2).play();
+		// this.theme = this.sound.add('theme7');
+		// this.theme.setVolume(0.2).play();
 		//this.rect = this.add.rectangle(0, 0, 200, 200, 0x000000).setOrigin(0, 0).setAlpha(0.7).setDepth(35);
 	}
 	update(t, dt) {
+		if (!this?.theme?.isPlaying) this.playRandomTheme()
 		this.controller.update();
 		this.movingXPlatformsGroup.getChildren().forEach(platform => platform.update());
 		this.movingYPlatformsGroup.getChildren().forEach(platform => platform.update());
@@ -208,6 +209,12 @@ export class Game extends Phaser.Scene {
 		// const { x, y, width, height } = this.cameras.main.worldView;
 		// this.rect.setPosition(x, y).setSize(width, height);
 
+	}
+
+	playRandomTheme() {
+		//this.theme = this.sound.add(`theme${Game.getRandom(1, 8)}`);
+		this.theme = this.sound.add(`theme7`);
+		this.theme.setVolume(0.2).play();
 	}
 
 	showMessageBox(messageText) {
@@ -539,10 +546,13 @@ export class Game extends Phaser.Scene {
 				platform.fade();
 			}
 		});
-		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup], (bomb) => {
+		this.physics.add.collider(this.player.bombGroup, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup], (bomb) => {
 			if (Math.abs(bomb.body.velocity.x) < 10 && Math.abs(bomb.body.velocity.y) < 10 || Math.abs(bomb.body.velocity.y) < 5) return
-			const sound = this.sound.add('hit_bomb');
-			sound.setVolume(0.5).play();
+			bomb.sounds.play('hit_bomb');
+		});
+		this.physics.add.collider(this.player.bombGroup, [this.movingYPlatformsGroup], (bomb, platform) => {
+			if (Math.abs(Math.abs(bomb.body.velocity.y) - Math.abs(platform.body.velocity.y)) < 40) return
+			bomb.sounds.play('hit_bomb');
 		});
 		this.physics.add.overlap(this.player, this.doorGroup, (player, door) => this.changeLevel(door));
 		this.physics.add.overlap(this.player, this.fallenBarrelCollidersGroup, (player, collider) => collider.barrel.fall());

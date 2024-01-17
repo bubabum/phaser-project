@@ -447,8 +447,8 @@
 			},
 			{
 				"type": "audio",
-				"key": "theme",
-				"url": "./assets/audio/theme.wav"
+				"key": "theme7",
+				"url": "./assets/audio/music/theme7.mp3"
 			},
 			{
 				"type": "audio",
@@ -484,6 +484,11 @@
 				"type": "audio",
 				"key": "walk",
 				"url": "./assets/audio/walk.wav"
+			},
+			{
+				"type": "audio",
+				"key": "enemy_atack",
+				"url": "./assets/audio/enemy_atack.wav"
 			}
 		]
 	}

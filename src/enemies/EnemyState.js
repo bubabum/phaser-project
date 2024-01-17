@@ -32,6 +32,8 @@ export class EnemyAtack extends State {
 	}
 	enter() {
 		const { enemy } = this;
+		const sound = enemy.scene.sound.add('enemy_atack')
+		sound.setVolume(0.5).play();
 		enemy.setVelocityX(0);
 	}
 	handleState() {
@@ -80,7 +82,7 @@ export class EnemyDeadHit extends State {
 	}
 	handleState() {
 		const { enemy } = this;
-		if (enemy.body.velocity.y === 0) enemy.setState('DEAD_GROUND');
+		if (enemy.body.velocity.y === 0 || enemy.touchingPlatform) enemy.setState('DEAD_GROUND');
 	}
 }
 

@@ -19,7 +19,6 @@ export class Hud extends Phaser.Scene {
 
 	updateData(parent, key, data) {
 		if (key !== 'playerData') return
-		console.log(data.collected.has(`${data.currentLevel}key`))
 		this.continue.setText(data.continue);
 		this.drawLives(data.health);
 		this.sword.setText(data.inventory.sword);

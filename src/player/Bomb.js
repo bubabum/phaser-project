@@ -1,3 +1,5 @@
+import { SoundManager } from '../utility/SoundManager';
+
 export class Bomb extends Phaser.Physics.Arcade.Sprite {
 
 	constructor(scene, x, y, textureKey) {
@@ -13,6 +15,11 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.isOff = false;
 		this.exploded = false;
 		this.body.gameObject = this;
+		this.sound = {
+			'explosion': 0.5,
+			'hit_bomb': 1,
+		};
+		this.sounds = new SoundManager(scene, this.sound);
 		if (scene.hasLight) this.setPipeline('Light2D')
 	}
 
@@ -46,8 +53,8 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.scene.time.removeEvent(this.timer)
 		this.setAngle(0);
 		this.anims.play('explosion');
-		const sound = this.scene.sound.add('explosion')
-		sound.setVolume(0.3).play();
+		//const sound = this.scene.sound.add('explosion')
+		this.sounds.play('explosion');
 		this.exploded = true;
 		this.body.moves = false;
 		this.scene.cameras.main.shake(150, 0.01);
