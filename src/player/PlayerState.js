@@ -20,39 +20,23 @@ export class Run extends State {
 	}
 	enter() {
 		const { player } = this;
-		//player.walkBuffer = true;
 	}
 	handleInput({ controller }) {
 		const { player } = this;
 		const { moveRight, moveLeft, jump } = controller.buttons;
-		if (!player.walk.isPlaying) player.walk.play();
-		// if (!player.walk.isPlaying && !player.walkSoundTimer) {
-		// 	player.walk.play();
-		// 	player.walkSoundTimer = player.scene.time.delayedCall(150, () => {
-		// 		player.walkSoundTimer = null;
-		// 		//player.scene.time.removeEvent(player.walkSoundTimer);
-		// 		//player.walkSoundTimer.destroy();
-		// 		console.log(player.walkSoundTimer)
-		// 	});
-		// }
-		// if (player.walkBuffer && !player.walk.isPlaying && !player.walkSoundTimer) {
-		// 	player.walkBuffer = false;
-		// 	player.walk.play();
-		// 	player.walkSoundTimer = player.scene.time.delayedCall(200, () => {
-		// 		player.walkBuffer = true;
-		// 		player.walkSoundTimer.remove();
-		// 	});
-		// }
+		if (!player.sounds.isPlaying('walk')) player.sounds.play('walk');
+		let velocity = 0;
+		if (player.touchingPlatform.x) velocity = player.touchingPlatform.x.body.velocity.x;
 		if (moveRight.isPressed) {
-			player.setVelocityX(player.runVelocity);
+			player.setVelocityX((velocity > 0 ? player.runVelocity : player.runVelocity - velocity));
 		} else if (moveLeft.isPressed) {
-			player.setVelocityX(-player.runVelocity);
+			player.setVelocityX((velocity < 0 ? -player.runVelocity : -player.runVelocity - velocity));
 		} else {
 			player.setVelocityX(0);
 			player.setState('IDLE');
 		}
 		if (jump.justDown) return player.setState('JUMP');
-		if (player.body.velocity.y > 0 && !player.touchingPlatform || !player.body.onFloor()) {
+		if (player.body.velocity.y > 0 && !player.touchingPlatform.y || !player.body.onFloor()) {
 			player.setState('FALL');
 			player.jumpGap = true;
 			player.scene.time.delayedCall(132, () => player.jumpGap = false);
@@ -84,9 +68,9 @@ export class Jump extends State {
 	}
 	enter() {
 		const { player } = this;
-		player.jump.play();
+		player.sounds.play('jump');
 		player.setVelocityY(player.jumpVelocity);
-		player.touchingPlatform = null;
+		player.removeTouchingPlatform();
 	}
 	handleInput({ controller }) {
 
@@ -100,7 +84,7 @@ export class Jump extends State {
 			player.setVelocityX(0);
 		}
 		if (player.body.velocity.y > 0) return player.setState('FALL');
-		if (player.body.velocity.y === 0 && player.body.onFloor() || player.touchingPlatform && player.body.onFloor()) player.setState('LAND');
+		if (player.body.velocity.y === 0 && player.body.onFloor() || player.touchingPlatform.y && player.body.onFloor()) player.setState('LAND');
 	}
 }
 
@@ -111,13 +95,14 @@ export class Fall extends State {
 	enter() {
 		const { player } = this;
 		player.setVelocityY(0);
-		player.touchingPlatform = null;
+		player.removeTouchingPlatform();
 		this.nextJumpReady = false;
 		this.nextJumpBuffer = 0;
 	}
 	handleInput({ dt, controller }) {
 		const { player } = this;
 		const { moveRight, moveLeft, jump } = controller.buttons;
+		if (player.body.velocity.y > 300) player.setVelocityY(300);
 		if (moveRight.isPressed) {
 			player.setVelocityX(player.runVelocity + 20);
 		} else if (moveLeft.isPressed) {
@@ -139,7 +124,7 @@ export class Fall extends State {
 		if (jump.justDown) this.nextJumpReady = true;
 		if (this.nextJumpBuffer > 116) [this.nextJumpReady, this.nextJumpBuffer] = [false, 0];
 		if (player.body.onFloor() && this.nextJumpReady) return player.setState('JUMP');
-		if (player.body.velocity.y === 0 && player.body.onFloor() || player.touchingPlatform && player.body.onFloor()) player.setState('LAND');
+		if (player.body.velocity.y === 0 && player.body.onFloor() || player.touchingPlatform.y && player.body.onFloor()) player.setState('LAND');
 	}
 }
 
@@ -149,7 +134,7 @@ export class Land extends State {
 	}
 	enter() {
 		const { player } = this;
-		player.land.play();
+		player.sounds.play('land');
 		player.setVelocityX(0);
 		player.madeDoubleJump = false;
 		player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'land', function (anims) {
@@ -170,7 +155,8 @@ export class Hit extends State {
 	}
 	enter() {
 		const { player } = this;
-		player.scene.sound.play('hit');
+		player.sounds.play('hit');
+		player.removeTouchingPlatform();
 		player.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'hit', function (anims) {
 			player.setState('FALL');
 			player.scene.time.delayedCall(2000, () => player.setInvulnerability(false));
@@ -187,11 +173,14 @@ export class DeadHit extends State {
 	}
 	enter() {
 		const { player } = this;
-		player.scene.sound.play('hit');
+		player.sounds.play('hit');
+		player.removeTouchingPlatform();
+		this.gap = false;
+		player.scene.time.delayedCall(50, () => this.gap = true);
 	}
 	handleInput() {
 		const { player } = this;
-		if (player.body.velocity.y === 0 || player.touchingPlatform) player.setState('DEAD_GROUND');
+		if (player.body.onFloor() && this.gap) player.setState('DEAD_GROUND');
 	}
 }
 

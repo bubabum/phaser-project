@@ -501,8 +501,18 @@
 			},
 			{
 				"type": "audio",
+				"key": "power_up1",
+				"url": "./assets/audio/player/power_up2.wav"
+			},
+			{
+				"type": "audio",
 				"key": "enemy_atack",
 				"url": "./assets/audio/enemy_atack.wav"
+			},
+			{
+				"type": "audio",
+				"key": "enemy_get_hit",
+				"url": "./assets/audio/enemy/get_hit.wav"
 			},
 			{
 				"type": "audio",

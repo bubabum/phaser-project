@@ -14,11 +14,12 @@ import { DeadGround } from './PlayerState';
 import { DoorIn } from './PlayerState';
 import { DoorOut } from './PlayerState';
 import { Dialogue } from '../utility/Dialogue';
+import { SoundManager } from '../utility/SoundManager';
 
 
 export class BombGuy extends Character {
 
-	constructor({ scene, x, y, textures, playerData }) {
+	constructor({ scene, x, y, textures, playerData, soundMap }) {
 		super({ scene, x, y: y - 25, texture: textures.player });
 		this.setDepth(23);
 		this.setSize(25, 50);
@@ -62,11 +63,7 @@ export class BombGuy extends Character {
 
 		this.particles = new ParticlesGroup({ scene: this.scene, textures: textures.particles, emitter: this });
 		this.dialogue = new Dialogue(scene, this);
-		this.jump = scene.sound.add('jump');
-		this.walk = scene.sound.add('walk');
-		this.land = scene.sound.add('land');
-		this.throw = scene.sound.add('throw');
-		//this.throw.setVolume(0.2);
+		this.sounds = new SoundManager(scene, soundMap);
 
 		this.createAnimations(textures.player);
 
@@ -95,9 +92,9 @@ export class BombGuy extends Character {
 	update({ t, dt, controller }) {
 		//console.log(this.currentState.name)
 		//console.log(this.touchingPlatform)
-		//console.log(this.body.onFloor())
+		//console.log(this.body.velocity.x)
 		this.activeBomb && this.activeBomb.update(this);
-		if (this.body.velocity.y > 300) this.setVelocityY(300);
+		//if (this.body.velocity.y > 300) this.setVelocityY(300);
 		// if (this.lastState !== this.currentState.name) {
 		// 	this.lastState = this.currentState.name;
 		// 	console.log(this.lastState);
@@ -125,9 +122,8 @@ export class BombGuy extends Character {
 		if (useBomb.justUp) this.throwBomb();
 		if (useSword.justDown) this.throwSword();
 		if (useRum.justDown) this.activateRum();
-
-		if (this.touchingPlatform && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
-			const platformVelocityY = this.touchingPlatform.body.velocity.y;
+		if (this.touchingPlatform.y && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
+			const platformVelocityY = this.touchingPlatform.y.body.velocity.y;
 			if (platformVelocityY > 0) {
 				this.setVelocityY(platformVelocityY);
 			}
@@ -154,6 +150,7 @@ export class BombGuy extends Character {
 
 	addCollectible(id, type) {
 		if (this.isDead()) return
+		this.sounds.play('power_up1')
 		switch (type) {
 			case 'life':
 				if (this.health === this.maxHeath) return false
@@ -190,14 +187,14 @@ export class BombGuy extends Character {
 
 	throwBomb() {
 		//if (!this.bombBar.isVisible()) return
-		this.throw.play();
+		this.sounds.play('throw');
 		if (this.activeBomb) this.activeBomb.throw(this.bombMaxVelocity * this.bombBar.stopCharging(), this);
 		this.activeBomb = null;
 	}
 
 	throwSword() {
 		if (this.inventoryData.sword === 0 || this.swordGroup.getChildren().length === this.swordGroup.maxSize || this.isDead()) return
-		this.throw.play();
+		this.sounds.play('throw');
 		const sowrd = this.swordGroup.get();
 		if (sowrd) sowrd.throw(this);
 		this.inventoryData.sword--;

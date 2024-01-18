@@ -18,4 +18,8 @@ export class SoundManager {
 		this.sounds[key].play();
 	}
 
+	isPlaying(key) {
+		return this.sounds[key].isPlaying;
+	}
+
 }

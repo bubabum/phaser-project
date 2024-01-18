@@ -4,7 +4,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y, texture);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
-
+		this.removeTouchingPlatform();
 	}
 
 	isDead() {
@@ -23,8 +23,12 @@ export class Character extends Phaser.Physics.Arcade.Sprite {
 		this.anims.play(this.currentState.animation);
 	}
 
-	setTouchingPlatform(platform) {
-		this.touchingPlatform = platform;
+	setTouchingPlatform(platform, axis) {
+		this.touchingPlatform[axis] = platform;
+	}
+
+	removeTouchingPlatform() {
+		this.touchingPlatform = { x: null, y: null };
 	}
 
 	setInvulnerability(status, effect = false) {

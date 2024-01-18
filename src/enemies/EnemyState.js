@@ -6,12 +6,13 @@ export class EnemyJump extends State {
 	}
 	enter() {
 		const { enemy } = this;
-		enemy.setVelocityY(enemy.jumpVelocity)
+		enemy.setVelocityY(enemy.jumpVelocity);
+		enemy.removeTouchingPlatform();
 	}
 	handleState() {
 		if (this.enemy.checkAtackRange()) return this.enemy.setState('AIR_ATACK');
 		if (this.enemy.body.velocity.y > 0) return this.enemy.setState('FALL');
-		if (this.enemy.body.blocked.down) this.enemy.setState('IDLE');
+		if (this.enemy.body.onFloor()) this.enemy.setState('IDLE');
 	}
 }
 
@@ -20,6 +21,8 @@ export class EnemyFall extends State {
 		super({ name: 'FALL', enemy, animation: 'fall' });
 	}
 	enter() {
+		const { enemy } = this;
+		enemy.removeTouchingPlatform();
 	}
 	handleState() {
 		if (this.enemy.body.blocked.down) return this.enemy.setState('IDLE');
@@ -63,6 +66,9 @@ export class EnemyHit extends State {
 	}
 	enter() {
 		const { enemy } = this;
+		const sound = enemy.scene.sound.add('enemy_get_hit')
+		sound.setVolume(0.5).play();
+		enemy.removeTouchingPlatform();
 		enemy.scene.time.delayedCall(1000, () => enemy.setInvulnerability(false));
 	}
 	handleState() {
@@ -76,13 +82,17 @@ export class EnemyDeadHit extends State {
 		super({ name: 'DEAD_HIT', enemy, animation: 'dead_hit' });
 	}
 	enter() {
-		this.enemy.setDrag(100, 0);
-		this.enemy.hurtbox.destroy();
-		if (this.bombToInteract) this.bombToInteract = null;
+		const { enemy } = this;
+		enemy.setDrag(100, 0);
+		enemy.hurtbox.destroy();
+		if (enemy.bombToInteract) enemy.bombToInteract = null;
+		enemy.removeTouchingPlatform();
+		this.gap = false;
+		enemy.scene.time.delayedCall(50, () => this.gap = true);
 	}
 	handleState() {
 		const { enemy } = this;
-		if (enemy.body.velocity.y === 0 || enemy.touchingPlatform) enemy.setState('DEAD_GROUND');
+		if (enemy.body.onFloor() && this.gap) enemy.setState('DEAD_GROUND');
 	}
 }
 

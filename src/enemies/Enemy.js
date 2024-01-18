@@ -27,8 +27,8 @@ export class Enemy extends Character {
 
 	update() {
 		this.drawHealthBar();
-		if (this.touchingPlatform && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
-			const platformVelocityY = this.touchingPlatform.body.velocity.y;
+		if (this.touchingPlatform.y && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
+			const platformVelocityY = this.touchingPlatform.y.body.velocity.y;
 			if (platformVelocityY > 0) this.setVelocityY(platformVelocityY);
 		}
 		this.currentState.handleState();

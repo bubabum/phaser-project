@@ -82,10 +82,13 @@ export class BaldPirateJumpUp extends State {
 		const { enemy } = this;
 		enemy.setVelocityY(enemy.jumpVelocity * 0.9)
 		enemy.setVelocityXByDirection(90);
+		this.gap = false;
+		enemy.scene.time.delayedCall(50, () => this.gap = true);
 	}
 	handleState() {
 		const { enemy } = this;
 		if (enemy.body.velocity.y > 0) return enemy.setState('FALL');
+		if (enemy.body.onFloor() && this.gap) enemy.setState('IDLE');
 	}
 }
 
@@ -97,10 +100,13 @@ export class BaldPirateLongJumpUp extends State {
 		const { enemy } = this;
 		enemy.setVelocityY(enemy.jumpVelocity)
 		enemy.setVelocityXByDirection(120);
+		this.gap = false;
+		enemy.scene.time.delayedCall(50, () => this.gap = true);
 	}
 	handleState() {
 		const { enemy } = this;
 		if (enemy.body.velocity.y > 0) return enemy.setState('FALL');
+		if (enemy.body.onFloor() && this.gap) enemy.setState('IDLE');
 	}
 }
 

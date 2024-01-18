@@ -63,10 +63,10 @@ export class Game extends Phaser.Scene {
 		this.levels = [
 			//{ tilemapKey: 'boss', hasLight: true, hasBoss: true },
 			//{ tilemapKey: 'eight', hasLight: false },
-			{ tilemapKey: 'first', hasLight: true },
-			{ tilemapKey: 'second', hasLight: true },
-			{ tilemapKey: 'three_isles', hasLight: false },
-			{ tilemapKey: 'platformer', hasLight: false },
+			// { tilemapKey: 'first', hasLight: true },
+			// { tilemapKey: 'second', hasLight: true },
+			// { tilemapKey: 'three_isles', hasLight: false },
+			// { tilemapKey: 'platformer', hasLight: false },
 			{ tilemapKey: 'eight', hasLight: false },
 			{ tilemapKey: 'six_rooms', hasLight: false },
 			{ tilemapKey: 'boss', hasLight: false, hasBoss: true },
@@ -170,6 +170,7 @@ export class Game extends Phaser.Scene {
 			if (!enemy.isInvulnerable) {
 				this.push(sword, enemy);
 				enemy.takeDamage();
+				if (this.cameras.main.worldView.contains(sword.x, sword.y)) sword.sounds.play('sword_embedded');
 				sword.destroy();
 				if (enemy.health === 0) this.dropPowerUp(enemy);
 			}
@@ -535,10 +536,23 @@ export class Game extends Phaser.Scene {
 			},
 			continue: 'continue_inventory',
 		}
-		this.player = new BombGuy({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures, playerData: this.playerData });
-		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer, this.movingXPlatformsGroup]);
-		this.physics.add.collider(this.player, [this.platformsLayer, this.movingXPlatformsGroup, this.movingYPlatformsGroup], (player, platform) => {
-			if (player.body.onFloor()) player.setTouchingPlatform(platform);
+		const soundMap = {
+			jump: 1,
+			walk: 1,
+			land: 1,
+			throw: 1,
+			hit: 1,
+			explosion: 0.5,
+			hit_bomb: 1,
+			'power_up1': 1,
+		}
+		this.player = new BombGuy({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures, playerData: this.playerData, soundMap });
+		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer]);
+		this.physics.add.collider(this.player, [this.movingXPlatformsGroup], (player, platform) => {
+			if (player.body.onFloor()) player.setTouchingPlatform(platform, 'x');
+		});
+		this.physics.add.collider(this.player, [this.movingYPlatformsGroup], (player, platform) => {
+			if (player.body.onFloor()) player.setTouchingPlatform(platform, 'y');
 		});
 		//this.physics.add.collider(this.player, this.movingYPlatformsGroup, (player, platform) => player.touchingPlatform = platform); // create player method
 		this.physics.add.collider(this.player, this.fadingPlatformsGroup, (player, platform) => {
