@@ -3,7 +3,9 @@ export class Candle extends Phaser.Physics.Arcade.Sprite {
 	constructor({ scene, x, y, textureKey }) {
 		super(scene, x, y, textureKey);
 		scene.add.existing(this);
+		this.setDepth(2);
 		this.light = scene.add.sprite(x, y - 30, `${textureKey}_light`);
+		this.light.setDepth(3);
 		this.createAnimations(textureKey);
 		this.anims.play('idle');
 		this.light.anims.play('idle');

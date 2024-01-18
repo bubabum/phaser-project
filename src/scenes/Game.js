@@ -63,10 +63,10 @@ export class Game extends Phaser.Scene {
 		this.levels = [
 			//{ tilemapKey: 'boss', hasLight: true, hasBoss: true },
 			//{ tilemapKey: 'eight', hasLight: false },
-			// { tilemapKey: 'first', hasLight: true },
-			// { tilemapKey: 'second', hasLight: true },
-			// { tilemapKey: 'three_isles', hasLight: false },
-			// { tilemapKey: 'platformer', hasLight: false },
+			{ tilemapKey: 'first', hasLight: false },
+			{ tilemapKey: 'second', hasLight: true },
+			{ tilemapKey: 'three_isles', hasLight: false },
+			{ tilemapKey: 'platformer', hasLight: false },
 			{ tilemapKey: 'eight', hasLight: false },
 			{ tilemapKey: 'six_rooms', hasLight: false },
 			{ tilemapKey: 'boss', hasLight: false, hasBoss: true },
@@ -100,7 +100,7 @@ export class Game extends Phaser.Scene {
 	create() {
 		this.map = this.make.tilemap({ key: this.levels[this.currentLevel].tilemapKey, tileWidth: 64, tileHeight: 64 });
 		this.tileset = this.map.addTilesetImage('tileset', 'tileset');
-		this.groundLayer = this.map.createLayer('ground', this.tileset);
+		this.groundLayer = this.map.createLayer('ground', this.tileset).setDepth(0);
 		// const tileCollisionMap = {
 		// 	1: [true, false, true, false, false],
 		// 	2: [false, false, true, false, false],
@@ -118,7 +118,7 @@ export class Game extends Phaser.Scene {
 		// })
 		this.groundLayer.setCollision([1, 2, 3, 7, 8, 9, 13, 14, 15, 19, 20, 25, 26, 50, 56]);
 		this.createDecorationTiles();
-		this.platformsLayer = this.map.createLayer('platforms', this.tileset).setDepth(2);
+		this.platformsLayer = this.map.createLayer('platforms', this.tileset).setDepth(6);
 		this.platformsLayer.filterTiles(tile => tile.index > 0).forEach(tile => tile.setCollision(false, false, true, false, false));
 		this.hiddenPassageLayer = this.map.createLayer('hidden_passage', this.tileset);
 		this.hiddenPassageLayer.setDepth(26);
@@ -218,26 +218,6 @@ export class Game extends Phaser.Scene {
 		this.theme.setVolume(0.2).play();
 	}
 
-	// showMessageBox(messageText) {
-	// 	if (this.messageBox) {
-	// 		this.messageBox.destroy();
-	// 		this.box.destroy();
-	// 		this.messageTimer.remove();
-	// 	}
-	// 	const { width, height } = this.cameras.main.worldView;
-	// 	const { x, y } = this.player;
-	// 	//this.messageBox = this.add.bitmapText(width / 2, height - 40, 'font', messageText, 20, 1).setMaxWidth(600).setOrigin(0.5, 1).setScrollFactor(0, 0).setDepth(32).setDropShadow(1, 1);
-	// 	this.messageBox = this.add.bitmapText(width / 2, height - 40, 'font', messageText, 12, 1).setMaxWidth(200).setOrigin(0, 1).setDepth(32).setDropShadow(1, 1);
-	// 	const bounds = this.messageBox.getTextBounds(true).global;
-	// 	//this.box = this.add.rectangle(bounds.x - 20, bounds.y - 20, bounds.width + 40, bounds.height + 40, 0x323443, 0.9).setScrollFactor(0, 0).setDepth(31).setOrigin(0, 0);
-	// 	//this.subBox = this.add.rectangle(x, y - 50, 204, 104, 0x323443, 1).setDepth(31).setOrigin(0, 1); //0x323443
-	// 	this.box = this.add.rectangle(x + 2, y - 52, 200, 100, 0x323443, 0.5).setDepth(31).setOrigin(0, 1).setStrokeStyle(2, 0x323443, 1); //0x987064
-	// 	// this.messageTimer = this.time.delayedCall(5000, () => {
-	// 	// 	this.messageBox.destroy();
-	// 	// 	this.box.destroy();
-	// 	// });
-	// }
-
 	dropPowerUp(enemy) {
 		const { x, y } = enemy;
 		let rnd = Math.floor(Math.random() * 9) + 1;
@@ -302,7 +282,7 @@ export class Game extends Phaser.Scene {
 			return `${texturKey}${textureIndexes[Math.floor(Math.random() * textureIndexes.length)]}`;
 		}
 		const addRandomImage = (offsetX, offsetY, texturKey, textureIndexes, tile) => {
-			this.add.image(tile.pixelX + offsetX, tile.pixelY + offsetY, getRandomTexture(texturKey, textureIndexes)).setOrigin(0, 0).setFlipX(false);
+			this.add.image(tile.pixelX + offsetX, tile.pixelY + offsetY, getRandomTexture(texturKey, textureIndexes)).setOrigin(0, 0).setFlipX(false).setDepth(1);
 		}
 		const groundTilesMap = [
 			{
@@ -496,7 +476,10 @@ export class Game extends Phaser.Scene {
 			dragY: 100,
 		});
 		this.physics.add.overlap(this.player, this.collectibles, (player, collectible) => {
-			if (player.addCollectible(collectible.id, collectible.type)) collectible.disappear();
+			if (player.addCollectible(collectible.id, collectible.type)) {
+				player.sounds.play('power_up');
+				collectible.disappear();
+			}
 		});
 		this.physics.add.collider(this.collectibles, [this.groundLayer, this.platformsLayer]);
 		layer.forEach(obj => {
@@ -537,14 +520,15 @@ export class Game extends Phaser.Scene {
 			continue: 'continue_inventory',
 		}
 		const soundMap = {
-			jump: 1,
-			walk: 1,
-			land: 1,
-			throw: 1,
-			hit: 1,
-			explosion: 0.5,
-			hit_bomb: 1,
-			'power_up1': 1,
+			'jump': 1,
+			'walk': 1,
+			'land': 1,
+			'throw': 1,
+			'hit': 1,
+			'explosion': 0.5,
+			'hit_bomb': 1,
+			'power_up': 0.3,
+			'death': 1,
 		}
 		this.player = new BombGuy({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures, playerData: this.playerData, soundMap });
 		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer]);
@@ -582,6 +566,7 @@ export class Game extends Phaser.Scene {
 		// });
 		this.physics.add.collider(this.player.swordGroup, this.groundLayer, (sword) => sword.embed());
 		door.anims.play('closing');
+		//door.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'closing', () => this.sound.play('door_close'));
 	}
 	createCamera() {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -616,6 +601,17 @@ export class Game extends Phaser.Scene {
 			'Canon': Canon,
 			'Cucumber': Cucumber,
 			'BigGuy': BigGuy,
+		}
+		const soundMap = {
+			'jump': 1,
+			'walk': 1,
+			'land': 1,
+			'throw': 1,
+			'hit': 1,
+			'explosion': 0.5,
+			'hit_bomb': 1,
+			'power_up': 0.3,
+			'death': 1,
 		}
 		if (!this.map.getObjectLayer('enemies')?.objects) return
 		this.map.getObjectLayer('enemies').objects.forEach(object => {

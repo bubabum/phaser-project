@@ -501,13 +501,18 @@
 			},
 			{
 				"type": "audio",
-				"key": "power_up1",
-				"url": "./assets/audio/player/power_up2.wav"
+				"key": "power_up",
+				"url": "./assets/audio/player/power_up.wav"
+			},
+			{
+				"type": "audio",
+				"key": "death",
+				"url": "./assets/audio/player/death.wav"
 			},
 			{
 				"type": "audio",
 				"key": "enemy_atack",
-				"url": "./assets/audio/enemy_atack.wav"
+				"url": "./assets/audio/enemy/atack.wav"
 			},
 			{
 				"type": "audio",
@@ -516,8 +521,23 @@
 			},
 			{
 				"type": "audio",
-				"key": "shoot",
-				"url": "./assets/audio/shoot.wav"
+				"key": "enemy_death",
+				"url": "./assets/audio/enemy/death.wav"
+			},
+			{
+				"type": "audio",
+				"key": "shot",
+				"url": "./assets/audio/enemy/shot.wav"
+			},
+			{
+				"type": "audio",
+				"key": "door_close",
+				"url": "./assets/audio/misc/door_close.mp3"
+			},
+			{
+				"type": "audio",
+				"key": "text",
+				"url": "./assets/audio/misc/text.wav"
 			}
 		]
 	}

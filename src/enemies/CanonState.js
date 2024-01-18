@@ -19,7 +19,7 @@ export class CanonShoot extends State {
 	}
 	enter() {
 		const { enemy } = this;
-		const sound = enemy.scene.sound.add('shoot');
+		const sound = enemy.scene.sound.add('shot');
 		sound.setVolume(enemy.getVolume()).play();
 		enemy.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'shoot', function (anims) {
 			enemy.setState('IDLE');

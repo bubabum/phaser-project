@@ -4,7 +4,7 @@ export class DecorationObject extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y, textureKey);
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
-		this.setOrigin(0.5, 1).setFlipX(flipX);
+		this.setOrigin(0.5, 1).setFlipX(flipX).setDepth(7);
 
 	}
 

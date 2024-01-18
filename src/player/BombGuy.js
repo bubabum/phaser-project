@@ -124,9 +124,7 @@ export class BombGuy extends Character {
 		if (useRum.justDown) this.activateRum();
 		if (this.touchingPlatform.y && this.currentState.name !== 'JUMP' && this.currentState.name !== 'FALL') {
 			const platformVelocityY = this.touchingPlatform.y.body.velocity.y;
-			if (platformVelocityY > 0) {
-				this.setVelocityY(platformVelocityY);
-			}
+			if (platformVelocityY > 0) this.setVelocityY(platformVelocityY);
 		}
 
 		if (this.dialogue.isVisible) this.dialogue.update();
@@ -150,7 +148,7 @@ export class BombGuy extends Character {
 
 	addCollectible(id, type) {
 		if (this.isDead()) return
-		this.sounds.play('power_up1')
+		//	this.sounds.play('power_up')
 		switch (type) {
 			case 'life':
 				if (this.health === this.maxHeath) return false
@@ -186,7 +184,10 @@ export class BombGuy extends Character {
 	}
 
 	throwBomb() {
-		//if (!this.bombBar.isVisible()) return
+		this.anims.play('throw');
+		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'throw', () => {
+			this.anims.play(this.currentState.animation);
+		});
 		this.sounds.play('throw');
 		if (this.activeBomb) this.activeBomb.throw(this.bombMaxVelocity * this.bombBar.stopCharging(), this);
 		this.activeBomb = null;
@@ -194,6 +195,10 @@ export class BombGuy extends Character {
 
 	throwSword() {
 		if (this.inventoryData.sword === 0 || this.swordGroup.getChildren().length === this.swordGroup.maxSize || this.isDead()) return
+		this.anims.play('throw');
+		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'throw', () => {
+			this.anims.play(this.currentState.animation);
+		});
 		this.sounds.play('throw');
 		const sowrd = this.swordGroup.get();
 		if (sowrd) sowrd.throw(this);
@@ -290,6 +295,12 @@ export class BombGuy extends Character {
 		this.anims.create({
 			key: 'door_out',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 84, end: 99 }),
+			frameRate: 20,
+			repeat: 0,
+		});
+		this.anims.create({
+			key: 'throw',
+			frames: this.anims.generateFrameNumbers(textureKey, { start: 100, end: 102 }),
 			frameRate: 20,
 			repeat: 0,
 		});

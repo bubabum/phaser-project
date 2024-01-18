@@ -34,6 +34,8 @@ export class Dialogue {
 			this.scene.time.delayedCall(100 * i, () => {
 				buffer.push(text.split('')[i]);
 				this.text.setText(buffer.join(''));
+				const sound = this.scene.sound.add('text')
+				sound.setVolume(0.05).play();
 			})
 		}
 		this.scene.time.delayedCall(100 * text.length + 500, () => {

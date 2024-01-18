@@ -6,6 +6,7 @@ export class Door extends Phaser.Physics.Arcade.Sprite {
 		scene.physics.add.existing(this);
 		this.setSize(10, 30);
 		this.setOffset(35, 60);
+		this.setDepth(4);
 		this.id = Number(id);
 		this.createAnimations(textureKey);
 	}

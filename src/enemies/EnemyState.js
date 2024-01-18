@@ -83,6 +83,8 @@ export class EnemyDeadHit extends State {
 	}
 	enter() {
 		const { enemy } = this;
+		const sound = enemy.scene.sound.add('enemy_death')
+		sound.setVolume(0.5).play();
 		enemy.setDrag(100, 0);
 		enemy.hurtbox.destroy();
 		if (enemy.bombToInteract) enemy.bombToInteract = null;

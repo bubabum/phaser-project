@@ -5,7 +5,7 @@ export class MovingSpike extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 		this.state = 'RAISE';
-		this.setDepth(22);
+		this.setDepth(10);
 		this.setAngle(rotation);
 		this.createAnimations(textureKey);
 		this.anims.play('idle_top');

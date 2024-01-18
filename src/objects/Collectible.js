@@ -15,9 +15,7 @@ export class Collectible extends Phaser.Physics.Arcade.Sprite {
 	disappear() {
 		this.disableBody();
 		this.anims.play('effect');
-		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'effect', function (anims) {
-			this.destroy();
-		}, this);
+		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'effect', () => this.destroy());
 	}
 
 }

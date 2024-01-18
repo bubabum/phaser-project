@@ -11,7 +11,7 @@ export class FadingPlatform extends Phaser.Physics.Arcade.Sprite {
 		this.body.checkCollision.down = false;
 		this.body.checkCollision.left = false;
 		this.body.checkCollision.right = false;
-		this.setDepth(22);
+		this.setDepth(6);
 	}
 
 	fade() {

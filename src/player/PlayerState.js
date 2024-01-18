@@ -190,6 +190,7 @@ export class DeadGround extends State {
 	}
 	enter() {
 		const { player } = this;
+		player.sounds.play('death');
 		player.setVelocityX(0);
 		player.scene.time.delayedCall(3000, () => {
 			if (player.continue === 0) return player.scene.scene.restart({ level: 0 });
