@@ -1,4 +1,5 @@
 import { Controller } from '../utility/Controller';
+import { SoundManager } from '../utility/SoundManager';
 import { RumPowerUp } from '../objects/RumPowerUp';
 import { SwordPowerUp } from '../objects/SwordPowerUp';
 import { Door } from '../objects/Door';
@@ -61,15 +62,15 @@ export class Game extends Phaser.Scene {
 			},
 		})
 		this.levels = [
-			//{ tilemapKey: 'boss', hasLight: true, hasBoss: true },
+			{ tilemapKey: 'boss', hasLight: true, hasBoss: true },
 			//{ tilemapKey: 'eight', hasLight: false },
-			{ tilemapKey: 'first', hasLight: false },
-			{ tilemapKey: 'second', hasLight: true },
-			{ tilemapKey: 'three_isles', hasLight: false },
-			{ tilemapKey: 'platformer', hasLight: false },
-			{ tilemapKey: 'eight', hasLight: false },
-			{ tilemapKey: 'six_rooms', hasLight: false },
-			{ tilemapKey: 'boss', hasLight: false, hasBoss: true },
+			// { tilemapKey: 'first', hasLight: false },
+			// { tilemapKey: 'second', hasLight: true },
+			// { tilemapKey: 'three_isles', hasLight: false },
+			// { tilemapKey: 'platformer', hasLight: false },
+			// { tilemapKey: 'eight', hasLight: false },
+			// { tilemapKey: 'six_rooms', hasLight: false },
+			// { tilemapKey: 'boss', hasLight: false, hasBoss: true },
 		];
 	}
 
@@ -206,14 +207,15 @@ export class Game extends Phaser.Scene {
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
 		if (this.hasBoss) this.boss.update();
 		// if (this.box) this.box.setPosition(this.player.x, this.player.y)
-		if (this.messageBox) this.messageBox.setPosition(this.box.x + 20, this.box.y - 60)
+		// if (this.messageBox) this.messageBox.setPosition(this.box.x + 20, this.box.y - 60)
 		// const { x, y, width, height } = this.cameras.main.worldView;
 		// this.rect.setPosition(x, y).setSize(width, height);
 
 	}
 
 	playRandomTheme() {
-		//this.theme = this.sound.add(`theme${Game.getRandom(1, 8)}`);
+		if (this.theme) this.theme.stop();
+		this.theme = this.sound.add(`theme${Game.getRandom(1, 7)}`);
 		this.theme = this.sound.add(`theme7`);
 		this.theme.setVolume(0.2).play();
 	}
@@ -244,6 +246,7 @@ export class Game extends Phaser.Scene {
 		const hasKey = this.player.collected.has(`${this.currentLevel}key`) && door.id === 1 || door.id === -1 && this.currentLevel !== 0;
 		const onFloor = this.player.body.onFloor();
 		if (keyDown && door.id === -1 && this.currentLevel === 0) return this.player.dialogue.show('Closed. It is first level, maybe you should go ahead.');
+		if (keyDown && this.currentLevel === this.levels.length - 1 && !hasKey || !onFloor) return this.player.dialogue.show('The End');
 		if (keyDown && !hasKey || !onFloor) return this.player.dialogue.show('Closed. I need key!');
 		door.disableBody();
 		door.anims.play('opening');
@@ -564,13 +567,13 @@ export class Game extends Phaser.Scene {
 		// this.physics.add.overlap(this.player, this.spikes, (player, spike) => {
 		// 	if (player.takeDamage()) this.push(spike, player);
 		// });
-		this.physics.add.collider(this.player.swordGroup, this.groundLayer, (sword) => sword.embed());
+		this.physics.add.collider(this.player.swordGroup, [this.groundLayer], (sword) => sword.embed());
 		door.anims.play('closing');
 		//door.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'closing', () => this.sound.play('door_close'));
 	}
 	createCamera() {
 		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-		this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
+		this.cameras.main.startFollow(this.player, true, 0.1, 0.1, 0, 0);
 		//this.cameras.main.setRoundPixels(true).setBackgroundColor(0xbababa);
 	}
 	createEnemies() {
@@ -603,16 +606,12 @@ export class Game extends Phaser.Scene {
 			'BigGuy': BigGuy,
 		}
 		const soundMap = {
-			'jump': 1,
-			'walk': 1,
-			'land': 1,
-			'throw': 1,
-			'hit': 1,
-			'explosion': 0.5,
-			'hit_bomb': 1,
-			'power_up': 0.3,
-			'death': 1,
+			'enemy_atack': 0.5,
+			'enemy_get_hit': 0.5,
+			'enemy_death': 0.5,
+			'enemy_teleport': 0.5,
 		}
+		this.enemySounds = new SoundManager(this, soundMap);
 		if (!this.map.getObjectLayer('enemies')?.objects) return
 		this.map.getObjectLayer('enemies').objects.forEach(object => {
 			const className = classes[object.properties.find(item => item.name === 'className').value];
@@ -694,9 +693,17 @@ export class Game extends Phaser.Scene {
 					this.physics.add.overlap(this.player, this.bossTrigger, () => {
 						this.bossTrigger.body.setEnable(false);
 						this.cameras.main.stopFollow();
-						this.cameras.main.pan(this.cameraPoint.x, this.cameraPoint.y, 2000);
+						this.cameras.main.pan(this.cameraPoint.x, this.cameraPoint.y, 1500);
 						this.enterGate.close();
-						this.time.delayedCall(2000, () => this.boss.setState('DISAPPEAR'))
+						this.theme.stop();
+						this.theme = this.sound.add(`theme8`);
+						this.theme.setVolume(0.2).play();
+						this.boss.turnToPlayer();
+						this.time.delayedCall(2000, () => this.boss.dialogue.show('I will destroy you!'));
+						this.time.delayedCall(4000, () => {
+							this.boss.enableBody();
+							this.boss.setState('DISAPPEAR');
+						});
 					});
 					return
 				case 'camera_point':
@@ -727,6 +734,8 @@ export class Game extends Phaser.Scene {
 			}
 		})
 		this.physics.add.collider(this.gates, [this.groundLayer, this.player]);
+		this.physics.add.collider(this.player.swordGroup, [this.gates], (sword) => sword.embed());
+		this.physics.add.collider(this.player.bombGroup, [this.gates]);
 		this.physics.add.collider(this.player, [this.gates]);
 	}
 	createDecorations() {

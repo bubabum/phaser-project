@@ -7,8 +7,8 @@ export class Dialogue {
 		this.width = 220;
 		this.height = 106;
 		this.padding = 10;
-		this.box = scene.add.rectangle(0, 0, this.width, this.height, 0x323443, 0.5).setDepth(31).setOrigin(0, 1).setStrokeStyle(2, 0x323443, 1);
-		this.text = scene.add.bitmapText(0, 0, 'font', '', 12, 1).setMaxWidth(this.width - this.padding * 2).setOrigin(0, 0).setDepth(32).setDropShadow(1, 1).setLeftAlign();
+		this.box = scene.add.rectangle(0, 0, this.width, this.height, 0x323443, 0.5).setDepth(32).setOrigin(0, 1).setStrokeStyle(2, 0x323443, 1);
+		this.text = scene.add.bitmapText(0, 0, 'font', '', 12, 1).setMaxWidth(this.width - this.padding * 2).setOrigin(0, 0).setDepth(33).setDropShadow(1, 1).setLeftAlign();
 		this.box.noLight = true;
 		this.text.noLight = true;
 		this.setPositions();
@@ -51,11 +51,20 @@ export class Dialogue {
 
 	setPositions() {
 		this.getAnchorPoint();
-		this.box.setPosition(this.x, this.y);
-		this.text.setPosition(this.x + this.padding, this.y - this.height + this.padding);
+		const { x, width } = this.scene.cameras.main.worldView
+		let pointX = this.x;
+		if (this.anchorObject.x + this.width > x + width) pointX = x + width - this.width;
+		this.box.setPosition(pointX, this.y);
+		this.text.setPosition(pointX + this.padding, this.y - this.height + this.padding);
 	}
 
 	getAnchorPoint() {
+		const { x, width } = this.scene.cameras.main.worldView
+		if (this.anchorObject.x > x + width * 0.6) {
+			this.x = Math.floor(this.anchorObject.getTopLeft().x);
+			this.y = Math.floor(this.anchorObject.getTopLeft().y);
+			return
+		}
 		this.x = Math.floor(this.anchorObject.getTopRight().x);
 		this.y = Math.floor(this.anchorObject.getTopRight().y);
 	}

@@ -9,7 +9,7 @@ export class Sword extends Phaser.Physics.Arcade.Sprite {
 		this.scene = scene;
 		this.soundMap = {
 			//'explosion': 0.5,
-			'sword_embedded': 0.5,
+			'sword_embedded': 0.2,
 		};
 		this.sounds = new SoundManager(scene, this.soundMap);
 		this.setDepth(25);

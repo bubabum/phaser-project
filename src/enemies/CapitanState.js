@@ -42,6 +42,7 @@ export class CapitanThrowBottle extends State {
 		const { enemy } = this;
 		enemy.turnToPlayer();
 		enemy.setVelocityX(0);
+		enemy.scene.enemySounds.play('enemy_atack');
 	}
 	handleState() {
 		const { enemy } = this;

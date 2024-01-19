@@ -1,6 +1,7 @@
 import { CanonIdle } from './CanonState';
 import { CanonShoot } from './CanonState';
 import { Enemy } from './Enemy';
+import { SoundManager } from '../utility/SoundManager';
 
 export class Canon extends Enemy {
 
@@ -14,6 +15,11 @@ export class Canon extends Enemy {
 		this.isCanon = true;
 		this.setBodyProperties(direction);
 		this.createAnimations(textureKey);
+		this.maxShotVolume = 0.5;
+		const soundMap = {
+			'shot': 0.5,
+		}
+		this.sounds = new SoundManager(scene, soundMap);
 		this.states = [
 			new CanonIdle(this),
 			new CanonShoot(this),

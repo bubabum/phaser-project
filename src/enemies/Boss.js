@@ -8,13 +8,14 @@ import { BossHit } from './BossState';
 import { BossDeadHit } from './BossState';
 import { BossDeadGround } from './BossState';
 import { Enemy } from './Enemy';
+import { Dialogue } from '../utility/Dialogue';
 
 export class Boss extends Enemy {
 
 	constructor({ scene, x, y, textureKey, direction }) {
 		super({ scene, x, y, textureKey });
 		this.bubbles = scene.bubbles;
-		this.maxHealth = 10;
+		this.maxHealth = 5;
 		this.health = this.maxHealth;
 		this.atackRange = 40;
 		//this.speedX = 120;
@@ -38,6 +39,7 @@ export class Boss extends Enemy {
 		this.bubbleTimer = null;
 		this.setBodyProperties(direction);
 		this.createHurtbox();
+		this.dialogue = new Dialogue(scene, this);
 		this.createAnimations(textureKey);
 		this.states = [
 			new BossWaiting(this),
@@ -155,13 +157,13 @@ export class Boss extends Enemy {
 			key: 'disappear',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 106, end: 115 }),
 			frameRate: 20,
-			repeat: -1,
+			repeat: 0,
 		});
 		this.anims.create({
 			key: 'appear',
 			frames: this.anims.generateFrameNumbers(textureKey, { start: 115, end: 106 }),
 			frameRate: 20,
-			repeat: -1,
+			repeat: 0,
 		});
 	}
 

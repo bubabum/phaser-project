@@ -195,6 +195,7 @@ export class DeadGround extends State {
 		player.scene.time.delayedCall(3000, () => {
 			if (player.continue === 0) return player.scene.scene.restart({ level: 0 });
 			player.continue--;
+			player.scene.theme.stop();
 			player.scene.scene.restart({ level: player.scene.currentLevel, playerData: player.getPlayerData() })
 		});
 	}

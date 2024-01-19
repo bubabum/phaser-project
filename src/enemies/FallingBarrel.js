@@ -1,3 +1,5 @@
+import { SoundManager } from '../utility/SoundManager';
+
 export class FallingBarrel extends Phaser.Physics.Arcade.Sprite {
 
 	constructor({ scene, x, y, textureKey }) {
@@ -7,10 +9,15 @@ export class FallingBarrel extends Phaser.Physics.Arcade.Sprite {
 		this.scene = scene;
 		this.setSize(42, 44);
 		this.setOffset(11, 16);
+		this.setDepth(25);
 		//this.setOrigin(0, 0);
 		this.createCollider();
 		this.anims.createFromAseprite(textureKey);
 		this.anims.play({ key: 'Idle', repeat: -1 });
+		this.sound = {
+			'falling_barrel': 0.3,
+		};
+		this.sounds = new SoundManager(scene, this.sound);
 		if (scene.hasLight) this.setPipeline('Light2D');
 	}
 
@@ -53,6 +60,7 @@ export class FallingBarrel extends Phaser.Physics.Arcade.Sprite {
 
 	brake() {
 		this.anims.play('Brake');
+		this.sounds.play('falling_barrel');
 		this.body.destroy();
 		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'Brake', function (anims) {
 			this.destroy();

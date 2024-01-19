@@ -35,8 +35,7 @@ export class EnemyAtack extends State {
 	}
 	enter() {
 		const { enemy } = this;
-		const sound = enemy.scene.sound.add('enemy_atack')
-		sound.setVolume(0.5).play();
+		enemy.scene.enemySounds.play('enemy_atack');
 		enemy.setVelocityX(0);
 	}
 	handleState() {
@@ -51,7 +50,9 @@ export class EnemyAirAtack extends State {
 		super({ name: 'AIR_ATACK', enemy, animation: 'air_atack' });
 	}
 	enter() {
-		this.enemy.setVelocityX(0);
+		const { enemy } = this;
+		enemy.scene.enemySounds.play('enemy_atack');
+		enemy.setVelocityX(0);
 	}
 	handleState() {
 		const { enemy } = this;
@@ -66,8 +67,7 @@ export class EnemyHit extends State {
 	}
 	enter() {
 		const { enemy } = this;
-		const sound = enemy.scene.sound.add('enemy_get_hit')
-		sound.setVolume(0.5).play();
+		enemy.scene.enemySounds.play('enemy_get_hit');
 		enemy.removeTouchingPlatform();
 		enemy.scene.time.delayedCall(1000, () => enemy.setInvulnerability(false));
 	}
@@ -83,8 +83,7 @@ export class EnemyDeadHit extends State {
 	}
 	enter() {
 		const { enemy } = this;
-		const sound = enemy.scene.sound.add('enemy_death')
-		sound.setVolume(0.5).play();
+		enemy.scene.enemySounds.play('enemy_death');
 		enemy.setDrag(100, 0);
 		enemy.hurtbox.destroy();
 		if (enemy.bombToInteract) enemy.bombToInteract = null;

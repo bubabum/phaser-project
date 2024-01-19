@@ -6,6 +6,7 @@ export class BossWaiting extends State {
 	}
 	enter() {
 		const { enemy } = this;
+		enemy.disableBody();
 	}
 	handleState() {
 		const { enemy } = this;
@@ -36,6 +37,7 @@ export class BossDisappear extends State {
 		const { enemy } = this;
 		enemy.hit = false;
 		enemy.turnToPlayer();
+		enemy.scene.enemySounds.play('enemy_teleport');
 	}
 	handleState() {
 		const { enemy } = this;
@@ -50,6 +52,7 @@ export class BossAppear extends State {
 		const { enemy } = this;
 		enemy.changePosition();
 		enemy.turnToPlayer();
+		enemy.scene.enemySounds.play('enemy_teleport');
 	}
 	handleState() {
 		const { enemy } = this;
@@ -64,6 +67,7 @@ export class BossThrowBubble extends State {
 	enter() {
 		const { enemy } = this;
 		enemy.turnToPlayer();
+		enemy.scene.enemySounds.play('enemy_atack');
 	}
 	handleState() {
 		const { enemy } = this;
@@ -93,6 +97,7 @@ export class BossHit extends State {
 	}
 	enter() {
 		const { enemy } = this;
+		enemy.scene.enemySounds.play('enemy_get_hit');
 		enemy.scene.time.delayedCall(1000, () => enemy.setInvulnerability(false));
 		if (enemy.bubbleTimer) enemy.bubbleTimer.remove();
 	}
@@ -108,7 +113,10 @@ export class BossDeadHit extends State {
 	}
 	enter() {
 		const { enemy } = this;
+		enemy.scene.enemySounds.play('enemy_death');
 		enemy.hurtbox.destroy();
+		enemy.scene.bubbles.getChildren().forEach(item => item.timer.remove(true));
+		enemy.dialogue.show('I will get you later!');
 	}
 	handleState() {
 		const { enemy } = this;
@@ -122,11 +130,13 @@ export class BossDeadGround extends State {
 	}
 	enter() {
 		const { enemy } = this;
-		enemy.scene.time.delayedCall(3000, () => {
+		enemy.scene.time.delayedCall(3500, () => {
 			enemy.scene.exitGate.open();
 			enemy.scene.cameras.main.pan(enemy.scene.player.x, enemy.scene.player.y, 500);
 			enemy.scene.cameras.main.startFollow(enemy.scene.player, true, 0.1, 0.1);
-			enemy.destroy();
+			enemy.scene.playRandomTheme();
+			enemy.anims.play('disappear');
+			enemy.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'disappear', () => enemy.destroy());
 		});
 	}
 	handleState() {

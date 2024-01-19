@@ -18,6 +18,18 @@ export class SoundManager {
 		this.sounds[key].play();
 	}
 
+	getSound(key) {
+		return this.sounds[key]
+	}
+
+	getMaxVolume(key) {
+		return this.soundMap[key]
+	}
+
+	setVolume(key, volume) {
+		this.sounds[key].setVolume(volume);
+	}
+
 	isPlaying(key) {
 		return this.sounds[key].isPlaying;
 	}
