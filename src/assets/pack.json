@@ -188,6 +188,36 @@
 				"url": "./assets/images/skull.png"
 			},
 			{
+				"type": "image",
+				"key": "arrows",
+				"url": "./assets/menu/arrows.png"
+			},
+			{
+				"type": "image",
+				"key": "jump",
+				"url": "./assets/menu/jump.png"
+			},
+			{
+				"type": "image",
+				"key": "open",
+				"url": "./assets/menu/open.png"
+			},
+			{
+				"type": "image",
+				"key": "throw",
+				"url": "./assets/menu/throw.png"
+			},
+			{
+				"type": "image",
+				"key": "knife",
+				"url": "./assets/menu/knife.png"
+			},
+			{
+				"type": "image",
+				"key": "rum",
+				"url": "./assets/menu/rum.png"
+			},
+			{
 				"type": "spritesheet",
 				"key": "bomb_guy",
 				"url": "./assets/sprites/bomb_guy.png",

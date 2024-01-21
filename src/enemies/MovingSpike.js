@@ -9,7 +9,6 @@ export class MovingSpike extends Phaser.Physics.Arcade.Sprite {
 		this.setAngle(rotation);
 		this.createAnimations(textureKey);
 		this.anims.play('idle_top');
-		if (scene.hasLight) this.setPipeline('Light2D');
 		scene.time.delayedCall(50, () => this.drop())
 	}
 

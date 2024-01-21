@@ -51,11 +51,12 @@ export class Dialogue {
 
 	setPositions() {
 		this.getAnchorPoint();
-		const { x, width } = this.scene.cameras.main.worldView
-		let pointX = this.x;
-		if (this.anchorObject.x + this.width > x + width) pointX = x + width - this.width;
-		this.box.setPosition(pointX, this.y);
-		this.text.setPosition(pointX + this.padding, this.y - this.height + this.padding);
+		const { x, y, width } = this.scene.cameras.main.worldView
+		let point = { x: this.x, y: this.y }
+		if (this.x + this.width > x + width) point.x = x + width - this.width;
+		if (this.y - this.height < y) point.y = y + this.height;
+		this.box.setPosition(point.x, point.y);
+		this.text.setPosition(point.x + this.padding, point.y - this.height + this.padding);
 	}
 
 	getAnchorPoint() {

@@ -5,7 +5,6 @@ export class Gate extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
 		this.setDepth(12);
-		//this.status = status;
 		this.createAnimations(textureKey);
 		this.setStatus(status);
 	}

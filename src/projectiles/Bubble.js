@@ -9,7 +9,7 @@ export class Bubble extends Phaser.Physics.Arcade.Sprite {
 		this.createAnimations(textureKey);
 		this.anims.play('idle');
 		this.timer = scene.time.delayedCall(10000, () => this.destroy());
-		if (scene.hasLight) {
+		if (scene.hasLight && scene.isWindows) {
 			this.setPipeline('Light2D');
 			this.light = scene.lights.addLight(this.x, this.y, 300, 0xaaaaaa, 0.3);
 		}

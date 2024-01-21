@@ -15,9 +15,9 @@ export class Canon extends Enemy {
 		this.isCanon = true;
 		this.setBodyProperties(direction);
 		this.createAnimations(textureKey);
-		this.maxShotVolume = 0.5;
+		this.maxShotVolume = 0.2;
 		const soundMap = {
-			'shot': 0.5,
+			'shot': 0.1,
 		}
 		this.sounds = new SoundManager(scene, soundMap);
 		this.states = [

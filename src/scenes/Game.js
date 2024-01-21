@@ -62,15 +62,13 @@ export class Game extends Phaser.Scene {
 			},
 		})
 		this.levels = [
+			{ tilemapKey: 'first', hasLight: false },
+			{ tilemapKey: 'second', hasLight: true },
+			{ tilemapKey: 'three_isles', hasLight: false },
+			{ tilemapKey: 'platformer', hasLight: true },
+			{ tilemapKey: 'eight', hasLight: false },
+			{ tilemapKey: 'six_rooms', hasLight: true },
 			{ tilemapKey: 'boss', hasLight: true, hasBoss: true },
-			//{ tilemapKey: 'eight', hasLight: false },
-			// { tilemapKey: 'first', hasLight: false },
-			// { tilemapKey: 'second', hasLight: true },
-			// { tilemapKey: 'three_isles', hasLight: false },
-			// { tilemapKey: 'platformer', hasLight: false },
-			// { tilemapKey: 'eight', hasLight: false },
-			// { tilemapKey: 'six_rooms', hasLight: false },
-			// { tilemapKey: 'boss', hasLight: false, hasBoss: true },
 		];
 	}
 
@@ -81,7 +79,7 @@ export class Game extends Phaser.Scene {
 				continue: 3,
 				health: 3,
 				inventory: {
-					sword: 9,
+					sword: 0,
 					rum: 0,
 				},
 				collected: new Set(),
@@ -124,14 +122,7 @@ export class Game extends Phaser.Scene {
 		this.hiddenPassageLayer = this.map.createLayer('hidden_passage', this.tileset);
 		this.hiddenPassageLayer.setDepth(26);
 		this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-
 		this.controller = new Controller(this);
-		// this.input.gamepad.once('connected', function (pad) {
-
-		// 	this.gamepad = pad;
-		// 	console.log(this.gamepad)
-		// });
-
 		this.createDoors();
 		this.createMovingPlatforms();
 		this.createFadingPlatforms();
@@ -152,11 +143,8 @@ export class Game extends Phaser.Scene {
 				sword.destroy();
 			});
 		}
-		//this.time.delayedCall(1000, () => this.showMessageBox('Use Left and Right to run, Up to jump, Down to open a door, and Space to throw a bomb!'))
-		//this.time.delayedCall(1000, () => this.showMessageBox(`level: ${this.currentLevel + 1}`))
-		//this.time.delayedCall(1000, () => this.showMessageBox(`I need key!`))
-
-		if (this.hasLight) this.createLight();
+		this.isWindows = window.navigator.userAgent.indexOf('Win') !== -1;
+		if (this.hasLight && this.isWindows) this.createLight();
 
 		this.physics.add.overlap(this.player.bombGroup, this.player, (player, bomb) => {
 			if (bomb.exploded && player.takeDamage()) this.push(bomb, player);
@@ -189,13 +177,8 @@ export class Game extends Phaser.Scene {
 		// 		Phaser.Math.RadToDeg(item.body.velocity.x / item.body.halfWidth)
 		// 	));
 		// });
-
 		this.registry.set('playerData', this.player.getPlayerData(false));
-
 		this.cameras.main.fadeIn(1000);
-		// this.theme = this.sound.add('theme7');
-		// this.theme.setVolume(0.2).play();
-		//this.rect = this.add.rectangle(0, 0, 200, 200, 0x000000).setOrigin(0, 0).setAlpha(0.7).setDepth(35);
 	}
 	update(t, dt) {
 		if (!this?.theme?.isPlaying) this.playRandomTheme()
@@ -206,24 +189,17 @@ export class Game extends Phaser.Scene {
 		this.player.update({ t, dt, controller: this.controller });
 		this.enemyGroup.getChildren().forEach(enemy => enemy.update());
 		if (this.hasBoss) this.boss.update();
-		// if (this.box) this.box.setPosition(this.player.x, this.player.y)
-		// if (this.messageBox) this.messageBox.setPosition(this.box.x + 20, this.box.y - 60)
-		// const { x, y, width, height } = this.cameras.main.worldView;
-		// this.rect.setPosition(x, y).setSize(width, height);
-
 	}
 
 	playRandomTheme() {
 		if (this.theme) this.theme.stop();
 		this.theme = this.sound.add(`theme${Game.getRandom(1, 7)}`);
-		this.theme = this.sound.add(`theme7`);
 		this.theme.setVolume(0.2).play();
 	}
 
 	dropPowerUp(enemy) {
 		const { x, y } = enemy;
 		let rnd = Math.floor(Math.random() * 9) + 1;
-		rnd = 2
 		let collectible;
 		if (rnd === 1) {
 			collectible = new RumPowerUp({ scene: this, x, y, textureKey: 'rum_drop' });
@@ -237,16 +213,12 @@ export class Game extends Phaser.Scene {
 	}
 
 	changeLevel(door) {
-		// if (door.id !== this.scene.currentLevel &&
-		// 	door.id !== -1 && Phaser.Input.Keyboard.JustDown(this.player.keyDown) &&
-		// 	!this.player.hasKey &&
-		// 	this.player.body.onFloor()) return this.showMessageBox('I need a key!')
 		const keyDown = this.controller.buttons.openDoor.isPressed;
 		if (!keyDown) return
 		const hasKey = this.player.collected.has(`${this.currentLevel}key`) && door.id === 1 || door.id === -1 && this.currentLevel !== 0;
 		const onFloor = this.player.body.onFloor();
 		if (keyDown && door.id === -1 && this.currentLevel === 0) return this.player.dialogue.show('Closed. It is first level, maybe you should go ahead.');
-		if (keyDown && this.currentLevel === this.levels.length - 1 && !hasKey || !onFloor) return this.player.dialogue.show('The End');
+		if (keyDown && this.currentLevel === this.levels.length - 1 && !hasKey || !onFloor) return this.player.dialogue.show(`Well done! You beat all levels. Dummy programmer didn't create more...`);
 		if (keyDown && !hasKey || !onFloor) return this.player.dialogue.show('Closed. I need key!');
 		door.disableBody();
 		door.anims.play('opening');
@@ -526,12 +498,10 @@ export class Game extends Phaser.Scene {
 			'jump': 1,
 			'walk': 1,
 			'land': 1,
-			'throw': 1,
-			'hit': 1,
-			'explosion': 0.5,
+			'hit': 0.5,
 			'hit_bomb': 1,
 			'power_up': 0.3,
-			'death': 1,
+			'death': 0.2,
 		}
 		this.player = new BombGuy({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures, playerData: this.playerData, soundMap });
 		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer]);
@@ -608,8 +578,8 @@ export class Game extends Phaser.Scene {
 		const soundMap = {
 			'enemy_atack': 0.5,
 			'enemy_get_hit': 0.5,
-			'enemy_death': 0.5,
-			'enemy_teleport': 0.5,
+			'enemy_death': 0.2,
+			'enemy_teleport': 0.4,
 		}
 		this.enemySounds = new SoundManager(this, soundMap);
 		if (!this.map.getObjectLayer('enemies')?.objects) return
@@ -635,11 +605,6 @@ export class Game extends Phaser.Scene {
 		});
 		this.physics.add.overlap(this.player, this.enemyHurtboxGroup, (player, hurtbox) => {
 			if (player.takeDamage()) this.push(hurtbox.enemy, player);
-			// if (hurtbox.enemy.canHit) {
-			// 	player.takeDamage();
-			// 	hurtbox.enemy.completeAtack();
-			// 	this.push(hurtbox.enemy, player);
-			// }
 		});
 		this.physics.add.collider([this.canonBallGroup, this.bottleGroup, this.seeds], [this.groundLayer], (projectile) => {
 			this.lights.removeLight(projectile.light);
@@ -699,7 +664,7 @@ export class Game extends Phaser.Scene {
 						this.theme = this.sound.add(`theme8`);
 						this.theme.setVolume(0.2).play();
 						this.boss.turnToPlayer();
-						this.time.delayedCall(2000, () => this.boss.dialogue.show('I will destroy you!'));
+						this.time.delayedCall(2000, () => this.boss.dialogue.show('I will beat you!'));
 						this.time.delayedCall(4000, () => {
 							this.boss.enableBody();
 							this.boss.setState('DISAPPEAR');

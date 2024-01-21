@@ -184,18 +184,18 @@ export class BombGuy extends Character {
 	}
 
 	throwBomb() {
-		this.anims.play('throw');
+		//this.anims.play('throw');
 		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'throw', () => {
 			this.anims.play(this.currentState.animation);
 		});
-		this.sounds.play('throw');
 		if (this.activeBomb) this.activeBomb.throw(this.bombMaxVelocity * this.bombBar.stopCharging(), this);
+
 		this.activeBomb = null;
 	}
 
 	throwSword() {
 		if (this.inventoryData.sword === 0 || this.swordGroup.getChildren().length === this.swordGroup.maxSize || this.isDead()) return
-		this.anims.play('throw');
+		//this.anims.play('throw');
 		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'throw', () => {
 			this.anims.play(this.currentState.animation);
 		});

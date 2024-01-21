@@ -15,10 +15,9 @@ export class Boss extends Enemy {
 	constructor({ scene, x, y, textureKey, direction }) {
 		super({ scene, x, y, textureKey });
 		this.bubbles = scene.bubbles;
-		this.maxHealth = 5;
+		this.maxHealth = 10;
 		this.health = this.maxHealth;
 		this.atackRange = 40;
-		//this.speedX = 120;
 		this.startX = x;
 		this.startY = y;
 		this.position = 0;

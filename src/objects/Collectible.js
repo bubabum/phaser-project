@@ -9,7 +9,7 @@ export class Collectible extends Phaser.Physics.Arcade.Sprite {
 		this.setDepth(25);
 		this.createAnimations(textureKey);
 		this.anims.play('idle');
-		if (scene.hasLight) this.setPipeline('Light2D');
+		if (scene.hasLight && scene.isWindows) this.setPipeline('Light2D');
 	}
 
 	disappear() {

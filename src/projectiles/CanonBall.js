@@ -6,7 +6,7 @@ export class CanonBall extends Phaser.Physics.Arcade.Sprite {
 		scene.physics.add.existing(this);
 		this.setCircle(15);
 		this.setDepth(25);
-		if (scene.hasLight) {
+		if (scene.hasLight && scene.isWindows) {
 			this.setPipeline('Light2D');
 			this.light = scene.lights.addLight(this.x, this.y, 300, 0xaaaaaa, 0.3);
 		}

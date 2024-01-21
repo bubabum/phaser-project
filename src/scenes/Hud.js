@@ -58,10 +58,10 @@ export class Hud extends Phaser.Scene {
 			.setOrigin(0, 1)
 			.setDepth(30)
 			.setDropShadow(1, 1);
-		this.fpsCounter = this.add.bitmapText(width - 10, 10, 'font', '', 20, 1)
-			.setOrigin(1, 0)
-			.setDepth(100)
-			.setDropShadow(1, 1);
+		// this.fpsCounter = this.add.bitmapText(width - 10, 10, 'font', '', 20, 1)
+		// 	.setOrigin(1, 0)
+		// 	.setDepth(100)
+		// 	.setDropShadow(1, 1);
 	}
 
 	drawLives(health) {

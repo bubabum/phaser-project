@@ -40,7 +40,7 @@ export class Enemy extends Character {
 			if (this.direction === 'right') return this.hurtbox.setPosition(this.body.position.x + this.body.width, posY);
 			this.hurtbox.setPosition(this.body.position.x, posY);
 		}
-		if (this.dialogue.isVisible) this.dialogue.update();
+		if (this.dialogue?.isVisible) this.dialogue.update();
 	}
 
 	isPlayer() {

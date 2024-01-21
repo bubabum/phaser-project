@@ -54,7 +54,7 @@ export class Loader extends Phaser.Scene {
 
 		this.load.on('complete', () => {
 			progress.destroy();
-			this.scene.start('Game');
+			this.scene.start('Menu');
 		});
 
 		this.load.pack('preload', './assets/pack.json', 'preload');

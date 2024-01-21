@@ -6,7 +6,6 @@ export class Life extends Collectible {
 		super({ scene, x, y, textureKey, type });
 		scene.add.existing(this);
 		scene.physics.add.existing(this);
-		//this.setPosition(this.getTileCenterX(x), y);
 	}
 
 	createAnimations(textureKey) {

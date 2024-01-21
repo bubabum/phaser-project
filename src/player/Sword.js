@@ -14,7 +14,7 @@ export class Sword extends Phaser.Physics.Arcade.Sprite {
 		this.sounds = new SoundManager(scene, this.soundMap);
 		this.setDepth(25);
 		this.createAnimations(textureKey);
-		if (scene.hasLight) this.setPipeline('Light2D')
+		if (scene.hasLight && scene.isWindows) this.setPipeline('Light2D')
 	}
 
 	throw(player) {

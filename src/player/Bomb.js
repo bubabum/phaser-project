@@ -11,16 +11,16 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.setOrigin(0.51, 0.67);
 		this.setDepth(25);
 		this.createAnimations(textureKey);
-		//this.setMass(1);
 		this.isOff = false;
 		this.exploded = false;
 		this.body.gameObject = this;
 		this.sound = {
-			'explosion': 0.5,
+			'explosion': 0.2,
 			'hit_bomb': 1,
+			'throw': 1,
 		};
 		this.sounds = new SoundManager(scene, this.sound);
-		if (scene.hasLight) this.setPipeline('Light2D')
+		if (scene.hasLight && scene.isWindows) this.setPipeline('Light2D')
 	}
 
 	update(player) {
@@ -40,8 +40,7 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
 
 	throw(velocity, player) {
 		this.body.setAllowGravity(true);
-		// const bombUseType = player.inventory.bombUseTypes[player.inventory.activeBombUseType];
-		// const bombTimer = player.inventory.bombTimers[player.inventory.activeBombTimer].value;
+		this.sounds.play('throw');
 		const bombUseType = 'THROW';
 		const bombTimer = 1500;
 		this.setVelocity((player.flipX ? -1 : 1) * velocity, (bombUseType === 'THROW' ? -velocity : 0));
