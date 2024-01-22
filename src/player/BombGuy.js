@@ -148,7 +148,6 @@ export class BombGuy extends Character {
 
 	addCollectible(id, type) {
 		if (this.isDead()) return
-		//	this.sounds.play('power_up')
 		switch (type) {
 			case 'life':
 				if (this.health === this.maxHeath) return false
@@ -188,8 +187,10 @@ export class BombGuy extends Character {
 		this.on(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'throw', () => {
 			this.anims.play(this.currentState.animation);
 		});
-		if (this.activeBomb) this.activeBomb.throw(this.bombMaxVelocity * this.bombBar.stopCharging(), this);
-
+		if (this.activeBomb) {
+			if (this.hasActiveRum) this.activeBomb.damage = 2;
+			this.activeBomb.throw(this.bombMaxVelocity * this.bombBar.stopCharging(), this);
+		}
 		this.activeBomb = null;
 	}
 

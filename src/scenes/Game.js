@@ -136,7 +136,7 @@ export class Game extends Phaser.Scene {
 		if (this.hasBoss) {
 			this.createBoss();
 			this.physics.add.overlap(this.boss, this.player.bombGroup, (boss, bomb) => {
-				if (bomb.exploded) boss.takeDamage();
+				if (bomb.exploded) boss.takeDamage(false, bomb.damage);
 			});
 			this.physics.add.overlap(this.boss, this.player.swordGroup, (boss, sword) => {
 				boss.takeDamage();
@@ -150,7 +150,7 @@ export class Game extends Phaser.Scene {
 			if (bomb.exploded && player.takeDamage()) this.push(bomb, player);
 		});
 		this.physics.add.overlap(this.player.bombGroup, this.enemyGroup, (bomb, enemy) => {
-			if (bomb.exploded && enemy.takeDamage()) {
+			if (bomb.exploded && enemy.takeDamage(false, bomb.damage)) {
 				this.push(bomb, enemy);
 				if (enemy.health === 0) this.dropPowerUp(enemy);
 			}
@@ -203,8 +203,10 @@ export class Game extends Phaser.Scene {
 		let collectible;
 		if (rnd === 1) {
 			collectible = new RumPowerUp({ scene: this, x, y, textureKey: 'rum_drop' });
-		} else if (1 < rnd && rnd < 6) {
+		} else if (1 < rnd && rnd < 7) {
 			collectible = new SwordPowerUp({ scene: this, x, y, textureKey: 'sword_drop' });
+		} else if (rnd === 7) {
+			collectible = new Life({ scene: this, x, y, textureKey: 'life', type: 'life' });
 		} else {
 			return
 		}
@@ -559,7 +561,7 @@ export class Game extends Phaser.Scene {
 			angularVelocity: 1000,
 		});
 		this.bottleGroup = this.physics.add.group({
-			defaultKey: 'blue_bottle',
+			defaultKey: 'blue_bottle_projectile',
 			classType: Bottle,
 			allowGravity: false,
 			angularVelocity: 1000,

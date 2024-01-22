@@ -58,7 +58,7 @@ export class Character extends Phaser.Physics.Arcade.Sprite {
 
 	takeDamage(death = false, damage = 1) {
 		if (!death && this.isInvulnerable || this.isDead()) return false
-		if (this.health === 1 || death === true) {
+		if (this.health <= damage || death === true) {
 			this.health = 0;
 			this.setState('DEAD_HIT');
 			this.setInvulnerability(true);

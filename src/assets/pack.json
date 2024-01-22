@@ -199,6 +199,11 @@
 			},
 			{
 				"type": "image",
+				"key": "blue_bottle_projectile",
+				"url": "./assets/images/blue_bottle_projectile.png"
+			},
+			{
+				"type": "image",
 				"key": "chair",
 				"url": "./assets/images/chair.png"
 			},

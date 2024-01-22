@@ -13,6 +13,7 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
 		this.createAnimations(textureKey);
 		this.isOff = false;
 		this.exploded = false;
+		this.damage = 1;
 		this.body.gameObject = this;
 		this.sound = {
 			'explosion': 0.2,

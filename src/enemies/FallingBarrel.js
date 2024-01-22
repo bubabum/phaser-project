@@ -10,7 +10,6 @@ export class FallingBarrel extends Phaser.Physics.Arcade.Sprite {
 		this.setSize(42, 44);
 		this.setOffset(11, 16);
 		this.setDepth(25);
-		//this.setOrigin(0, 0);
 		this.createCollider();
 		this.anims.createFromAseprite(textureKey);
 		this.anims.play({ key: 'Idle', repeat: -1 });
@@ -18,7 +17,6 @@ export class FallingBarrel extends Phaser.Physics.Arcade.Sprite {
 			'falling_barrel': 0.3,
 		};
 		this.sounds = new SoundManager(scene, this.sound);
-		if (scene.hasLight) this.setPipeline('Light2D');
 	}
 
 	update() {

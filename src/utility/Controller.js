@@ -3,13 +3,14 @@ export class Controller {
 	constructor(scene) {
 		this.scene = scene;
 		const { width, height } = scene.game.config;
-		this.leftPad = { x: 92, y: height - 120 };
-		this.rightPad = { x: width - 92, y: height - 120 };
+		this.leftPad = { x: 120, y: height - 120 };
+		this.rightPad = { x: width - 120, y: height - 120 };
+		this.padding = 60;
 		this.buttons = {
 			moveLeft: {
 				gamepadKey: 14,
 				keyboardKey: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
-				touchKey: scene.add.sprite(this.leftPad.x - 40, this.leftPad.y, 'left').setDepth(40).setScrollFactor(0, 0).setScale(3).setVisible(false),
+				touchKey: scene.add.sprite(this.leftPad.x - this.padding + 10, this.leftPad.y, 'left').setVisible(false),
 				lastPressed: false,
 				isPressed: false,
 				justDown: false,
@@ -18,7 +19,7 @@ export class Controller {
 			moveRight: {
 				gamepadKey: 15,
 				keyboardKey: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-				touchKey: scene.add.sprite(this.leftPad.x + 40, this.leftPad.y, 'right').setDepth(40).setScrollFactor(0, 0).setScale(3).setVisible(false),
+				touchKey: scene.add.sprite(this.leftPad.x + this.padding - 10, this.leftPad.y, 'right').setVisible(false),
 				lastPressed: false,
 				lastPressed: false,
 				isPressed: false,
@@ -28,7 +29,7 @@ export class Controller {
 			openDoor: {
 				gamepadKey: 13,
 				keyboardKey: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
-				touchKey: scene.add.sprite(this.leftPad.x, this.leftPad.y + 40, 'down').setDepth(40).setScrollFactor(0, 0).setScale(3).setVisible(false),
+				touchKey: scene.add.sprite(this.leftPad.x, this.leftPad.y + this.padding - 10, 'down').setVisible(false),
 				lastPressed: false,
 				isPressed: false,
 				justDown: false,
@@ -37,7 +38,7 @@ export class Controller {
 			jump: {
 				gamepadKey: 0,
 				keyboardKey: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
-				touchKey: scene.add.sprite(this.rightPad.x, this.rightPad.y + 48, 'a').setDepth(40).setScrollFactor(0, 0).setScale(3).setVisible(false),
+				touchKey: scene.add.sprite(this.rightPad.x, this.rightPad.y + this.padding, 'a').setVisible(false),
 				lastPressed: false,
 				isPressed: false,
 				justDown: false,
@@ -46,7 +47,7 @@ export class Controller {
 			useBomb: {
 				gamepadKey: 2,
 				keyboardKey: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
-				touchKey: scene.add.sprite(this.rightPad.x - 48, this.rightPad.y, 'x').setDepth(40).setScrollFactor(0, 0).setScale(3).setVisible(false),
+				touchKey: scene.add.sprite(this.rightPad.x - this.padding, this.rightPad.y, 'x').setVisible(false),
 				lastPressed: false,
 				isPressed: false,
 				justDown: false,
@@ -55,7 +56,7 @@ export class Controller {
 			useSword: {
 				gamepadKey: 1,
 				keyboardKey: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V),
-				touchKey: scene.add.sprite(this.rightPad.x + 48, this.rightPad.y, 'b').setDepth(40).setScrollFactor(0, 0).setScale(3).setVisible(false),
+				touchKey: scene.add.sprite(this.rightPad.x + this.padding, this.rightPad.y, 'b').setVisible(false),
 				lastPressed: false,
 				isPressed: false,
 				justDown: false,
@@ -64,7 +65,7 @@ export class Controller {
 			useRum: {
 				gamepadKey: 3,
 				keyboardKey: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C),
-				touchKey: scene.add.sprite(this.rightPad.x, this.rightPad.y - 48, 'y').setDepth(40).setScrollFactor(0, 0).setScale(3).setVisible(false),
+				touchKey: scene.add.sprite(this.rightPad.x, this.rightPad.y - this.padding, 'y').setVisible(false),
 				lastPressed: false,
 				isPressed: false,
 				justDown: false,
@@ -76,7 +77,7 @@ export class Controller {
 
 	setTouchKeys() {
 		for (let key in this.buttons) {
-			this.buttons[key].touchKey.setVisible(true).setInteractive();
+			this.buttons[key].touchKey.setVisible(true).setDepth(40).setScrollFactor(0, 0).setScale(3.75).setAlpha(0.5).setInteractive();
 			this.buttons[key].touchKey.on('pointerdown', () => {
 				this.buttons[key].touched = true;
 			});
