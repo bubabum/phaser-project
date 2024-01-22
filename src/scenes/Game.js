@@ -499,6 +499,7 @@ export class Game extends Phaser.Scene {
 			'walk': 1,
 			'land': 1,
 			'hit': 0.5,
+			'throw': 1,
 			'hit_bomb': 1,
 			'power_up': 0.3,
 			'death': 0.2,

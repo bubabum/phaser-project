@@ -12,12 +12,11 @@ export const GameConfig = {
 		height: ((window.screen.width / window.screen.height) < 1 ? 9 * 52 : 16 / (window.screen.width / window.screen.height) * 52),
 	},
 	input: {
-		gamepad: true
+		gamepad: true,
+		activePointers: 4,
 	},
 	render: { pixelArt: true, antialias: false },
 	crisp: true,
 	maxLights: 100,
 	scene: [Loader, Game, Hud, Menu, GameOver]
 };
-
-console.log(window)

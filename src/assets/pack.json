@@ -9,6 +9,41 @@
 			},
 			{
 				"type": "image",
+				"key": "left",
+				"url": "./assets/controller/left.png"
+			},
+			{
+				"type": "image",
+				"key": "right",
+				"url": "./assets/controller/right.png"
+			},
+			{
+				"type": "image",
+				"key": "down",
+				"url": "./assets/controller/down.png"
+			},
+			{
+				"type": "image",
+				"key": "a",
+				"url": "./assets/controller/a.png"
+			},
+			{
+				"type": "image",
+				"key": "x",
+				"url": "./assets/controller/x.png"
+			},
+			{
+				"type": "image",
+				"key": "b",
+				"url": "./assets/controller/b.png"
+			},
+			{
+				"type": "image",
+				"key": "y",
+				"url": "./assets/controller/y.png"
+			},
+			{
+				"type": "image",
 				"key": "tileset",
 				"url": "./assets/tiles/tileset.png"
 			},
