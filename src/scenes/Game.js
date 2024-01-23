@@ -217,12 +217,12 @@ export class Game extends Phaser.Scene {
 
 	changeLevel(door) {
 		const keyDown = this.controller.buttons.openDoor.isPressed;
-		if (!keyDown) return
-		const hasKey = this.player.collected.has(`${this.currentLevel}key`) && door.id === 1 || door.id === -1 && this.currentLevel !== 0;
 		const onFloor = this.player.body.onFloor();
-		if (keyDown && door.id === -1 && this.currentLevel === 0) return this.player.dialogue.show('Closed. It is first level, maybe you should go ahead.');
-		if (keyDown && this.currentLevel === this.levels.length - 1 && !hasKey || !onFloor) return this.player.dialogue.show(`Well done! You beat all levels. Dummy programmer didn't create more...`);
-		if (keyDown && !hasKey || !onFloor) return this.player.dialogue.show('Closed. I need key!');
+		if (!keyDown || !onFloor) return
+		const hasKey = this.player.collected.has(`${this.currentLevel}key`) && door.id === 1 || door.id === -1 && this.currentLevel !== 0;
+		if (door.id === -1 && this.currentLevel === 0) return this.player.dialogue.show('Closed. It is first level, maybe you should go ahead.');
+		if (door.id === 1 && this.currentLevel === this.levels.length - 1) return this.player.dialogue.show(`Well done! You beat all levels. Dummy programmer didn't create more...`);
+		if (!hasKey) return this.player.dialogue.show('Closed. I need key!');
 		door.disableBody();
 		door.anims.play('opening');
 		this.player.setState('DOOR_IN');
