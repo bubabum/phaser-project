@@ -15,19 +15,20 @@ export class Menu extends Phaser.Scene {
 		progress.fillStyle(0x56505b, 1);
 		progress.fillRect(0, 0, width, height);
 		this.add.bitmapText(width * 0.5, 50, 'font', 'Jolly Exploger', 32, 1).setOrigin(0.5, 0.5);
-		this.anims.create({
+		this.player = this.add.sprite(width * 0.5, 150, 'life').setOrigin(0.5, 0.5).setScale(3);
+		this.player.anims.create({
 			key: 'idle',
 			frames: this.anims.generateFrameNumbers('bomb_guy', { start: 0, end: 25 }),
 			frameRate: 20,
 			repeat: -1
 		});
-		this.add.sprite(width * 0.5, 150, 'bomb_guy').setOrigin(0.5, 0.5).setScale(3).play('idle');
+		this.player.anims.play('idle');
 		this.startGameBtn = this.add.bitmapText(width * 0.5, height * 0.5 + 50, 'font', 'Start game', 20, 1)
 			.setOrigin(0.5, 0.5)
 			.setInteractive()
 			.on('pointerover', () => this.startGameBtn.setScale(1.1))
 			.on('pointerout', () => this.startGameBtn.setScale(1))
-			.on('pointerdown', () => this.scene.start('Game', {}));
+			.on('pointerdown', () => this.startGame());
 		this.add.sprite(100, height * 0.5 + 80, 'arrows');
 		this.add.bitmapText(130, height * 0.5 + 71, 'font', 'run', 16, 1);
 		this.add.sprite(100, height * 0.5 + 100, 'jump');
@@ -54,10 +55,16 @@ export class Menu extends Phaser.Scene {
 	}
 
 	update() {
-		if (this.spaceKey.isDown || this.enterKey.isDown) this.scene.start('Game', {});
+		if (this.spaceKey.isDown || this.enterKey.isDown) this.startGame();
 		if (this.gamepad) this.gamepad.buttons.forEach(button => {
-			if ([0, 9].indexOf(button.index) !== -1 && button.pressed) this.scene.start('Game', {});
+			if ([0, 9].indexOf(button.index) !== -1 && button.pressed) this.startGame();
 		})
+	}
+
+	startGame() {
+		const sound = this.sound.add(`blop`);
+		sound.setVolume(0.1).play();
+		this.scene.start('Game', {});
 	}
 
 }

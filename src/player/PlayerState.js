@@ -190,11 +190,15 @@ export class DeadGround extends State {
 	}
 	enter() {
 		const { player } = this;
-		player.sounds.play('death');
 		player.setVelocityX(0);
 		player.scene.time.delayedCall(3000, () => {
 			player.scene.theme.stop();
-			if (player.continue === 0) return player.scene.scene.start('GameOver');
+			if (player.continue === 0) {
+				player.scene.theme = player.scene.sound.add(`death`);
+				player.scene.theme.setVolume(0.2).play();
+				player.scene.scene.start('GameOver');
+				return
+			}
 			player.continue--;
 			player.scene.scene.restart({ level: player.scene.currentLevel, playerData: player.getPlayerData() })
 		});

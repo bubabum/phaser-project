@@ -209,6 +209,7 @@ export class BombGuy extends Character {
 
 	activateRum() {
 		if (this.inventoryData.rum === 0 || this.isDead() || this.hasActiveRum) return
+		this.sounds.play('rum');
 		this.hasActiveRum = true;
 		this.setInvulnerability(true).setAlpha(0.5);
 		this.inventoryData.rum--;

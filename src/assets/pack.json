@@ -9,21 +9,6 @@
 			},
 			{
 				"type": "image",
-				"key": "left",
-				"url": "./assets/controller/left.png"
-			},
-			{
-				"type": "image",
-				"key": "right",
-				"url": "./assets/controller/right.png"
-			},
-			{
-				"type": "image",
-				"key": "down",
-				"url": "./assets/controller/down.png"
-			},
-			{
-				"type": "image",
 				"key": "a",
 				"url": "./assets/controller/a.png"
 			},
@@ -41,6 +26,11 @@
 				"type": "image",
 				"key": "y",
 				"url": "./assets/controller/y.png"
+			},
+			{
+				"type": "image",
+				"key": "arrow",
+				"url": "./assets/controller/arrow.png"
 			},
 			{
 				"type": "image",
@@ -567,22 +557,22 @@
 			{
 				"type": "audio",
 				"key": "jump",
-				"url": "./assets/audio/jump.wav"
+				"url": "./assets/audio/player/jump.wav"
 			},
 			{
 				"type": "audio",
 				"key": "explosion",
-				"url": "./assets/audio/explosion.wav"
+				"url": "./assets/audio/player/explosion.wav"
 			},
 			{
 				"type": "audio",
 				"key": "hit_bomb",
-				"url": "./assets/audio/hit_bomb.wav"
+				"url": "./assets/audio/player/hit_bomb.wav"
 			},
 			{
 				"type": "audio",
 				"key": "sword_embedded",
-				"url": "./assets/audio/sword_embedded.wav"
+				"url": "./assets/audio/player/sword_embedded.wav"
 			},
 			{
 				"type": "audio",
@@ -592,22 +582,27 @@
 			{
 				"type": "audio",
 				"key": "land",
-				"url": "./assets/audio/land.wav"
+				"url": "./assets/audio/player/land.wav"
 			},
 			{
 				"type": "audio",
 				"key": "throw",
-				"url": "./assets/audio/throw.wav"
+				"url": "./assets/audio/player/throw.wav"
 			},
 			{
 				"type": "audio",
 				"key": "walk",
-				"url": "./assets/audio/walk.wav"
+				"url": "./assets/audio/player/walk.wav"
 			},
 			{
 				"type": "audio",
 				"key": "power_up",
 				"url": "./assets/audio/player/power_up.wav"
+			},
+			{
+				"type": "audio",
+				"key": "rum",
+				"url": "./assets/audio/player/rum.wav"
 			},
 			{
 				"type": "audio",
@@ -653,6 +648,11 @@
 				"type": "audio",
 				"key": "text",
 				"url": "./assets/audio/misc/text.wav"
+			},
+			{
+				"type": "audio",
+				"key": "blop",
+				"url": "./assets/audio/misc/blop.wav"
 			}
 		]
 	}

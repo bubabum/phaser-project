@@ -10,7 +10,7 @@ export class Controller {
 			moveLeft: {
 				gamepadKey: 14,
 				keyboardKey: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
-				touchKey: scene.add.sprite(this.leftPad.x - this.padding + 10, this.leftPad.y, 'left').setVisible(false),
+				touchKey: scene.add.sprite(this.leftPad.x - this.padding, this.leftPad.y, 'arrow').setVisible(false),
 				lastPressed: false,
 				isPressed: false,
 				justDown: false,
@@ -19,7 +19,7 @@ export class Controller {
 			moveRight: {
 				gamepadKey: 15,
 				keyboardKey: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-				touchKey: scene.add.sprite(this.leftPad.x + this.padding - 10, this.leftPad.y, 'right').setVisible(false),
+				touchKey: scene.add.sprite(this.leftPad.x + this.padding, this.leftPad.y, 'arrow').setVisible(false).setFlipX(true),
 				lastPressed: false,
 				lastPressed: false,
 				isPressed: false,
@@ -29,7 +29,7 @@ export class Controller {
 			openDoor: {
 				gamepadKey: 13,
 				keyboardKey: scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
-				touchKey: scene.add.sprite(this.leftPad.x, this.leftPad.y + this.padding - 10, 'down').setVisible(false),
+				touchKey: scene.add.sprite(this.leftPad.x, this.leftPad.y + this.padding, 'arrow').setVisible(false).setAngle(-90),
 				lastPressed: false,
 				isPressed: false,
 				justDown: false,
@@ -77,7 +77,7 @@ export class Controller {
 
 	setTouchKeys() {
 		for (let key in this.buttons) {
-			this.buttons[key].touchKey.setVisible(true).setDepth(40).setScrollFactor(0, 0).setScale(3.75).setAlpha(0.5).setInteractive();
+			this.buttons[key].touchKey.setVisible(true).setDepth(40).setScrollFactor(0, 0).setScale(3.75).setAlpha(0.4).setInteractive();
 			this.buttons[key].touchKey.on('pointerdown', () => {
 				this.buttons[key].touched = true;
 			});

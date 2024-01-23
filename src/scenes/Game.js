@@ -179,6 +179,7 @@ export class Game extends Phaser.Scene {
 		// });
 		this.registry.set('playerData', this.player.getPlayerData(false));
 		this.cameras.main.fadeIn(1000);
+
 	}
 	update(t, dt) {
 		if (!this?.theme?.isPlaying) this.playRandomTheme()
@@ -505,6 +506,7 @@ export class Game extends Phaser.Scene {
 			'hit_bomb': 1,
 			'power_up': 0.3,
 			'death': 0.2,
+			'rum': 0.2,
 		}
 		this.player = new BombGuy({ scene: this, x: door.x, y: door.y + door.height * 0.5, textures, playerData: this.playerData, soundMap });
 		this.physics.add.collider(this.player, [this.groundLayer, this.platformsLayer]);
