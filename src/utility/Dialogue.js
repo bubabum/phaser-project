@@ -26,6 +26,7 @@ export class Dialogue {
 
 	show(text) {
 		if (this.isVisible) return
+		this.scene.scene.moveUp('Game');
 		this.isVisible = true;
 		this.setIsVisible();
 		this.text.setText('');
@@ -44,6 +45,7 @@ export class Dialogue {
 	}
 
 	hide() {
+		this.scene.scene.moveDown('Game');
 		this.isVisible = false;
 		this.setIsVisible();
 	}
