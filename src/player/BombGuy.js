@@ -300,12 +300,12 @@ export class BombGuy extends Character {
 			frameRate: 20,
 			repeat: 0,
 		});
-		this.anims.create({
-			key: 'throw',
-			frames: this.anims.generateFrameNumbers(textureKey, { start: 100, end: 102 }),
-			frameRate: 20,
-			repeat: 0,
-		});
+		// this.anims.create({
+		// 	key: 'throw',
+		// 	frames: this.anims.generateFrameNumbers(textureKey, { start: 100, end: 102 }),
+		// 	frameRate: 20,
+		// 	repeat: 0,
+		// });
 	}
 
 }
