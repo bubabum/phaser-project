@@ -166,7 +166,7 @@ export class BombGuy extends Character {
 				return true
 			case 'rum':
 			case 'sword':
-				if (this.inventoryData[type] === 9) return false
+				if (this.inventoryData[type] >= 9) return false
 				this.inventoryData[type]++;
 				this.scene.registry.set('playerData', this.getPlayerData(false));
 				return true
